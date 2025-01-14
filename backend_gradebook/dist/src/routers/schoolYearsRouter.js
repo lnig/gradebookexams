@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const schoolYears_js_1 = require("../handlers/schoolYears.js");
+const schoolYearsValidation_js_1 = require("../validations/schoolYearsValidation.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const schoolYearsRouter = (0, express_1.Router)();
+schoolYearsRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, schoolYearsValidation_js_1.validateCreateSchoolYear)(), middleware_js_1.handleInputErrors, schoolYears_js_1.createSchoolYear);
+schoolYearsRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), middleware_js_1.handleInputErrors, schoolYears_js_1.getSchoolYears);
+schoolYearsRouter.get('/:schoolYearId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), middleware_js_1.handleInputErrors, schoolYears_js_1.getSchoolYearById);
+schoolYearsRouter.patch('/:schoolYearId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, schoolYearsValidation_js_1.validateUpdateSchoolYear)(), middleware_js_1.handleInputErrors, schoolYears_js_1.updateSchoolYear);
+schoolYearsRouter.delete('/:schoolYearId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, schoolYearsValidation_js_1.validateDeleteSchoolYear)(), middleware_js_1.handleInputErrors, schoolYears_js_1.deleteSchoolYear);
+exports.default = schoolYearsRouter;

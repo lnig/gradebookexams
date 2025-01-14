@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../handlers/userTypes.js");
+const userTypesValidation_js_1 = require("../validations/userTypesValidation.js");
+const userTypes_js_2 = require("../enums/userTypes.js");
+const userTypesRouter = (0, express_1.Router)();
+userTypesRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_2.UserType.Administrator]), (0, userTypesValidation_js_1.validateCreateUserType)(), middleware_js_1.handleInputErrors, userTypes_js_1.createUserType);
+userTypesRouter.delete('/:userTypeId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_2.UserType.Administrator]), (0, userTypesValidation_js_1.validateDeleteUserType)(), middleware_js_1.handleInputErrors, userTypes_js_1.deleteUserType);
+userTypesRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_2.UserType.Administrator, userTypes_js_2.UserType.Teacher, userTypes_js_2.UserType.Student, userTypes_js_2.UserType.Parent]), userTypes_js_1.getUserTypes);
+exports.default = userTypesRouter;

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const messages_js_1 = require("../handlers/messages.js");
+const messagesRouter = (0, express_1.Router)();
+messagesRouter.get('/recent', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), messages_js_1.getRecentConversations);
+messagesRouter.get('/unread', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), messages_js_1.getUnreadMessages);
+messagesRouter.get('/:interlocutorId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), messages_js_1.getMessagesBetweenUsers);
+exports.default = messagesRouter;

@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const problemTypes_js_1 = require("../handlers/problemTypes.js");
+const problemTypesValidation_js_1 = require("../validations/problemTypesValidation.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const problemTypesRouter = (0, express_1.Router)();
+problemTypesRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, problemTypesValidation_js_1.validateCreateProblemType)(), middleware_js_1.handleInputErrors, problemTypes_js_1.createProblemType);
+problemTypesRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), problemTypes_js_1.getProblemTypes);
+problemTypesRouter.patch('/:problemTypeId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), problemTypes_js_1.updateProblemType);
+problemTypesRouter.delete('/:problemTypeId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, problemTypesValidation_js_1.validateDeleteProblemType)(), middleware_js_1.handleInputErrors, problemTypes_js_1.deleteProblemType);
+exports.default = problemTypesRouter;

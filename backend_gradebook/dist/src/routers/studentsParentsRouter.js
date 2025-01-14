@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const studentsParentsValidation_js_1 = require("../validations/studentsParentsValidation.js");
+const studentsParents_js_1 = require("../handlers/studentsParents.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const studentsParentsRouter = (0, express_1.Router)();
+studentsParentsRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, studentsParentsValidation_js_1.validateCreateStudentParentRelationship)(), middleware_js_1.handleInputErrors, studentsParents_js_1.createStudentParentRelationship);
+studentsParentsRouter.delete('/:studentId/:parentId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, studentsParentsValidation_js_1.validateDeleteStudentParentRelationship)(), middleware_js_1.handleInputErrors, studentsParents_js_1.deleteStudentParentRelationship);
+studentsParentsRouter.get('/:parentId/students', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), studentsParents_js_1.getStudentsForParent);
+exports.default = studentsParentsRouter;

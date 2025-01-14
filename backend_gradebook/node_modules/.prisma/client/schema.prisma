@@ -1,0 +1,641 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model attendances {
+  id          Bytes    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  date_time   DateTime @db.Timestamp(0)
+  was_present Boolean  @default(dbgenerated("b'0'")) @db.Bit(1)
+  was_late    Boolean  @default(dbgenerated("b'0'")) @db.Bit(1)
+  was_excused Boolean  @default(dbgenerated("b'0'")) @db.Bit(1)
+  student_id  Bytes    @db.Binary(16)
+  lesson_id   Bytes    @db.Binary(16)
+  students    students @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "attendances_ibfk_1")
+  lessons     lessons  @relation(fields: [lesson_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "attendances_ibfk_2")
+
+  @@unique([student_id, lesson_id], map: "student_id")
+  @@index([lesson_id], map: "lesson_id")
+}
+
+model badges {
+  id                Bytes             @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name              String            @db.VarChar(255)
+  description       String            @db.VarChar(255)
+  category_id       Bytes             @db.Binary(16)
+  badges_categories badges_categories @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "badges_ibfk_1")
+  badges_history    badges_history[]
+
+  @@index([category_id], map: "category_id")
+}
+
+model badges_categories {
+  id     Bytes    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name   String   @db.VarChar(255)
+  badges badges[]
+}
+
+model badges_history {
+  id           Bytes    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  date_awarded DateTime @db.Timestamp(0)
+  student_id   Bytes    @db.Binary(16)
+  badge_id     Bytes    @db.Binary(16)
+  students     students @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "badges_history_ibfk_1")
+  badges       badges   @relation(fields: [badge_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "badges_history_ibfk_2")
+
+  @@index([badge_id], map: "badge_id")
+  @@index([student_id], map: "student_id")
+}
+
+model classes {
+  id             Bytes           @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  class_name_id  Bytes           @db.Binary(16)
+  school_year_id Bytes           @db.Binary(16)
+  teacher_id     Bytes?          @db.Binary(16)
+  class_names    class_names     @relation(fields: [class_name_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_1")
+  school_years   school_years    @relation(fields: [school_year_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_3")
+  teachers       teachers?       @relation(fields: [teacher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_2")
+  classes_exams  classes_exams[]
+  lessons        lessons[]
+  students       students[]
+
+  @@unique([class_name_id, school_year_id], map: "class_name_id")
+  @@index([teacher_id], map: "teacher_id")
+  @@index([school_year_id], map: "school_year_id")
+}
+
+model event_types {
+  id            Bytes           @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name          String          @unique(map: "name") @db.VarChar(255)
+  school_events school_events[]
+}
+
+model grades_gradebook {
+  id          Bytes    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  description String   @db.VarChar(255)
+  grade       Int      @db.TinyInt
+  weight      Int      @db.TinyInt
+  date_given  DateTime @db.Timestamp(0)
+  student_id  Bytes    @db.Binary(16)
+  subject_id  Bytes    @db.Binary(16)
+  teacher_id  Bytes    @db.Binary(16)
+  students    students @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "grades_gradebook_ibfk_1")
+  subjects    subjects @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "grades_gradebook_ibfk_2")
+  teachers    teachers @relation(fields: [teacher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "grades_gradebook_ibfk_3")
+
+  @@index([student_id], map: "student_id")
+  @@index([subject_id], map: "subject_id")
+  @@index([teacher_id], map: "teacher_id")
+}
+
+model homeworks {
+  id          Bytes    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  description String   @db.VarChar(255)
+  deadline    DateTime @db.Date
+  lesson_id   Bytes    @unique(map: "lesson_id") @db.Binary(16)
+  lessons     lessons  @relation(fields: [lesson_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "homeworks_ibfk_1")
+}
+
+model lessons {
+  id              Bytes             @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  description     String?           @db.VarChar(255)
+  date            DateTime          @db.Date
+  start_time      DateTime          @db.Time(0)
+  end_time        DateTime          @db.Time(0)
+  teacher_id      Bytes             @db.Binary(16)
+  class_id        Bytes             @db.Binary(16)
+  subject_id      Bytes             @db.Binary(16)
+  attendances     attendances[]
+  exams           exams[]
+  gradebook_exams gradebook_exams[]
+  homeworks       homeworks?
+  teachers        teachers          @relation(fields: [teacher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lessons_ibfk_1")
+  classes         classes           @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lessons_ibfk_2")
+  subjects        subjects          @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lessons_ibfk_3")
+
+  @@index([class_id], map: "class_id")
+  @@index([subject_id], map: "subject_id")
+  @@index([teacher_id], map: "teacher_id")
+}
+
+model messages {
+  id                                               Bytes      @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  subject                                          String     @db.VarChar(255)
+  content                                          String     @db.VarChar(255)
+  date_time                                        DateTime   @db.Timestamp(0)
+  was_read                                         Boolean    @default(dbgenerated("b'0'")) @db.Bit(1)
+  sender_id                                        Bytes      @db.Binary(16)
+  sender_type_id                                   Bytes      @db.Binary(16)
+  receiver_id                                      Bytes      @db.Binary(16)
+  receiver_type_id                                 Bytes      @db.Binary(16)
+  user_types_messages_sender_type_idTouser_types   user_types @relation("messages_sender_type_idTouser_types", fields: [sender_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "messages_ibfk_1")
+  user_types_messages_receiver_type_idTouser_types user_types @relation("messages_receiver_type_idTouser_types", fields: [receiver_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "messages_ibfk_2")
+
+  @@index([receiver_type_id], map: "receiver_type_id")
+  @@index([sender_type_id], map: "sender_type_id")
+}
+
+model parents {
+  id                     Bytes              @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  pesel                  String             @unique(map: "pesel") @db.VarChar(11)
+  email                  String             @unique(map: "email") @db.VarChar(255)
+  phone_number           String             @unique(map: "phone_number") @db.VarChar(9)
+  password               String             @db.VarChar(255)
+  first_name             String             @db.VarChar(255)
+  last_name              String             @db.VarChar(255)
+  reset_password_token   String?            @unique(map: "reset_password_token") @db.VarChar(512)
+  reset_password_expires DateTime?          @db.Timestamp(0)
+  students_parents       students_parents[]
+}
+
+model problem_types {
+  id                 Bytes                @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name               String               @unique(map: "name") @db.VarChar(255)
+  problems_gradebook problems_gradebook[]
+}
+
+model problems_gradebook {
+  id              Bytes         @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  description     String        @db.VarChar(255)
+  reported_time   DateTime      @db.Timestamp(0)
+  problem_type_id Bytes         @db.Binary(16)
+  reporter_id     Bytes         @db.Binary(16)
+  user_type_id    Bytes         @db.Binary(16)
+  status_id       Bytes         @db.Binary(16)
+  problem_types   problem_types @relation(fields: [problem_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "problems_gradebook_ibfk_1")
+  user_types      user_types    @relation(fields: [user_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "problems_gradebook_ibfk_2")
+  statuses        statuses      @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "problems_gradebook_ibfk_3")
+
+  @@index([problem_type_id], map: "problem_type_id")
+  @@index([status_id], map: "status_id")
+  @@index([user_type_id], map: "user_type_id")
+}
+
+model school_events {
+  id            Bytes       @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name          String      @db.VarChar(255)
+  location      String      @db.VarChar(255)
+  description   String      @db.VarChar(255)
+  date          DateTime    @db.Date
+  start_time    DateTime    @db.Time(0)
+  end_time      DateTime    @db.Time(0)
+  event_type_id Bytes       @db.Binary(16)
+  event_types   event_types @relation(fields: [event_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "school_events_ibfk_1")
+
+  @@index([event_type_id], map: "event_type_id")
+}
+
+model statuses {
+  id                 Bytes                @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name               String               @unique(map: "name") @db.VarChar(255)
+  problems_gradebook problems_gradebook[]
+}
+
+model students {
+  id                     Bytes                    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  pesel                  String                   @unique(map: "pesel") @db.VarChar(11)
+  email                  String                   @unique(map: "email") @db.VarChar(255)
+  phone_number           String                   @unique(map: "phone_number") @db.VarChar(9)
+  password               String                   @db.VarChar(255)
+  first_name             String                   @db.VarChar(255)
+  last_name              String                   @db.VarChar(255)
+  reset_password_token   String?                  @unique(map: "reset_password_token") @db.VarChar(512)
+  reset_password_expires DateTime?                @db.Timestamp(0)
+  class_id               Bytes?                   @db.Binary(16)
+  attempts               attempts[]
+  attendances            attendances[]
+  badges_history         badges_history[]
+  final_grades           final_grades[]
+  grades_exams           grades_exams[]
+  grades_gradebook       grades_gradebook[]
+  notifications          notifications[]
+  questions_responses    questions_responses[]
+  student_closed_answers student_closed_answers[]
+  student_open_answers   student_open_answers[]
+  classes                classes?                 @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "students_ibfk_1")
+  students_exams         students_exams[]
+  students_parents       students_parents[]
+
+  @@index([class_id], map: "class_id")
+}
+
+model students_parents {
+  student_id Bytes    @db.Binary(16)
+  parent_id  Bytes    @db.Binary(16)
+  students   students @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "students_parents_ibfk_1")
+  parents    parents  @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "students_parents_ibfk_2")
+
+  @@id([student_id, parent_id])
+  @@index([parent_id], map: "parent_id")
+}
+
+model subjects {
+  id                Bytes               @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name              String              @unique(map: "name") @db.VarChar(255)
+  final_grades      final_grades[]
+  grades_gradebook  grades_gradebook[]
+  lessons           lessons[]
+  teachers_subjects teachers_subjects[]
+}
+
+model surveys {
+  id          Bytes       @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name        String      @db.VarChar(255)
+  description String      @db.VarChar(255)
+  start_time  DateTime    @db.Timestamp(0)
+  end_time    DateTime    @db.Timestamp(0)
+  questions   questions[]
+}
+
+model teachers {
+  id                     Bytes               @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  pesel                  String              @unique(map: "pesel") @db.VarChar(11)
+  email                  String              @unique(map: "email") @db.VarChar(255)
+  phone_number           String              @unique(map: "phone_number") @db.VarChar(9)
+  password               String              @db.VarChar(255)
+  first_name             String              @db.VarChar(255)
+  last_name              String              @db.VarChar(255)
+  reset_password_token   String?             @unique(map: "reset_password_token") @db.VarChar(512)
+  reset_password_expires DateTime?           @db.Timestamp(0)
+  classes                classes[]
+  exams                  exams[]
+  final_grades           final_grades[]
+  grades_gradebook       grades_gradebook[]
+  lessons                lessons[]
+  teachers_subjects      teachers_subjects[]
+}
+
+model teachers_subjects {
+  teacher_id Bytes    @db.Binary(16)
+  subject_id Bytes    @db.Binary(16)
+  teachers   teachers @relation(fields: [teacher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "teachers_subjects_ibfk_1")
+  subjects   subjects @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "teachers_subjects_ibfk_2")
+
+  @@id([teacher_id, subject_id])
+  @@index([subject_id], map: "subject_id")
+}
+
+model updates {
+  id           Bytes    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  description  String   @db.VarChar(255)
+  version      String   @unique(map: "version") @db.VarChar(255)
+  release_time DateTime @db.Timestamp(0)
+}
+
+model administrators {
+  id                     Bytes     @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  pesel                  String    @unique(map: "pesel") @db.VarChar(11)
+  email                  String    @unique(map: "email") @db.VarChar(255)
+  phone_number           String    @unique(map: "phone_number") @db.VarChar(9)
+  password               String    @db.VarChar(255)
+  first_name             String    @db.VarChar(255)
+  last_name              String    @db.VarChar(255)
+  reset_password_token   String?   @unique(map: "reset_password_token") @db.VarChar(512)
+  reset_password_expires DateTime? @db.Timestamp(0)
+}
+
+model user_types {
+  id                                             Bytes                @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name                                           String               @unique(map: "name") @db.VarChar(255)
+  messages_messages_sender_type_idTouser_types   messages[]           @relation("messages_sender_type_idTouser_types")
+  messages_messages_receiver_type_idTouser_types messages[]           @relation("messages_receiver_type_idTouser_types")
+  problems_gradebook                             problems_gradebook[]
+}
+
+model school_years {
+  id         Bytes       @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name       String      @unique(map: "name") @db.VarChar(9)
+  start_date DateTime    @db.Date
+  end_date   DateTime    @db.Date
+  classes    classes[]
+  semesters  semesters[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model semesters {
+  id             Bytes          @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  semester       Int            @db.TinyInt
+  start_date     DateTime       @db.Date
+  end_date       DateTime       @db.Date
+  school_year_id Bytes          @db.Binary(16)
+  final_grades   final_grades[]
+  school_years   school_years   @relation(fields: [school_year_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "semesters_ibfk_1")
+
+  @@unique([semester, school_year_id], map: "semester")
+  @@index([school_year_id], map: "school_year_id")
+}
+
+model class_names {
+  id      Bytes     @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name    String    @unique(map: "name") @db.VarChar(10)
+  classes classes[]
+}
+
+model exams {
+  id                            Bytes              @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  lesson_id                     Bytes              @db.Binary(16)
+  title                         String?            @db.VarChar(60)
+  topic                         String?            @db.VarChar(255)
+  scope                         String?            @db.VarChar(512)
+  start_date_time               DateTime           @db.Timestamp(0)
+  end_date_time                 DateTime           @db.Timestamp(0)
+  visibility                    Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  number_of_questions           Int?
+  duration                      Int
+  teacher_id                    Bytes              @db.Binary(16)
+  description                   String?            @db.VarChar(255)
+  number_of_tries               Int?               @default(1)
+  multiple_tries                Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  time_limit_for_each_question  Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  randomise_questions           Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  end_test_after_leaving_window Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  block_copying_pasting         Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  randomise_answers             Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  latest_attempt_counts         Boolean            @default(dbgenerated("b'1'")) @db.Bit(1)
+  best_attempt_counts           Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  hide_results                  Boolean            @default(dbgenerated("b'1'")) @db.Bit(1)
+  display_points_per_question   Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  show_correct_answers          Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  allow_navigation              Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  allow_review                  Boolean            @default(dbgenerated("b'0'")) @db.Bit(1)
+  attempts                      attempts[]
+  classes_exams                 classes_exams[]
+  closed_questions              closed_questions[]
+  lessons                       lessons            @relation(fields: [lesson_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "exams_ibfk_1")
+  teachers                      teachers           @relation(fields: [teacher_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "exams_ibfk_2")
+  files_repository              files_repository[]
+  grades_exams                  grades_exams[]
+  notifications                 notifications[]
+  open_questions                open_questions[]
+  students_exams                students_exams[]
+
+  @@index([lesson_id], map: "lesson_id")
+  @@index([teacher_id], map: "teacher_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model final_grades {
+  id          Bytes     @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  grade       Int       @db.TinyInt
+  student_id  Bytes     @db.Binary(16)
+  subject_id  Bytes     @db.Binary(16)
+  teacher_id  Bytes     @db.Binary(16)
+  semester_id Bytes     @db.Binary(16)
+  students    students  @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "final_grades_ibfk_1")
+  subjects    subjects  @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "final_grades_ibfk_2")
+  teachers    teachers  @relation(fields: [teacher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "final_grades_ibfk_3")
+  semesters   semesters @relation(fields: [semester_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "final_grades_ibfk_4")
+
+  @@index([semester_id], map: "semester_id")
+  @@index([student_id], map: "student_id")
+  @@index([subject_id], map: "subject_id")
+  @@index([teacher_id], map: "teacher_id")
+}
+
+model questions {
+  id                           Bytes                          @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  content                      String                         @db.VarChar(255)
+  survey_id                    Bytes                          @db.Binary(16)
+  question_type_id             Bytes                          @db.Binary(16)
+  surveys                      surveys                        @relation(fields: [survey_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "questions_ibfk_1")
+  questions_types              questions_types                @relation(fields: [question_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "questions_ibfk_2")
+  questions_possible_responses questions_possible_responses[]
+  questions_responses          questions_responses[]
+
+  @@index([question_type_id], map: "question_type_id")
+  @@index([survey_id], map: "survey_id")
+}
+
+model questions_possible_responses {
+  id          Bytes     @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  content     String    @db.VarChar(255)
+  question_id Bytes     @db.Binary(16)
+  questions   questions @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "questions_possible_responses_ibfk_1")
+
+  @@index([question_id], map: "question_id")
+}
+
+model questions_responses {
+  id          Bytes     @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  content     String    @db.VarChar(255)
+  student_id  Bytes     @db.Binary(16)
+  question_id Bytes     @db.Binary(16)
+  students    students  @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "questions_responses_ibfk_1")
+  questions   questions @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "questions_responses_ibfk_2")
+
+  @@unique([student_id, question_id], map: "student_id")
+  @@index([question_id], map: "question_id")
+}
+
+model questions_types {
+  id        Bytes       @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  name      String      @unique(map: "name") @db.VarChar(255)
+  questions questions[]
+}
+
+model attempt_questions {
+  id                 Bytes                           @id @db.Binary(16)
+  attempt_id         Bytes                           @db.Binary(16)
+  open_question_id   Bytes?                          @db.Binary(16)
+  closed_question_id Bytes?                          @db.Binary(16)
+  question_type      attempt_questions_question_type
+  created_at         DateTime?                       @default(now()) @db.DateTime(0)
+  attempts           attempts                        @relation(fields: [attempt_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "attempt_questions_ibfk_1")
+  open_questions     open_questions?                 @relation(fields: [open_question_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "attempt_questions_ibfk_2")
+  closed_questions   closed_questions?               @relation(fields: [closed_question_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "attempt_questions_ibfk_3")
+
+  @@index([attempt_id], map: "attempt_id")
+  @@index([closed_question_id], map: "closed_question_id")
+  @@index([open_question_id], map: "open_question_id")
+}
+
+model attempts {
+  id                     Bytes                    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  student_id             Bytes                    @db.Binary(16)
+  exam_id                Bytes                    @db.Binary(16)
+  attempt_number         Int
+  total_score            Int?
+  max_score              Int?
+  graded                 Boolean                  @default(dbgenerated("b'0'")) @db.Bit(1)
+  start_time             DateTime                 @default(now()) @db.Timestamp(0)
+  end_time               DateTime?                @db.Timestamp(0)
+  attempt_questions      attempt_questions[]
+  students               students                 @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "attempts_ibfk_1")
+  exams                  exams                    @relation(fields: [exam_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "attempts_ibfk_2")
+  student_closed_answers student_closed_answers[]
+  student_open_answers   student_open_answers[]
+
+  @@unique([student_id, exam_id, attempt_number], map: "unique_attempt")
+  @@index([exam_id], map: "exam_id")
+}
+
+model classes_exams {
+  class_id Bytes   @db.Binary(16)
+  exam_id  Bytes   @db.Binary(16)
+  classes  classes @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "classes_exams_ibfk_1")
+  exams    exams   @relation(fields: [exam_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "classes_exams_ibfk_2")
+
+  @@id([class_id, exam_id])
+  @@index([exam_id], map: "exam_id")
+}
+
+model closed_answers {
+  id                     Bytes                    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  closed_question_id     Bytes                    @db.Binary(16)
+  is_correct             Boolean?                 @db.Bit(1)
+  description            String                   @db.VarChar(255)
+  closed_questions       closed_questions         @relation(fields: [closed_question_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "closed_answers_ibfk_1")
+  student_closed_answers student_closed_answers[]
+
+  @@index([closed_question_id], map: "closed_question_id")
+}
+
+model closed_questions {
+  id                     Bytes                    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  exam_id                Bytes                    @db.Binary(16)
+  score                  Int?                     @db.TinyInt
+  is_multiple            Boolean?                 @db.Bit(1)
+  description            String                   @db.VarChar(255)
+  attempt_questions      attempt_questions[]
+  closed_answers         closed_answers[]
+  exams                  exams                    @relation(fields: [exam_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "closed_questions_ibfk_1")
+  student_closed_answers student_closed_answers[]
+
+  @@index([exam_id], map: "exam_id")
+}
+
+model files_repository {
+  id          Bytes  @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  title       String @db.VarChar(50)
+  description String @db.VarChar(255)
+  file        Bytes
+  exam_id     Bytes  @db.Binary(16)
+  exams       exams  @relation(fields: [exam_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "files_repository_ibfk_1")
+
+  @@index([exam_id], map: "exam_id")
+}
+
+model gradebook_exams {
+  id        Bytes   @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  topic     String  @db.VarChar(255)
+  scope     String  @db.VarChar(512)
+  lesson_id Bytes   @db.Binary(16)
+  lessons   lessons @relation(fields: [lesson_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "gradebook_exams_ibfk_1")
+
+  @@index([lesson_id], map: "lesson_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model grades_exams {
+  id          Bytes    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  student_id  Bytes    @db.Binary(16)
+  attempt_id  Bytes    @db.Binary(16)
+  exam_id     Bytes    @db.Binary(16)
+  description String   @db.VarChar(255)
+  grade       String   @db.Char(2)
+  date_given  DateTime @default(now()) @db.Timestamp(0)
+  students    students @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "grades_exams_ibfk_1")
+  exams       exams    @relation(fields: [exam_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "grades_exams_ibfk_2")
+
+  @@index([exam_id], map: "exam_id")
+  @@index([student_id], map: "student_id")
+}
+
+model grading_scale {
+  id        Bytes  @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  min_score Int
+  max_score Int
+  grades    String @db.Char(2)
+}
+
+model notifications {
+  id                Bytes    @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  student_id        Bytes    @db.Binary(16)
+  description       String   @db.VarChar(255)
+  notification_date DateTime @default(now()) @db.Timestamp(0)
+  is_read           Boolean  @default(dbgenerated("b'0'")) @db.Bit(1)
+  exam_id           Bytes?   @db.Binary(16)
+  students          students @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "notifications_ibfk_1")
+  exams             exams?   @relation(fields: [exam_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "notifications_ibfk_2")
+
+  @@index([exam_id], map: "exam_id")
+  @@index([student_id], map: "student_id")
+}
+
+model open_answers {
+  id               Bytes          @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  open_question_id Bytes          @db.Binary(16)
+  description      String         @db.VarChar(255)
+  open_questions   open_questions @relation(fields: [open_question_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "open_answers_ibfk_1")
+
+  @@index([open_question_id], map: "open_question_id")
+}
+
+model open_questions {
+  id                   Bytes                  @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  exam_id              Bytes                  @db.Binary(16)
+  auto_check           Boolean                @default(dbgenerated("b'0'")) @db.Bit(1)
+  description          String?                @db.VarChar(200)
+  score                Int                    @db.TinyInt
+  attempt_questions    attempt_questions[]
+  open_answers         open_answers[]
+  exams                exams                  @relation(fields: [exam_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "open_questions_ibfk_1")
+  student_open_answers student_open_answers[]
+
+  @@index([exam_id], map: "exam_id")
+}
+
+model student_closed_answers {
+  id                 Bytes            @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  student_id         Bytes            @db.Binary(16)
+  closed_question_id Bytes            @db.Binary(16)
+  closed_answer_id   Bytes            @db.Binary(16)
+  attempt_id         Bytes            @db.Binary(16)
+  correctness        Boolean?         @db.Bit(1)
+  date_time          DateTime?        @default(now()) @db.Timestamp(0)
+  students           students         @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "student_closed_answers_ibfk_1")
+  closed_questions   closed_questions @relation(fields: [closed_question_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "student_closed_answers_ibfk_2")
+  closed_answers     closed_answers   @relation(fields: [closed_answer_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "student_closed_answers_ibfk_3")
+  attempts           attempts         @relation(fields: [attempt_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "student_closed_answers_ibfk_4")
+
+  @@index([attempt_id], map: "attempt_id")
+  @@index([closed_answer_id], map: "closed_answer_id")
+  @@index([closed_question_id], map: "closed_question_id")
+  @@index([student_id], map: "student_id")
+}
+
+model student_open_answers {
+  id               Bytes          @id @default(dbgenerated("(uuid_to_bin(uuid()))")) @db.Binary(16)
+  open_question_id Bytes          @db.Binary(16)
+  score            Int?           @db.TinyInt
+  student_id       Bytes          @db.Binary(16)
+  attempt_id       Bytes          @db.Binary(16)
+  date_time        DateTime?      @db.Timestamp(0)
+  description      String?        @db.VarChar(255)
+  open_questions   open_questions @relation(fields: [open_question_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "student_open_answers_ibfk_1")
+  students         students       @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "student_open_answers_ibfk_2")
+  attempts         attempts       @relation(fields: [attempt_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "student_open_answers_ibfk_3")
+
+  @@index([attempt_id], map: "attempt_id")
+  @@index([open_question_id], map: "open_question_id")
+  @@index([student_id], map: "student_id")
+}
+
+model students_exams {
+  students_id Bytes    @db.Binary(16)
+  exam_id     Bytes    @db.Binary(16)
+  students    students @relation(fields: [students_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "students_exams_ibfk_1")
+  exams       exams    @relation(fields: [exam_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "students_exams_ibfk_2")
+
+  @@id([students_id, exam_id])
+  @@index([exam_id], map: "exam_id")
+}
+
+enum attempt_questions_question_type {
+  OPEN
+  CLOSED
+}

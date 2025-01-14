@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const questions_js_1 = require("../handlers/questions.js");
+const questionsValidation_js_1 = require("../validations/questionsValidation.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const questionsRouter = (0, express_1.Router)();
+questionsRouter.patch('/:questionId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, questionsValidation_js_1.validateUpdateQuestion)(), middleware_js_1.handleInputErrors, questions_js_1.updateQuestion);
+questionsRouter.delete('/:questionId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, questionsValidation_js_1.validateDeleteQuestion)(), middleware_js_1.handleInputErrors, questions_js_1.deleteQuestion);
+exports.default = questionsRouter;

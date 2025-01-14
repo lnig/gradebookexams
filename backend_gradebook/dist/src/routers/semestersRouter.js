@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const semesters_js_1 = require("../handlers/semesters.js");
+const semestersValidation_js_1 = require("../validations/semestersValidation.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const semestersRouter = (0, express_1.Router)();
+semestersRouter.get('/by-school-year', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), semesters_js_1.getSemestersBySchoolYearName);
+semestersRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, semestersValidation_js_1.validateCreateSemester)(), middleware_js_1.handleInputErrors, semesters_js_1.createSemester);
+semestersRouter.get('/:schoolYearId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), (0, semestersValidation_js_1.validateGetSemesters)(), middleware_js_1.handleInputErrors, semesters_js_1.getSemesters);
+semestersRouter.patch('/:semesterId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, semestersValidation_js_1.validateUpdateSemester)(), middleware_js_1.handleInputErrors, semesters_js_1.updateSemester);
+semestersRouter.delete('/:semesterId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, semestersValidation_js_1.validateDeleteSemester)(), middleware_js_1.handleInputErrors, semesters_js_1.deleteSemester);
+exports.default = semestersRouter;

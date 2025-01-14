@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const classNamesValidation_js_1 = require("../validations/classNamesValidation.js");
+const classNames_js_1 = require("../handlers/classNames.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const classNamesRouter = (0, express_1.Router)();
+classNamesRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, classNamesValidation_js_1.validateCreateClassName)(), middleware_js_1.handleInputErrors, classNames_js_1.createClassName);
+classNamesRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), classNames_js_1.getClassNames);
+classNamesRouter.patch('/:classNameId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, classNamesValidation_js_1.validateUpdateClassName)(), middleware_js_1.handleInputErrors, classNames_js_1.updateClassName);
+classNamesRouter.delete('/:classNameId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, classNamesValidation_js_1.validateDeleteClassName)(), middleware_js_1.handleInputErrors, classNames_js_1.deleteClassName);
+exports.default = classNamesRouter;

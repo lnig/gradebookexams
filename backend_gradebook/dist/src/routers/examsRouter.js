@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const exams_js_1 = require("../handlers/exams.js");
+const examsValidation_js_1 = require("../validations/examsValidation.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const examsRouter = (0, express_1.Router)();
+examsRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, examsValidation_js_1.validateCreateExam)(), middleware_js_1.handleInputErrors, exams_js_1.createExam);
+examsRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), exams_js_1.getAllExams);
+examsRouter.get('/:userId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), (0, examsValidation_js_1.validateUserId)(), middleware_js_1.handleInputErrors, exams_js_1.getExams);
+examsRouter.get('/upcoming/:userId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), (0, examsValidation_js_1.validateUserId)(), middleware_js_1.handleInputErrors, exams_js_1.getThreeUpcomingExams);
+examsRouter.patch('/:examId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, examsValidation_js_1.validateUpdateExam)(), middleware_js_1.handleInputErrors, exams_js_1.updateExam);
+examsRouter.delete('/:examId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, examsValidation_js_1.validateDeleteExam)(), middleware_js_1.handleInputErrors, exams_js_1.deleteExam);
+exports.default = examsRouter;

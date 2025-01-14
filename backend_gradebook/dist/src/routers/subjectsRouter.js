@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const subjectsValidation_js_1 = require("../validations/subjectsValidation.js");
+const subjects_js_1 = require("../handlers/subjects.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const subjectsRouter = (0, express_1.Router)();
+subjectsRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, subjectsValidation_js_1.validateCreateSubject)(), middleware_js_1.handleInputErrors, subjects_js_1.createSubject);
+subjectsRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), subjects_js_1.getSubjects);
+subjectsRouter.patch('/:subjectId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, subjectsValidation_js_1.validateUpdateSubject)(), middleware_js_1.handleInputErrors, subjects_js_1.updateSubject);
+subjectsRouter.delete('/:subjectId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, subjectsValidation_js_1.validateDeleteSubject)(), middleware_js_1.handleInputErrors, subjects_js_1.deleteSubject);
+exports.default = subjectsRouter;

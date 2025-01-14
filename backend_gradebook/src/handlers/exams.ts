@@ -1,0 +1,322 @@
+import { Request, Response } from 'express';
+import prisma from '../db';
+import { grades_gradebook, subjects, classes, students, teachers, lessons, gradebook_exams } from '@prisma/client';
+import { createSuccessResponse, createErrorResponse } from '../interfaces/responseInterfaces';
+import { parse as uuidParse, stringify as uuidStringify } from 'uuid';
+import { Buffer } from 'node:buffer';
+
+function isStudent(user: teachers | students): user is students {
+    return (user as students).class_id !== undefined;
+}
+
+export const createExam = async (req: Request, res: Response) => {
+    try {
+        const topic: string = req.body.topic;
+        const scope: string = req.body.scope;
+        const lessonId: string = req.body.lessonId;
+
+        const existingLesson: lessons | null = await prisma.lessons.findUnique({
+            where: {
+                id: Buffer.from(uuidParse(lessonId))
+            }
+        });
+
+        if (!existingLesson) {
+            return res.status(404).json(createErrorResponse(`Lesson does not exist.`));
+        }
+
+        const createdExam = await prisma.gradebook_exams.create({
+            data: {
+                topic: topic,
+                scope: scope,
+                lesson_id: Buffer.from(uuidParse(lessonId))
+            }
+        });
+
+        const responseData = {
+            ...createdExam,
+            id: uuidStringify(createdExam.id),
+            lesson_id: uuidStringify(createdExam.lesson_id),
+        };
+
+        return res.status(200).json(createSuccessResponse(responseData, `Exam created successfully.`));
+    } catch (err) {
+        console.error('Error creating exam', err);
+        res.status(500).json(createErrorResponse('An unexpected error occurred while creating exam. Please try again later.'));
+    }
+};
+
+export const getExams = async (req: Request, res: Response) => {
+    try {
+        const userId: string = req.params.userId;
+
+        let existingUser: teachers | students | null = await prisma.teachers.findUnique({
+            where: {
+                id: Buffer.from(uuidParse(userId))
+            }
+        });
+
+        if (!existingUser) {
+            existingUser = await prisma.students.findUnique({
+                where: {
+                    id: Buffer.from(uuidParse(userId))
+                }
+            });
+        }
+
+        if (!existingUser) {
+            return res.status(404).json(createErrorResponse(`User does not exist.`));
+        }
+
+        let lessons;
+
+        if (isStudent(existingUser) && existingUser.class_id) {
+            lessons = await prisma.lessons.findMany({
+                where: {
+                    class_id: existingUser.class_id
+                }
+            });
+        } else {
+            lessons = await prisma.lessons.findMany({
+                where: {
+                    teacher_id: existingUser.id,
+                }
+            });
+        }
+
+        const exams = await prisma.gradebook_exams.findMany({
+            where: {
+                lesson_id: {
+                    in: lessons.map(lesson => lesson.id)
+                }
+            },
+            include: {
+                lessons: true
+            }
+        });
+
+        const responseData = exams.map(exam => ({
+            id: uuidStringify(exam.id),
+            topic: exam.topic,
+            scope: exam.scope,
+            lesson: {
+                id: uuidStringify(exam.lessons.id),
+                description: exam.lessons.description,
+                date: exam.lessons.date,
+                start_time: exam.lessons.start_time,
+                end_time: exam.lessons.end_time,
+                teacher_id: uuidStringify(exam.lessons.teacher_id),
+                class_id: uuidStringify(exam.lessons.class_id),
+                subject_id: uuidStringify(exam.lessons.subject_id),
+            }
+        }));
+
+        return res.status(200).json(createSuccessResponse(responseData, 'Exams retrieved successfully.'));
+    } catch (err) {
+        console.error('Error retrieving exams', err);
+        return res.status(500).json(createErrorResponse('An unexpected error occurred while retrieving exams. Please try again later.'));
+    }
+};
+
+export const getThreeUpcomingExams = async (req: Request, res: Response) => {
+    try {
+        const userId: string = req.params.userId;
+
+        let existingUser: teachers | students | null = await prisma.teachers.findUnique({
+            where: {
+                id: Buffer.from(uuidParse(userId))
+            }
+        });
+
+        if (!existingUser) {
+            existingUser = await prisma.students.findUnique({
+                where: {
+                    id: Buffer.from(uuidParse(userId))
+                }
+            });
+        }
+
+        if (!existingUser) {
+            return res.status(404).json(createErrorResponse(`User does not exist.`));
+        }
+
+        let lessons;
+
+        if (isStudent(existingUser) && existingUser.class_id) {
+            lessons = await prisma.lessons.findMany({
+                where: {
+                    class_id: existingUser.class_id
+                }
+            });
+        } else {
+            lessons = await prisma.lessons.findMany({
+                where: {
+                    teacher_id: existingUser.id,
+                }
+            });
+        }
+
+        const now = new Date();
+
+        const exams = await prisma.gradebook_exams.findMany({
+            where: {
+                lesson_id: {
+                    in: lessons.map(lesson => lesson.id)
+                },
+                OR: [
+                    {
+                        lessons: {
+                            date: {
+                                gt: now
+                            }
+                        }
+                    },
+                    {
+                        lessons: {
+                            date: {
+                                equals: now
+                            },
+                            start_time: {
+                                gt: now
+                            }
+                        }
+                    }
+                ]
+            },
+            include: {
+                lessons: true
+            },
+            orderBy: [
+                { lessons: { date: 'asc' } },
+                { lessons: { start_time: 'asc' } }
+            ],
+            take: 3
+        });
+ 
+        const responseData = exams.map(exam => ({
+            id: uuidStringify(exam.id),
+            topic: exam.topic,
+            scope: exam.scope,
+            lesson: {
+                id: uuidStringify(exam.lessons.id),
+                description: exam.lessons.description,
+                date: exam.lessons.date,
+                start_time: exam.lessons.start_time,
+                end_time: exam.lessons.end_time,
+                teacher_id: uuidStringify(exam.lessons.teacher_id),
+                class_id: uuidStringify(exam.lessons.class_id),
+                subject_id: uuidStringify(exam.lessons.subject_id),
+            }
+        }));
+
+        return res.status(200).json(createSuccessResponse(responseData, 'Exams retrieved successfully.'));
+    } catch (err) {
+        console.error('Error retrieving exams', err);
+        return res.status(500).json(createErrorResponse('An unexpected error occurred while retrieving exams. Please try again later.'));
+    }
+};
+
+export const updateExam = async (req: Request, res: Response) => {
+    try {
+        const examId: string = req.params.examId;
+        const topic: string = req.body.topic;
+        const scope: string = req.body.scope;
+
+        const existingExam: gradebook_exams | null = await prisma.gradebook_exams.findUnique({
+            where: {
+                id: Buffer.from(uuidParse(examId))
+            }
+        });
+
+        if (!existingExam) {
+            return res.status(404).json(createErrorResponse(`Exam does not exist.`));
+        }
+
+        const data: { topic?: string, scope?: string } = {};
+
+        if (topic) data.topic = topic;
+        if (scope) data.scope = scope;
+
+        const updatedExam = await prisma.gradebook_exams.update({
+            where: {
+                id: Buffer.from(uuidParse(examId))
+            },
+            data: data
+        });
+
+        const responseData = {
+            ...updatedExam,
+            id: uuidStringify(updatedExam.id),
+            lesson_id: uuidStringify(updatedExam.lesson_id)
+        };
+
+        return res.status(200).json(createSuccessResponse(responseData, `Exam updated successfully.`));
+    } catch (err) {
+        console.error('Error updating exam', err);
+        res.status(500).json(createErrorResponse('An unexpected error occurred while updating exam. Please try again later.'));
+    }
+};
+
+export const deleteExam = async (req: Request, res: Response) => {
+    try {
+        const examId: string = req.params.examId;
+
+        const existingExam: gradebook_exams | null = await prisma.gradebook_exams.findUnique({
+            where: {
+                id: Buffer.from(uuidParse(examId))
+            }
+        });
+
+        if (!existingExam) {
+            return res.status(404).json(createErrorResponse(`Exam does not exist.`));
+        }
+
+        const deletedExam = await prisma.gradebook_exams.delete({
+            where: {
+                id: Buffer.from(uuidParse(examId))
+            }
+        });
+
+        const responseData = {
+            ...deletedExam,
+            id: uuidStringify(deletedExam.id),
+            lesson_id: uuidStringify(deletedExam.lesson_id)
+        };
+
+        return res.status(200).json(createSuccessResponse(responseData, `Exam deleted successfully.`));
+    } catch (err) {
+        console.error('Error deleting exam', err);
+        res.status(500).json(createErrorResponse('An unexpected error occurred while deleting exam. Please try again later.'));
+    }
+};
+
+export const getAllExams = async (req: Request, res: Response) => {
+    try {
+        const exams = await prisma.gradebook_exams.findMany({
+            include: {
+                lessons: true,
+            },
+        });
+
+        const responseData = exams.map(exam => ({
+            id: uuidStringify(exam.id),
+            topic: exam.topic,
+            scope: exam.scope,
+            lesson: {
+                id: uuidStringify(exam.lessons.id),
+                description: exam.lessons.description,
+                date: exam.lessons.date,
+                start_time: exam.lessons.start_time,
+                end_time: exam.lessons.end_time,
+                teacher_id: uuidStringify(exam.lessons.teacher_id),
+                class_id: uuidStringify(exam.lessons.class_id),
+                subject_id: uuidStringify(exam.lessons.subject_id),
+            },
+        }));
+
+        return res.status(200).json(createSuccessResponse(responseData, 'All exams retrieved successfully.'));
+    } catch (err) {
+        console.error('Error retrieving all exams', err);
+        return res.status(500).json(createErrorResponse('An unexpected error occurred while retrieving all exams. Please try again later.'));
+    }
+};

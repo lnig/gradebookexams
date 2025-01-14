@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const schoolEventsValidation_js_1 = require("../validations/schoolEventsValidation.js");
+const schoolEvents_js_1 = require("../handlers/schoolEvents.js");
+const schoolEventsRouter = (0, express_1.Router)();
+schoolEventsRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, schoolEventsValidation_js_1.validateCreateSchoolEvents)(), middleware_js_1.handleInputErrors, schoolEvents_js_1.createSchoolEvent);
+schoolEventsRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), middleware_js_1.handleInputErrors, schoolEvents_js_1.getSchoolEvents);
+schoolEventsRouter.get('/:schoolEventId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), (0, schoolEventsValidation_js_1.validateSchoolEventId)(), middleware_js_1.handleInputErrors, schoolEvents_js_1.getSchoolEvent);
+schoolEventsRouter.patch('/:schoolEventId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, schoolEventsValidation_js_1.validateUpdateSchoolEvent)(), middleware_js_1.handleInputErrors, schoolEvents_js_1.updateSchoolEvent);
+schoolEventsRouter.delete('/:schoolEventId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, schoolEventsValidation_js_1.validateSchoolEventId)(), middleware_js_1.handleInputErrors, schoolEvents_js_1.deleteSchoolEvent);
+exports.default = schoolEventsRouter;

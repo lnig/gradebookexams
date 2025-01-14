@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const statuses_js_1 = require("../handlers/statuses.js");
+const statusesValidation_js_1 = require("../validations/statusesValidation.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const statusesRouter = (0, express_1.Router)();
+statusesRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, statusesValidation_js_1.validateCreateStatus)(), middleware_js_1.handleInputErrors, statuses_js_1.createStatus);
+statusesRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), statuses_js_1.getStatuses);
+statusesRouter.patch('/:statusId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), statuses_js_1.updateStatus);
+statusesRouter.delete('/:statusId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, statusesValidation_js_1.validateDeleteStatus)(), middleware_js_1.handleInputErrors, statuses_js_1.deleteStatus);
+exports.default = statusesRouter;

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const studentsParentsValidation_js_1 = require("../validations/studentsParentsValidation.js");
+const studentsParents_js_1 = require("../handlers/studentsParents.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const studentsParentsRouter = (0, express_1.Router)();
+studentsParentsRouter.post('/assign-parent', auth_js_1.authenticate, (0, auth_js_1.authorize)(['administrator']), (0, studentsParentsValidation_js_1.validateAssignParentToStudent)(), middleware_js_1.handleInputErrors, studentsParents_js_1.assignParentToStudent);
+studentsParentsRouter.delete('/unassign-parent/:studentId/:parentId', auth_js_1.authenticate, (0, auth_js_1.authorize)(['administrator']), (0, studentsParentsValidation_js_1.validateUnassignParentFromStudent)(), middleware_js_1.handleInputErrors, studentsParents_js_1.unassignParentFromStudent);
+exports.default = studentsParentsRouter;

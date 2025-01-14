@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const middleware_js_1 = require("../modules/middleware.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const eventTypesValidation_js_1 = require("../validations/eventTypesValidation.js");
+const eventTypes_js_1 = require("../handlers/eventTypes.js");
+const eventTypesRouter = (0, express_1.Router)();
+eventTypesRouter.post('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, eventTypesValidation_js_1.validateEventTypeName)(), middleware_js_1.handleInputErrors, eventTypes_js_1.createEventType);
+eventTypesRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), middleware_js_1.handleInputErrors, eventTypes_js_1.getEventTypes);
+eventTypesRouter.get('/:eventTypeId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), (0, eventTypesValidation_js_1.validateEventTypeId)(), middleware_js_1.handleInputErrors, eventTypes_js_1.getEventType);
+eventTypesRouter.patch('/:eventTypeId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, eventTypesValidation_js_1.validateEventTypeUpdate)(), middleware_js_1.handleInputErrors, eventTypes_js_1.updateEventType);
+eventTypesRouter.delete('/:eventTypeId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator]), (0, eventTypesValidation_js_1.validateEventTypeId)(), middleware_js_1.handleInputErrors, eventTypes_js_1.deleteEventType);
+exports.default = eventTypesRouter;

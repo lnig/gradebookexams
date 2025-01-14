@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_js_1 = require("../modules/auth.js");
+const userTypes_js_1 = require("../enums/userTypes.js");
+const students_js_1 = require("../handlers/students.js");
+const studentsRouter = (0, express_1.Router)();
+studentsRouter.get('', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Parent, userTypes_js_1.UserType.Student]), students_js_1.getStudents);
+studentsRouter.get('/:studentId', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), students_js_1.getStudentById);
+exports.default = studentsRouter;
