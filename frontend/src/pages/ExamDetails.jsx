@@ -9,7 +9,7 @@ import Switch from '../components/Switch';
 import NumberInput from "../components/NumberInput";
 import { useNavigate } from 'react-router-dom';
 import { getToken, getUserRole } from "../utils/UserRoleUtils";
-import UserRoles from "../utils/UserRoles"
+import UserRoles from "../utils/userRoles"
 import { Info } from 'lucide-react';
 import Tooltip from '../components/Tooltip'
 import { toast } from 'react-toastify';
