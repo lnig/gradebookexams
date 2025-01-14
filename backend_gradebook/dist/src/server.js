@@ -45,7 +45,7 @@ const server = http_1.default.createServer(app);
 exports.server = server;
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: 'https://gradebookexams-1.onrender.com',
+        origin: 'https://egrade.onrender.com',
         methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization']
@@ -54,7 +54,7 @@ const io = new socket_io_1.Server(server, {
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)({
-    origin: 'https://gradebookexams-1.onrender.com',
+    origin: 'https://egrade.onrender.com',
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ['Content-Type', 'Authorization']
