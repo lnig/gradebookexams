@@ -1,6 +1,6 @@
 import { SECRET_KEY } from './validateEnv.js';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import AuthUser from '../interfaces/authUser.js';
 import { Request, Response, NextFunction } from 'express';
 import { createErrorResponse } from '../interfaces/responseInterfaces.js';
