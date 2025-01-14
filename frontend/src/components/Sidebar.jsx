@@ -15,11 +15,11 @@ export default function Sidebar({ children, onLogout }) {
           <div className="p-4 pb-2 flex justify-between items-center h-12">
             <div className="flex items-center gap-2">
               <img
-                src="https://img.logoipsum.com/295.svg"
+                src="https://img.logoipsum.com/296.svg"
                 className="w-8 lg:mt-4"
                 alt="LogoIpsum"
               />
-              <p className="text-2xl lg:mt-4 font-averia text-[#5417D7]">eGrade</p>
+              <p className="text-2xl lg:mt-4 font-averia text-[#007dfc]">eGrade</p>
             </div>
             
             <button
