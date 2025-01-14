@@ -142,7 +142,7 @@ export function ClassNames() {
                   <Search size={20} className='mr-2 text-textBg-600' />
                   <input
                     type='text'
-                    placeholder='Search Event Types'
+                    placeholder='Search Class Name'
                     value={searchTerm}
                     onChange={handleSearchChange}
                     className="w-full focus:outline-none lg:text-base placeholder:text-textBg-600"

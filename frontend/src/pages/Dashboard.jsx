@@ -222,7 +222,7 @@ export function Dashboard() {
                     </div>
                   ))
                 ) : (
-                  <p>No grades available.</p>
+                  <p>No upcoming exams</p>
                 )}
               </div>
               <Link to={`/calendar`}>
