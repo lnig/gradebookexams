@@ -10,6 +10,7 @@ import CreateQuestionTypeForm from "../components/forms/questiontypes/CreateQues
 import EditQuestionTypeForm from "../components/forms/questiontypes/EditQuestionTypeForm";
 import ConfirmForm from "../components/forms/ConfirmForm";
 import UserRoles from "../data/userRoles";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 function Surveys() {
   const [activeTab, setActiveTab] = useState('surveys');
@@ -31,7 +32,7 @@ function Surveys() {
   const fetchSurveys = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/survey', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/survey`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +54,7 @@ function Surveys() {
   const fetchQuestionTypes = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/question-type', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/question-type`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +140,7 @@ function Surveys() {
     if (!currentDeleteQuestionType) return;
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/question-type/${currentDeleteQuestionType.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/question-type/${currentDeleteQuestionType.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

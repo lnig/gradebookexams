@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { validate as validateUUID } from 'uuid';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 const EditGradeForm = ({ grade, isOpen, onSuccess, onClose }) => {
   const [description, setDescription] = useState(grade.description);
@@ -34,7 +35,7 @@ const EditGradeForm = ({ grade, isOpen, onSuccess, onClose }) => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/grade/${grade.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/grade/${grade.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

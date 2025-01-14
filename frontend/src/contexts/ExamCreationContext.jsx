@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { getToken } from '../utils/UserRoleUtils';
 import { v4 as uuidv4 } from 'uuid';
+import { API_EXAMS_URL } from '../utils/config';
 
 export const ExamCreationContext = createContext();
 
@@ -40,7 +41,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
           selectedStudents: [],
           availableClasses: [],
           availableStudents: [],
-          gradebookExams: [] // Inicjalizacja jako pusta tablica
+          gradebookExams: []
         };
   });
   
@@ -77,15 +78,13 @@ export const ExamCreationProvider = ({ children, examId }) => {
       ...prevData,
       ...newData,
     }));
-    // console.log(title)
-    // console.log(selectedLessonId);
   };
 
   const fetchGradebookExams = useCallback(async () => {
     console.log("Fetching Gradebook Exams...");
     incrementLoading();
     try {
-      const response = await fetch('http://localhost:3000/exams/getGradebookExams', {
+      const response = await fetch(`${API_EXAMS_URL}/exams/getGradebookExams`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +162,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
   const fetchExamInfo = useCallback(async () => {
     incrementLoading();
     try {
-      const response = await fetch(`http://localhost:3000/exams/${examId}`, {
+      const response = await fetch(`${API_EXAMS_URL}/exams/${examId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -228,7 +227,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
   const fetchExamQuestions = useCallback(async () => {
     incrementLoading();
     try {
-      const response = await fetch(`http://localhost:3000/exams/${examId}/getExamQuestions`, {
+      const response = await fetch(`${API_EXAMS_URL}/exams/${examId}/getExamQuestions`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -269,7 +268,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
   const fetchParticipants = useCallback(async () => {
     incrementLoading();
     try {
-      const response = await fetch(`http://localhost:3000/exams/${examId}/getParticipants`, {
+      const response = await fetch(`${API_EXAMS_URL}/exams/${examId}/getParticipants`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -296,7 +295,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
   const fetchParticipantsForNewExam = useCallback(async () => {
     incrementLoading();
     try {
-      const response = await fetch(`http://localhost:3000/exams/NewExamParticipants`, {
+      const response = await fetch(`${API_EXAMS_URL}/exams/NewExamParticipants`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -467,7 +466,6 @@ export const ExamCreationProvider = ({ children, examId }) => {
       });
     } else {
       setIsEditing(false);
-      // Usunięto wywołanie fetchGradebookExams
     }
   }, [examId, fetchExamInfo, fetchExamQuestions, fetchParticipants, fetchGradebookExams, resetExamData]);
 

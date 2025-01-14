@@ -11,6 +11,7 @@ import ConfirmForm from '../components/forms/ConfirmForm';
 import { validate as validateUUID } from 'uuid'; 
 import { toast } from "react-toastify";
 import UserRoles from "../data/userRoles";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 function ClassDetails() {
   const { id } = useParams();
@@ -31,7 +32,7 @@ function ClassDetails() {
   const fetchClassDetails = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/class/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/class/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +55,7 @@ function ClassDetails() {
   const fetchAvailableStudents = async () => {
     setLoading(true);
     try {
-        const response = await fetch('http://localhost:3001/student', {
+        const response = await fetch(`${API_GRADEBOOK_URL}/student`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ function ClassDetails() {
     try {
       for (const student of selectedStudents) {
         const studentId = student.value;
-        const response = await fetch(`http://localhost:3001/class/assign-student/${id}`, {
+        const response = await fetch(`${API_GRADEBOOK_URL}/class/assign-student/${id}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -120,7 +121,7 @@ function ClassDetails() {
 
   const handleRemoveStudent = async (studentId) => {
     try {
-        const response = await fetch(`http://localhost:3001/class/unassign-student/${id}`, {
+        const response = await fetch(`${API_GRADEBOOK_URL}/class/unassign-student/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -159,7 +160,7 @@ function ClassDetails() {
     if (!classToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/class/${classToDelete}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/class/${classToDelete}`, {
           method: 'DELETE',
           headers: {
               'Content-Type': 'application/json',

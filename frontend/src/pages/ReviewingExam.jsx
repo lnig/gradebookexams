@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PageTitle from "../components/PageTitle";
 import QuestionOnSolving from "../components/QuestionOnSolving";
 import { toast } from 'react-toastify';
+import { API_EXAMS_URL } from "../utils/config";
 
 export function ReviewingExam() {
     const { attempt_id } = useParams();
@@ -18,7 +19,7 @@ export function ReviewingExam() {
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(`http://localhost:3000/exams/getAttemptDetails/${attempt_id}`, {
+                const response = await fetch(`${API_EXAMS_URL}/exams/getAttemptDetails/${attempt_id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { validate as validateUUID } from 'uuid';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 const EditExamForm = ({ exam, isOpen, onSuccess, onClose }) => {
   const [topic, setTopic] = useState(exam.topic);
@@ -34,7 +35,7 @@ const EditExamForm = ({ exam, isOpen, onSuccess, onClose }) => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/exam/${exam.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/exam/${exam.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

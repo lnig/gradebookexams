@@ -9,6 +9,7 @@ import { validate as validateUUID } from 'uuid';
 import { getToken } from '../utils/UserRoleUtils';
 import ConfirmForm from '../components/forms/ConfirmForm';
 import { toast } from "react-toastify";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function ClassNames() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,7 +27,7 @@ export function ClassNames() {
   const fetchClassNames = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/class-name', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/class-name`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +112,7 @@ export function ClassNames() {
     if (!classToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/class-name/${classToDelete}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/class-name/${classToDelete}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

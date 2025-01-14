@@ -5,6 +5,7 @@ import Modal from '../../Modal';
 import { getToken } from '../../../utils/UserRoleUtils';
 import '../../../customCSS/customScrollbar.css';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function CreateLessonForm({ onSuccess, onClose, isOpen }) {
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ function CreateLessonForm({ onSuccess, onClose, isOpen }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3001/class', 
+      const response = await fetch(`${API_GRADEBOOK_URL}/class`, 
       {
         method: 'GET',
         headers: {
@@ -55,7 +56,7 @@ function CreateLessonForm({ onSuccess, onClose, isOpen }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3001/teacher', 
+      const response = await fetch(`${API_GRADEBOOK_URL}/teacher`, 
       {
         method: 'GET',
         headers: {
@@ -80,7 +81,7 @@ function CreateLessonForm({ onSuccess, onClose, isOpen }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3001/subject', 
+      const response = await fetch(`${API_GRADEBOOK_URL}/subject`, 
       {
         method: 'GET',
         headers: {
@@ -166,7 +167,7 @@ function CreateLessonForm({ onSuccess, onClose, isOpen }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/lesson', { 
+      const response = await fetch(`${API_GRADEBOOK_URL}/lesson`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

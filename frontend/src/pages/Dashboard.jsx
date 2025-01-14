@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { getToken, getUserId, getUserRole } from "../utils/UserRoleUtils";
 import UserRoles from "../data/userRoles";
 import { formatTime, formatDate } from "../utils/dateTimeUtils";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function Dashboard() {
   const [latestHomework, setLatestHomework] = useState([]);
@@ -33,7 +34,7 @@ export function Dashboard() {
 
   const fetchStudentForParent = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/student-parent/${parentId}/students`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/${parentId}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +55,7 @@ export function Dashboard() {
     setLoadingLatestHomework(true);
     setErrorLatestHomework(null);
     try {
-      const response = await fetch(`http://localhost:3001/homework/latest/${studentId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/homework/latest/${studentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ export function Dashboard() {
     setAttendanceLoading(true);
     setAttendanceError(null);
     try {
-      const response = await fetch(`http://localhost:3001/attendance/statistics/${studentId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/attendance/statistics/${studentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -123,7 +124,7 @@ export function Dashboard() {
     setLatestGradesLoading(true);
     setLatestGradesError(null);
     try {
-      const response = await fetch(`http://localhost:3001/grade/latest/${studentId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/grade/latest/${studentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -146,7 +147,7 @@ export function Dashboard() {
     setUpcomingExamsLoading(true);
     setUpcomingExamsError(null);
     try {
-      const response = await fetch(`http://localhost:3001/exam/upcoming/${studentId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/exam/upcoming/${studentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

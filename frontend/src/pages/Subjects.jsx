@@ -9,6 +9,7 @@ import ConfirmForm from '../components/forms/ConfirmForm';
 import CreateSubjectForm from "../components/forms/subjects/CreateSubjectForm"
 import EditSubjectForm from "../components/forms/subjects/EditSubjectForm"
 import { toast } from "react-toastify";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function Subjects() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +29,7 @@ export function Subjects() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3001/subject', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/subject`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +115,7 @@ export function Subjects() {
     if (!subjectToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/subject/${subjectToDelete}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/subject/${subjectToDelete}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

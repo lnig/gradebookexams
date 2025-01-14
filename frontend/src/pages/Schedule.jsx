@@ -29,6 +29,7 @@ import DropdownMenu from '../components/Dropdown';
 import { toast } from 'react-toastify';
 import { formatTime } from '../utils/dateTimeUtils';
 import CreateExamForm from '../components/forms/exams/CreateExamForm';
+import { API_GRADEBOOK_URL } from '../utils/config';
 
 const today = new Date();
 let baseYear = today.getFullYear();
@@ -72,7 +73,7 @@ export function Schedule() {
 
   const fetchStudentForParent = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/student-parent/${parentId}/students`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/${parentId}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +144,7 @@ export function Schedule() {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/class', 
+      const response = await fetch(`${API_GRADEBOOK_URL}/class`, 
       {
         method: 'GET',
         headers: {
@@ -172,7 +173,7 @@ export function Schedule() {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:3001/lesson/class/${classId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/lesson/class/${classId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -203,7 +204,7 @@ export function Schedule() {
 
     if(userRole === UserRoles.Student || userRole === UserRoles.Teacher || userRole === UserRoles.Parent){
       try {
-        const response = await fetch(`http://localhost:3001/lesson/user/${userId}`, {
+        const response = await fetch(`${API_GRADEBOOK_URL}/lesson/user/${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -233,7 +234,7 @@ export function Schedule() {
     try {
       let response;
       if (type === 'single') {
-        response = await fetch(`http://localhost:3001/lesson/${lessonToDelete.id}`, {
+        response = await fetch(`${API_GRADEBOOK_URL}/lesson/${lessonToDelete.id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -241,7 +242,7 @@ export function Schedule() {
           },
         });
       } else if (type === 'all') {
-        response = await fetch(`http://localhost:3001/lesson/class/${lessonToDelete.classId}/subject/${lessonToDelete.subjectId}`, {
+        response = await fetch(`${API_GRADEBOOK_URL}/lesson/class/${lessonToDelete.classId}/subject/${lessonToDelete.subjectId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -410,7 +411,7 @@ export function Schedule() {
     setUpdating(true);
     setUpdateError(null);
     try {
-      const response = await fetch(`http://localhost:3001/lesson/${lessonId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/lesson/${lessonId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -445,7 +446,7 @@ export function Schedule() {
     setUpdating(true);
     setUpdateError(null);
     try {
-      const response = await fetch('http://localhost:3001/attendance', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/attendance`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -477,7 +478,7 @@ export function Schedule() {
       }
   
       closeModal();
-      toast.success(data.message || 'Obecność zapisana pomyślnie.');
+      toast.success(data.message || 'Attendance saved successfully..');
     } catch (err) {
       toast.error(err.message || 'An unexpected error occurred.');
     } finally {

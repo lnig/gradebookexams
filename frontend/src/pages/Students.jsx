@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import StudentCard from "../components/StudentCard";
 import { getToken } from "../utils/UserRoleUtils";
 import { toast } from "react-toastify";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function Students() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,7 +18,7 @@ export function Students() {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/student', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

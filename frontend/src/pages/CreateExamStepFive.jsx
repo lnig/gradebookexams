@@ -9,6 +9,7 @@ import Switch from "../components/Switch";
 import { ExamCreationContext } from "../contexts/ExamCreationContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { API_EXAMS_URL } from "../utils/config";
 
 export function CreateExamStepFive(){
   const { examData, resetExamData } = useContext(ExamCreationContext);
@@ -34,7 +35,7 @@ export function CreateExamStepFive(){
       const endDateTimeCombined = `${examData.endDateTime}T${examData.endTime}:00.000Z`;
       
   
-      const createExamResponse = await fetch("http://localhost:3000/exams/createExam", {
+      const createExamResponse = await fetch(`${API_EXAMS_URL}/exams/createExam`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +79,7 @@ export function CreateExamStepFive(){
   
       const classIds = examData.selectedClasses.map(cls => cls.value);
       const studentIds = examData.selectedStudents.map(student => student.value);
-      const assignParticipantsResponse = await fetch(`http://localhost:3000/exams/${examId}/participants`, {
+      const assignParticipantsResponse = await fetch(`${API_EXAMS_URL}/exams/${examId}/participants`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +123,7 @@ export function CreateExamStepFive(){
         }));
         console.log(closedQuestions);
 
-      const addQuestionsResponse = await fetch(`http://localhost:3000/exams/${examId}/addquestions`, {
+      const addQuestionsResponse = await fetch(`${API_EXAMS_URL}/exams/${examId}/addquestions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

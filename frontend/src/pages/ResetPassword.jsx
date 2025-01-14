@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../components/Button';
 import { toast } from 'react-toastify';
 import { decodeToken } from '../utils/UserRoleUtils';
+import { API_GRADEBOOK_URL } from '../utils/config';
 
 export function ResetPassword() {
   const { token } = useParams();
@@ -21,7 +22,7 @@ export function ResetPassword() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/auth/reset-password`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

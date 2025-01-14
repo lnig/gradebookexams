@@ -4,6 +4,7 @@ import Button from '../../Button';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
 import { X } from 'lucide-react';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function CreateGradeForm({ isOpen, onClose, onSuccess, students, lessonId, subjectId, teacherId }) {
   const [description, setDescription] = useState('');
@@ -36,7 +37,7 @@ function CreateGradeForm({ isOpen, onClose, onSuccess, students, lessonId, subje
       const gradePromises = Object.entries(grades).map(async ([studentId, grade]) => {
         if (grade === '') return null;
 
-        const response = await fetch('http://localhost:3001/grade', {
+        const response = await fetch(`${API_GRADEBOOK_URL}/grade`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

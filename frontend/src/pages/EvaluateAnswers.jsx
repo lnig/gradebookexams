@@ -5,6 +5,7 @@ import QuestionOnSolving from "../components/QuestionOnSolving";
 import NumberInput from "../components/NumberInput";
 import Button from "../components/Button";
 import { toast } from 'react-toastify';
+import { API_EXAMS_URL } from "../utils/config";
 
 export function EvaluateAnswers() {
     const [data, setData] = useState(null);
@@ -44,7 +45,7 @@ export function EvaluateAnswers() {
                 let result;
 
                 if (exam_id) {
-                    response = await fetch(`http://localhost:3000/exams/showAllOpenAnswersToGrade/${exam_id}`, {
+                    response = await fetch(`${API_EXAMS_URL}/exams/showAllOpenAnswersToGrade/${exam_id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ export function EvaluateAnswers() {
                         },
                     });
                 } else {
-                    response = await fetch(`http://localhost:3000/exams/showOpenAnswersToGrade/${attempt_id}`, {
+                    response = await fetch(`${API_EXAMS_URL}/exams/showOpenAnswersToGrade/${attempt_id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',

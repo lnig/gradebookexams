@@ -15,6 +15,7 @@ import {
 import { getToken, getUserRole } from "../utils/UserRoleUtils";
 import { toast } from 'react-toastify'
 import UserRoles from "../data/userRoles";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 function StudentDetails() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ function StudentDetails() {
   const fetchStudentInfo = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/student/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ function StudentDetails() {
     setLoading(true);
     try {
       const parentId = studentInfo.parents[0].id;
-      const response = await fetch(`http://localhost:3001/student-parent/${id}/${parentId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/${id}/${parentId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

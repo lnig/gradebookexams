@@ -4,6 +4,7 @@ import CreateExamStepThree from "./CreateExamStepThree";
 import { useParams, useNavigate } from "react-router-dom";
 import { getToken } from "../utils/UserRoleUtils";
 import { toast } from "react-toastify";
+import { API_EXAMS_URL } from "../utils/config";
 
 const EditParticipants = () => {
   const { examId } = useParams();
@@ -93,7 +94,7 @@ const EditParticipantsContent = ({ examId, handleCancel, handleSaveSuccess, hand
       if (deletePayload.classes.length > 0 || deletePayload.students.length > 0) {
         setIsSaving(true);
         setSaveError(null);
-        const deleteResponse = await fetch(`http://localhost:3000/exams/${examId}/deleteparticipants`, {
+        const deleteResponse = await fetch(`${API_EXAMS_URL}/exams/${examId}/deleteparticipants`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -111,7 +112,7 @@ const EditParticipantsContent = ({ examId, handleCancel, handleSaveSuccess, hand
       if (addPayload.classes.length > 0 || addPayload.students.length > 0) {
         setIsSaving(true);
         setSaveError(null);
-        const addResponse = await fetch(`http://localhost:3000/exams/${examId}/participants`, {
+        const addResponse = await fetch(`${API_EXAMS_URL}/exams/${examId}/participants`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

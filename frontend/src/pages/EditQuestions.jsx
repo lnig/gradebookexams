@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { validate as uuidValidate } from 'uuid';
 import { getToken } from "../utils/UserRoleUtils";
 import { toast } from "react-toastify";
+import { API_EXAMS_URL } from "../utils/config";
 
 const EditQuestions = () => {
   const { examId } = useParams();
@@ -152,7 +153,7 @@ const EditQuestionsContent = ({ examId, onCancel, handleSaveSuccess, handleSaveE
       setIsSaving(true);
       setSaveError(null);
 
-      const response = await fetch(`http://localhost:3000/exams/${examId}/upsertQuestionsToExam`, {
+      const response = await fetch(`${API_EXAMS_URL}/exams/${examId}/upsertQuestionsToExam`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

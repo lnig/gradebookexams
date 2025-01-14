@@ -1,4 +1,3 @@
-// components/forms/problemtype/EditProblemTypeForm.jsx
 import React, { useState, useEffect } from 'react';
 import Button from '../../Button';
 import { validate as validateUUID } from 'uuid';
@@ -6,6 +5,7 @@ import Modal from '../../Modal';
 import { X } from 'lucide-react';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 const EditProblemTypeForm = ({ id, currentName, isOpen, onSuccess, onClose }) => {
   const [name, setName] = useState(currentName);
@@ -30,7 +30,7 @@ const EditProblemTypeForm = ({ id, currentName, isOpen, onSuccess, onClose }) =>
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/problem-type/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/problem-type/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

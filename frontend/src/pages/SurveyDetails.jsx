@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { getToken } from '../utils/UserRoleUtils';
 import PageTitle from '../components/PageTitle';
 import { Calendar } from 'lucide-react';
+import { API_GRADEBOOK_URL } from '../utils/config';
 
 function SurveyDetails() {
   const { id } = useParams();
@@ -13,7 +14,7 @@ function SurveyDetails() {
   useEffect(() => {
     const fetchSurveyDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/survey/details/${id}`, {
+        const response = await fetch(`${API_GRADEBOOK_URL}/survey/details/${id}`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,

@@ -31,7 +31,7 @@ export function CreateExamStepOne({ onCancel, onSave, isEditing, isSaving }) {
   };
 
   const handleLessonChange = (e) => {
-    const selectedLessonId = e.target.value; // String
+    const selectedLessonId = e.target.value;
     console.log("Selected Lesson ID:", selectedLessonId);
 
     updateExamData({ ["selectedLessonId"]: selectedLessonId });

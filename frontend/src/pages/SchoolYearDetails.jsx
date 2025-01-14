@@ -10,6 +10,7 @@ import CreateSemesterForm from "../components/forms/semesters/CreateSemesterForm
 import EditSemesterForm from "../components/forms/semesters/EditSemester"; 
 import ConfirmForm from '../components/forms/ConfirmForm';
 import { toast } from 'react-toastify'
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 function SchoolYearDetails() {
   const [schoolYearInfo, setSchoolYearInfo] = useState(null);
@@ -28,7 +29,7 @@ function SchoolYearDetails() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3001/school-year/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/school-year/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +86,7 @@ function SchoolYearDetails() {
     if (!semesterToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/semester/${semesterToDelete}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/semester/${semesterToDelete}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

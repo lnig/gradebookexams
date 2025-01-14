@@ -6,8 +6,7 @@ import Button from "../components/Button";
 import { getToken, getUserId, getUserRole, decodeToken } from "../utils/UserRoleUtils";
 import UserRoles from '../data/userRoles';
 import '../customCSS/customScrollbar.css';
-
-const API_URL = 'http://localhost:3001';
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function Messages() {
   const [token, setToken] = useState(getToken());
@@ -50,7 +49,7 @@ export function Messages() {
 
   const fetchUserTypes = useCallback(async () => {
     try {
-      const response = await fetch(`${API_URL}/user-type`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/user-type`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +94,7 @@ export function Messages() {
 
   const fetchConversationMessages = useCallback(async (interlocutorId) => {
     try {
-      const response = await fetch(`${API_URL}/message/${interlocutorId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/message/${interlocutorId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +120,7 @@ export function Messages() {
 
   const fetchUnreadMessages = useCallback(async () => {
     try {
-      const response = await fetch(`${API_URL}/message/unread`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/message/unread`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +142,7 @@ export function Messages() {
 
   const fetchRecentConversations = useCallback(async () => {
     try {
-      const response = await fetch(`${API_URL}/message/recent`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/message/recent`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -171,7 +170,7 @@ export function Messages() {
       setLoading(true);
       try {
         if (currentUser.id) {
-          socketRef.current = io(API_URL, {
+          socketRef.current = io(API_GRADEBOOK_URL, {
             auth: { token }
           });
 
@@ -200,10 +199,10 @@ export function Messages() {
           await fetchUserTypes();
 
           const [fetchedAdministrators, fetchedTeachers, fetchedParents, fetchedStudents] = await Promise.all([
-            fetchUsers(`${API_URL}/administrator`),
-            fetchUsers(`${API_URL}/teacher`),
-            fetchUsers(`${API_URL}/parent`),
-            fetchUsers(`${API_URL}/student`),
+            fetchUsers(`${API_GRADEBOOK_URL}/administrator`),
+            fetchUsers(`${API_GRADEBOOK_URL}/teacher`),
+            fetchUsers(`${API_GRADEBOOK_URL}/parent`),
+            fetchUsers(`${API_GRADEBOOK_URL}/student`),
           ]);
 
           setAdministrators(fetchedAdministrators);

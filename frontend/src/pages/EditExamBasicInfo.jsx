@@ -4,6 +4,7 @@ import CreateExamStepOne from "./CreateExamStepOne";
 import { useParams, useNavigate } from "react-router-dom";
 import { getToken } from "../utils/UserRoleUtils";
 import { toast } from "react-toastify";
+import { API_EXAMS_URL } from "../utils/config";
 
 const EditExamBasicInfo = () => {
   const { examId } = useParams();
@@ -23,7 +24,7 @@ const EditExamBasicInfo = () => {
     setIsSaving(true);
     setSaveError(null);
     try {
-      const response = await fetch(`http://localhost:3000/exams/update/${examId}`, {
+      const response = await fetch(`${API_EXAMS_URL}/exams/update/${examId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

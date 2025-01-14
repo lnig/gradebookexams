@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import Modal from '../../Modal';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function EditQuestionTypeForm({ isOpen, onClose, onSuccess, id, currentName }) {
   const [name, setName] = useState(currentName || '');
@@ -19,7 +20,7 @@ function EditQuestionTypeForm({ isOpen, onClose, onSuccess, id, currentName }) {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:3001/question-type/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/question-type/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

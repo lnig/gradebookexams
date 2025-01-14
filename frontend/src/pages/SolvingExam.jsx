@@ -9,6 +9,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getToken } from "../utils/UserRoleUtils";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_EXAMS_URL } from "../utils/config";
 
 // Klucze w localStorage
 const EXIT_TIME_KEY = "exitTime";
@@ -88,10 +89,8 @@ export function SolvingExam() {
       setError(null);
       
       try {
-        console.log("87674564355345345345345")
         const noCacheParam = `?ts=${Date.now()}`;
-        console.log("11111111")
-        const resp = await fetch(`http://localhost:3000/exams/${examId}/startAttempt${noCacheParam}`, {
+        const resp = await fetch(`${API_EXAMS_URL}/exams/${examId}/startAttempt${noCacheParam}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -100,10 +99,8 @@ export function SolvingExam() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("22222222")
         if (!resp.ok) {
           const errData = await resp.json();
-          console.log("333333333")
           throw new Error(errData.message || "Failed to fetch exam.");
         }
         console.log("4444444")
@@ -164,7 +161,7 @@ export function SolvingExam() {
       try {
         console.log("[handleEndAttempt] -> saving finalAnswers to backend...");
 
-        const resp = await fetch(`http://localhost:3000/exams/saveAttempt/${attemptId}`, {
+        const resp = await fetch(`${API_EXAMS_URL}/exams/saveAttempt/${attemptId}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

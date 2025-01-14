@@ -11,6 +11,7 @@ import EditGradeForm from "../components/forms/grades/EditGradeForm";
 import ConfirmForm from '../components/forms/ConfirmForm';
 import { toast } from "react-toastify";
 import FinalGradeForm from "../components/forms/grades/FinalGrade";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function Grades() {
   const [semester, setSemester] = useState(null);
@@ -41,7 +42,7 @@ export function Grades() {
 
   const fetchStudentForParent = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/student-parent/${parentId}/students`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/${parentId}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +135,7 @@ export function Grades() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3001/class', 
+      const response = await fetch(`${API_GRADEBOOK_URL}/class`, 
       {
         method: 'GET',
         headers: {
@@ -159,7 +160,7 @@ export function Grades() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3001/grade/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/grade/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -192,7 +193,7 @@ export function Grades() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3001/semester/by-school-year`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/semester/by-school-year`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -225,7 +226,7 @@ export function Grades() {
     setError(null);
     
     try {
-      const response = await fetch(`http://localhost:3001/class/students/${selectedClass}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/class/students/${selectedClass}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -252,7 +253,7 @@ export function Grades() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3001/grade/final/${studentId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/grade/final/${studentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

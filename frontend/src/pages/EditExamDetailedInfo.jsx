@@ -4,6 +4,7 @@ import CreateExamStepFour from "./CreateExamStepFour";
 import { useNavigate, useParams } from "react-router-dom";
 import { getToken } from "../utils/UserRoleUtils";
 import { toast } from 'react-toastify';
+import { API_EXAMS_URL } from "../utils/config";
 
 const EditExamDetailedInfo = () => {
   const { examId } = useParams();
@@ -53,8 +54,6 @@ const EditExamDetailedInfoContent = ({ examId, handleCancel, handleSaveSuccess, 
 
     const startDateTimeCombined = `${examData.startDateTime}T${examData.startTime}:00.000Z`;
     const endDateTimeCombined = `${examData.endDateTime}T${examData.endTime}:00.000Z`;
-    console.log("lessonid")
-    console.log(examData.lesson_id);
     const payload = {
       title: examData.title,
       description: examData.description,
@@ -81,12 +80,8 @@ const EditExamDetailedInfoContent = ({ examId, handleCancel, handleSaveSuccess, 
       allow_return_to_previous_questions: examData.allowReturnToPreviousQuestions,
       allow_multiple_attempts: examData.allowMultipleAttempts,
     };
-    console.log(payload)
-//4760c802-cfa7-11ef-a5d4-6045bdf96538
-//4760c802-cfa7-11ef-a5d4-6045bdf96538
     try {
-      console.log(examId)
-      const response = await fetch(`http://localhost:3000/exams/update/${examId}`, {
+      const response = await fetch(`${API_EXAMS_URL}/exams/update/${examId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

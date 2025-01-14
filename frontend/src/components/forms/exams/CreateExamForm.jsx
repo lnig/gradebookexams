@@ -4,6 +4,7 @@ import Button from '../../Button';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
 import { X } from 'lucide-react';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function CreateExamForm({ isOpen, onClose, onSuccess, lessonId }) {
   const [topic, setTopic] = useState('');
@@ -25,7 +26,7 @@ function CreateExamForm({ isOpen, onClose, onSuccess, lessonId }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/exam', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/exam`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

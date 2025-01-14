@@ -9,6 +9,7 @@ import QuestionChart from "../components/QuestionChart";
 import { useNavigate } from 'react-router-dom';
 import { getToken, getUserRole } from "../utils/UserRoleUtils";
 import { toast } from "react-toastify";
+import { API_EXAMS_URL } from "../utils/config";
 
 export default function Results() {
   const [selectedOption, setSelectedOption] = useState("Results");
@@ -68,7 +69,7 @@ export default function Results() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:3000/exams/${exam_id}/results`, {
+        const response = await fetch(`${API_EXAMS_URL}/exams/${exam_id}/results`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

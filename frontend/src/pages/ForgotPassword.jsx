@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import Button from '../components/Button';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../utils/config';
 
 export function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -34,7 +35,7 @@ export function ForgotPassword() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/auth/forgot-password', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +57,6 @@ export function ForgotPassword() {
 
   return (
     <div className="relative h-svh sm:h-screen w-screen flex items-center justify-center bg-white overflow-hidden">
-      {/* Backgrounds and animations – similar to the Login component */}
       <div className="absolute -bottom-[800px] -left-[400px] w-[1280px] h-[1280px] bg-[#fafafb] rounded-full"></div>
       <div className="absolute -top-32 -right-32 w-[28rem] h-[28rem] bg-[#fafafb] rounded-full"></div>
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#fafafb] rounded-full"></div>

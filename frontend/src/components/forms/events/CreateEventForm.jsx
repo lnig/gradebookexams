@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import Modal from '../../Modal';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function CreateEventForm({ onSuccess, onClose, isOpen }) {
   const [name, setName] = useState('');
@@ -21,7 +22,7 @@ function CreateEventForm({ onSuccess, onClose, isOpen }) {
 
   const fetchEventTypes = async () => {
     try {
-      const response = await fetch('http://localhost:3001/event-type', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/event-type`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ function CreateEventForm({ onSuccess, onClose, isOpen }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/school-event', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/school-event`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

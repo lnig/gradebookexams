@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import Modal from '../../Modal';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function CreateSubjectForm({ onSuccess, onClose, isOpen }) {
   const [name, setName] = useState('');
@@ -18,7 +19,7 @@ function CreateSubjectForm({ onSuccess, onClose, isOpen }) {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3001/subject', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/subject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

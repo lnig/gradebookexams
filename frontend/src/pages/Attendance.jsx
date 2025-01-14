@@ -19,6 +19,7 @@ import ConfirmForm from '../components/forms/ConfirmForm';
 import ExcuseAbsences from '../components/forms/attendance/ExcuseAbsences'; 
 import { toast } from "react-toastify";
 import { formatTime, formatDateLocal } from '../utils/dateTimeUtils'
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 const attendanceTypeColors = {
   Present: 'bg-green-500',
@@ -74,7 +75,7 @@ export function Attendance() {
 
   const fetchStudentForParent = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/student-parent/${parentId}/students`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/${parentId}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +95,7 @@ export function Attendance() {
   const fetchClasses = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/class', 
+      const response = await fetch(`${API_GRADEBOOK_URL}/class`, 
       {
         method: 'GET',
         headers: {
@@ -151,7 +152,7 @@ export function Attendance() {
   const fetchAttendance = async (studentId) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/attendance/student/${studentId}`, { 
+      const response = await fetch(`${API_GRADEBOOK_URL}/attendance/student/${studentId}`, { 
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -175,7 +176,7 @@ export function Attendance() {
 
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/attendance/class/${selectedClass}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/attendance/class/${selectedClass}`, {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
@@ -361,7 +362,7 @@ export function Attendance() {
     try {
       let response;
       if (excuseType === 'all') {
-        response = await fetch(`http://localhost:3001/attendance/excuse/${studentId}`, {
+        response = await fetch(`${API_GRADEBOOK_URL}/attendance/excuse/${studentId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -372,7 +373,7 @@ export function Attendance() {
         console.log(selectedDate);
         const date = formatDateLocal(selectedDate);
         console.log(date);
-        response = await fetch(`http://localhost:3001/attendance/excuse/${studentId}/by-date/${encodeURIComponent(date)}`, {
+        response = await fetch(`${API_GRADEBOOK_URL}/attendance/excuse/${studentId}/by-date/${encodeURIComponent(date)}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

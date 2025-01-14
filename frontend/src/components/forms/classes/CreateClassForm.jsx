@@ -5,6 +5,7 @@ import Modal from "../../Modal";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
 import UserRoles from "../../../data/userRoles";
+import { API_GRADEBOOK_URL } from "../../../utils/config";
 
 function CreateClassForm({ onSuccess, isOpen, closeModal }) {
   const [classNames, setClassNames] = useState([]);
@@ -29,14 +30,14 @@ function CreateClassForm({ onSuccess, isOpen, closeModal }) {
 
     try {
       const [classNamesRes, schoolYearsRes] = await Promise.all([
-        fetch('http://localhost:3001/class-name', {
+        fetch(`${API_GRADEBOOK_URL}/class-name`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
         }),
-        fetch('http://localhost:3001/school-year', {
+        fetch(`${API_GRADEBOOK_URL}/school-year`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ function CreateClassForm({ onSuccess, isOpen, closeModal }) {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/class', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/class`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

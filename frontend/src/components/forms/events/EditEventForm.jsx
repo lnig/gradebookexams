@@ -5,6 +5,7 @@ import Modal from '../../Modal';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { formatDateToInput, formatTimeToInput } from '../../../utils/dateTimeUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function EditEventForm({ onSuccess, onClose, isOpen, event }) {
   const [name, setName] = useState(event?.name || '');
@@ -22,7 +23,7 @@ function EditEventForm({ onSuccess, onClose, isOpen, event }) {
 
   const fetchEventTypes = async () => {
     try {
-      const response = await fetch('http://localhost:3001/event-type', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/event-type`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ function EditEventForm({ onSuccess, onClose, isOpen, event }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/school-event/${event.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/school-event/${event.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

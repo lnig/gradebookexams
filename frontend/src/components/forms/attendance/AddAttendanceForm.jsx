@@ -6,6 +6,7 @@ import UserRoles from '../../../data/userRoles';
 import { getToken, getUserId } from '../../../utils/UserRoleUtils';
 import Tooltip from '../../Tooltip';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 const AddAttendanceForm = ({
   isOpen,
@@ -32,7 +33,7 @@ const AddAttendanceForm = ({
     if (isOpen && selectedEvent) {
       setLoading(true);
       setError(null);
-      fetch(`http://localhost:3001/attendance/${selectedEvent.id}`, {
+      fetch(`${API_GRADEBOOK_URL}/attendance/${selectedEvent.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -154,7 +155,7 @@ const AddAttendanceForm = ({
   
       if (existingAttendances) {
         await Promise.all(processedAttendances.map(attendance => 
-          fetch(`http://localhost:3001/attendance/${attendance.id}`, {
+          fetch(`${API_GRADEBOOK_URL}/attendance/${attendance.id}`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
@@ -201,7 +202,7 @@ const AddAttendanceForm = ({
 
     const date = new Date(selectedEvent.date).toISOString().split('T')[0];
     try {
-      const response = await fetch(`http://localhost:3001/attendance/student/${studentId}/by-date/${encodeURIComponent(date)}`, 
+      const response = await fetch(`${API_GRADEBOOK_URL}/attendance/student/${studentId}/by-date/${encodeURIComponent(date)}`, 
       {
         method: 'GET',
         headers: {

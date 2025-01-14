@@ -5,6 +5,7 @@ import Select from 'react-select';
 import { X } from 'lucide-react';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function AssignParentForm({ onSuccess, isOpen, closeModal, studentId, studentName }) {
   const [availableParents, setAvailableParents] = useState([]);
@@ -22,7 +23,7 @@ function AssignParentForm({ onSuccess, isOpen, closeModal, studentId, studentNam
   const fetchAvailableParents = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/parent/available-parents`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/parent/available-parents`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

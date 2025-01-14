@@ -11,6 +11,7 @@ import Tooltip from '../components/Tooltip';
 import '../customCSS/customScrollbar.css';
 import UserRoles from '../data/userRoles';
 import { formatTime } from '../utils/dateTimeUtils'
+import { API_GRADEBOOK_URL } from '../utils/config';
 
 const DashboardSchedule = () => {
   const [selectedOffset, setSelectedOffset] = useState(0);
@@ -53,7 +54,7 @@ const DashboardSchedule = () => {
 
   const fetchStudentForParent = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/student-parent/${parentId}/students`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/${parentId}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ const DashboardSchedule = () => {
     setLoading(true);
     setError(null);
     try {
-      const backResponse = await fetch(`http://localhost:3001/lesson/back/${userId}`, {
+      const backResponse = await fetch(`${API_GRADEBOOK_URL}/lesson/back/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ const DashboardSchedule = () => {
         },
       });
 
-      const todayResponse = await fetch(`http://localhost:3001/lesson/today/${userId}`, {
+      const todayResponse = await fetch(`${API_GRADEBOOK_URL}/lesson/today/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ const DashboardSchedule = () => {
         },
       });
 
-      const aheadResponse = await fetch(`http://localhost:3001/lesson/ahead/${userId}`, {
+      const aheadResponse = await fetch(`${API_GRADEBOOK_URL}/lesson/ahead/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

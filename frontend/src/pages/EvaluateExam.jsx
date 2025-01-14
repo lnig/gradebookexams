@@ -5,6 +5,7 @@ import FilterForm from "../components/FilterForm";
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from "../components/Button";
 import { toast } from "react-toastify";
+import { API_EXAMS_URL } from "../utils/config";
 
 export function EvaluateExam() {
     const [studentsToGrade, setStudentsToGrade] = useState([]);
@@ -39,7 +40,7 @@ export function EvaluateExam() {
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(`http://localhost:3000/exams/${exam_id}/getAllAttemptsToGrade`, {
+                const response = await fetch(`${API_EXAMS_URL}/exams/${exam_id}/getAllAttemptsToGrade`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

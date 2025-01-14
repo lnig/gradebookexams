@@ -9,6 +9,7 @@ import { validate as validateUUID } from 'uuid';
 import ConfirmForm from '../components/forms/ConfirmForm';
 import EditSchoolYearForm from "../components/forms/schoolyears/EditSchoolYearForm";
 import { toast } from "react-toastify";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function SchoolYears() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +29,7 @@ export function SchoolYears() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3001/school-year',{
+      const response = await fetch(`${API_GRADEBOOK_URL}/school-year`,{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ export function SchoolYears() {
     if (!schoolYearToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/school-year/${schoolYearToDelete}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/school-year/${schoolYearToDelete}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

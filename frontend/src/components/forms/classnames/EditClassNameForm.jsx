@@ -5,6 +5,7 @@ import Modal from '../../Modal';
 import { X } from 'lucide-react';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 const EditClassNameForm = ({ id, currentName, isOpen, onSuccess, onClose}) => {
   const [name, setName] = useState(currentName);
@@ -22,7 +23,7 @@ const EditClassNameForm = ({ id, currentName, isOpen, onSuccess, onClose}) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:3001/class-name/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/class-name/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

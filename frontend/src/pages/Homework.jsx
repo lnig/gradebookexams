@@ -5,6 +5,7 @@ import { CheckCircle, Hourglass, XCircle, Clock, User } from 'lucide-react'
 import { getUserId, getToken, getUserRole } from '../utils/UserRoleUtils'
 import UserRoles from "../data/userRoles"
 import { toast } from "react-toastify"
+import { API_GRADEBOOK_URL } from "../utils/config"
 
 export function Homework() {
   const [homeworks, setHomeworks] = useState([])
@@ -27,7 +28,7 @@ export function Homework() {
 
   const fetchStudentForParent = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/student-parent/${parentId}/students`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/${parentId}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ export function Homework() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch(`http://localhost:3001/homework/student/${studentId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/homework/student/${studentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +87,7 @@ export function Homework() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch(`http://localhost:3001/homework/teacher/${teacherId}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/homework/teacher/${teacherId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -110,7 +111,7 @@ export function Homework() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch(`http://localhost:3001/homework`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/homework`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

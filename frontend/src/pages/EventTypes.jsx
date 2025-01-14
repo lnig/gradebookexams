@@ -9,6 +9,7 @@ import ConfirmForm from '../components/forms/ConfirmForm';
 import CreateEventTypeForm from "../components/forms/eventtypes/CreateEventTypeForm";
 import EditEventTypeForm from "../components/forms/eventtypes/EditEventTypeForm";
 import { toast } from "react-toastify";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function EventTypes() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,7 +27,7 @@ export function EventTypes() {
   const fetchTypes = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/event-type', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/event-type`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +112,7 @@ export function EventTypes() {
 
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/event-type/${typeToDelete}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/event-type/${typeToDelete}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

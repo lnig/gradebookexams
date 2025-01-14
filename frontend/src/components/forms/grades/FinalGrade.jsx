@@ -4,6 +4,7 @@ import Button from '../../Button';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
 import { X } from 'lucide-react';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function FinalGradeForm({ 
   isOpen, 
@@ -52,8 +53,8 @@ function FinalGradeForm({
 
     try {
       const url = existingFinalGrade 
-        ? `http://localhost:3001/grade/final/${existingFinalGrade.id}`
-        : 'http://localhost:3001/grade/final';
+        ? `${API_GRADEBOOK_URL}/grade/final/${existingFinalGrade.id}`
+        : `${API_GRADEBOOK_URL}/grade/final`;
       
       const method = existingFinalGrade ? 'PATCH' : 'POST';
 

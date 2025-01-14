@@ -4,6 +4,7 @@ import { Plus, Trash, X } from 'lucide-react';
 import Modal from '../../Modal';
 import { toast } from 'react-toastify';
 import { getToken } from '../../../utils/UserRoleUtils';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 function CreateSurveyForm({ onSuccess, onClose, isOpen, questionTypes = [] }) {
   const [formData, setFormData] = useState({
@@ -104,7 +105,7 @@ function CreateSurveyForm({ onSuccess, onClose, isOpen, questionTypes = [] }) {
         questions: formData.questions
       };
 
-      const response = await fetch('http://localhost:3001/survey', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/survey`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

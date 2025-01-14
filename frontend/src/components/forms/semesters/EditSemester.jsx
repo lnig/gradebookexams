@@ -5,6 +5,7 @@ import Modal from '../../Modal';
 import { X } from 'lucide-react';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 const EditSemesterForm = ({ id, currentSemester, currentStartDate, currentEndDate, isOpen, onSuccess, onClose }) => {
   const [semester, setSemester] = useState(currentSemester);
@@ -57,7 +58,7 @@ const EditSemesterForm = ({ id, currentSemester, currentStartDate, currentEndDat
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/semester/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/semester/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

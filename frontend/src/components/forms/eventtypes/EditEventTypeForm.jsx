@@ -5,6 +5,7 @@ import Modal from '../../Modal';
 import { X } from 'lucide-react';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 const EditEventTypeForm = ({ id, currentName, isOpen, onSuccess, onClose}) => {
   const [name, setName] = useState(currentName);
@@ -24,7 +25,7 @@ const EditEventTypeForm = ({ id, currentName, isOpen, onSuccess, onClose}) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:3001/event-type/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/event-type/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

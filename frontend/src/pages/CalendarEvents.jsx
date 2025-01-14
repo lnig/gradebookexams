@@ -20,6 +20,7 @@ import ConfirmForm from "../components/forms/ConfirmForm";
 import UserRoles from "../data/userRoles";
 import Tooltip from '../components/Tooltip';
 import { toast } from "react-toastify";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 const today = new Date();
 let baseYear = today.getFullYear();
@@ -48,7 +49,6 @@ export function CalendarEvents() {
   const [isDeleteExamModalOpen, setIsDeleteExamModalOpen] = useState(false);
   const [examToDelete, setExamToDelete] = useState(null);
 
-  // Dla administratora nie potrzebujemy pobierać userId – ma on wgl dostęp do wszystkich eventów
   const [userId, setUserId] = useState(null);
   
   const parentId = getUserId();
@@ -98,7 +98,7 @@ export function CalendarEvents() {
   
   const fetchStudentForParent = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/student-parent/${parentId}/students`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/${parentId}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,6 @@ export function CalendarEvents() {
         throw new Error(`Error: ${response.status}`);
       }
       const result = await response.json();
-      // Przykładowo pobieramy pierwszego studenta
       setUserId(result.data);
     } catch (err) {
       console.error("Failed to fetch students for parent:", err.message);
@@ -129,7 +128,7 @@ export function CalendarEvents() {
 
   const fetchEventTypes = async () => {
     try {
-      const response = await fetch('http://localhost:3001/event-type', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/event-type`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +164,7 @@ export function CalendarEvents() {
     setLoading(true);
     setError(null);
     try {
-      const eventsResponse = await fetch('http://localhost:3001/school-event', {
+      const eventsResponse = await fetch(`${API_GRADEBOOK_URL}/school-event`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -179,9 +178,9 @@ export function CalendarEvents() {
 
       const eventsResult = await eventsResponse.json();
 
-      let examsUrl = 'http://localhost:3001/exam';
+      let examsUrl = `${API_GRADEBOOK_URL}/exam`;
       if (userRole !== UserRoles.Administrator) {
-        examsUrl = `http://localhost:3001/exam/${currentUserId}`;
+        examsUrl = `${API_GRADEBOOK_URL}/exam/${currentUserId}`;
       }
 
       const examsResponse = await fetch(examsUrl, {

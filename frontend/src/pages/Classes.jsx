@@ -7,6 +7,7 @@ import CreateClassForm from "../components/forms/classes/CreateClassForm";
 import { getToken, getUserRole } from "../utils/UserRoleUtils";
 import { toast } from "react-toastify";
 import UserRoles from "../data/userRoles";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function Classes() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,7 +21,7 @@ export function Classes() {
   const fetchClasses = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/class', 
+      const response = await fetch(`${API_GRADEBOOK_URL}/class`, 
       {
         method: 'GET',
         headers: {

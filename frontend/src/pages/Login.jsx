@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import Button from '../components/Button';
 import { toast } from 'react-toastify';
+import { API_GRADEBOOK_URL } from '../utils/config';
 
 export function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -39,7 +40,7 @@ export function Login({ onLogin }) {
     e.preventDefault();
   
     try {
-      const response = await fetch('https://gradebookexams.onrender.com/auth/signin', {
+      const response = await fetch(`${API_GRADEBOOK_URL}/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +79,6 @@ export function Login({ onLogin }) {
 
   return (
     <div className="relative h-svh sm:h-screen w-screen flex items-center justify-center bg-white overflow-hidden">
-      {/* Tła i animacje – te same elementy co w Twojej implementacji */}
       <div className="absolute -bottom-[800px] -left-[400px] w-[1280px] h-[1280px] bg-[#fafafb] rounded-full"></div>
       <div className="absolute -top-32 -right-32 w-[28rem] h-[28rem] bg-[#fafafb] rounded-full"></div>
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#fafafb] rounded-full"></div>

@@ -12,6 +12,7 @@ import UserRoles from '../data/userRoles';
 import { Pen, Plus, Trash } from 'lucide-react';
 import { formatDate } from "../utils/dateTimeUtils";
 import UpdateProblemStatusForm from "../components/forms/problems/UpdateProblemStatusForm";
+import { API_GRADEBOOK_URL } from "../utils/config";
 
 export function Problems() {
   const [loading, setLoading] = useState(false);
@@ -49,7 +50,7 @@ export function Problems() {
   const fetchUserTypes = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/user-type', { 
+      const response = await fetch(`${API_GRADEBOOK_URL}/user-type`, { 
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +78,7 @@ export function Problems() {
   const fetchStatuses = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/status', { 
+      const response = await fetch(`${API_GRADEBOOK_URL}/status`, { 
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ export function Problems() {
   const fetchProblems = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/problem', { 
+      const response = await fetch(`${API_GRADEBOOK_URL}/problem`, { 
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +125,7 @@ export function Problems() {
   const fetchProblemTypes = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/problem-type', { 
+      const response = await fetch(`${API_GRADEBOOK_URL}/problem-type`, { 
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -192,7 +193,7 @@ export function Problems() {
     }
 
     try {
-        const response = await fetch('http://localhost:3001/problem', { 
+        const response = await fetch(`${API_GRADEBOOK_URL}/problem`, { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -289,7 +290,7 @@ export function Problems() {
 
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/problem-type/${currentDeleteType.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/problem-type/${currentDeleteType.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -316,7 +317,7 @@ export function Problems() {
 
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/status/${currentDeleteStatus.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/status/${currentDeleteStatus.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -353,7 +354,7 @@ export function Problems() {
   
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/problem/${currentDeleteProblem.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/problem/${currentDeleteProblem.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

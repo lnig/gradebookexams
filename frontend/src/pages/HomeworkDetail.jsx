@@ -11,6 +11,7 @@ import { getToken, getUserRole } from '../utils/UserRoleUtils'
 import ConfirmForm from '../components/forms/ConfirmForm'
 import EditHomeworkForm from '../components/forms/homeworks/EditHomeworkForm'
 import UserRoles from '../data/userRoles'
+import { API_GRADEBOOK_URL } from '../utils/config'
 
 function HomeworkDetail() {
   const { id } = useParams()
@@ -30,7 +31,7 @@ function HomeworkDetail() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch(`http://localhost:3001/homework/details/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/homework/details/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -54,7 +55,7 @@ function HomeworkDetail() {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/homework/${id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/homework/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

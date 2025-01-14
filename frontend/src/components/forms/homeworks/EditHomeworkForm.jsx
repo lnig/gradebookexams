@@ -4,6 +4,7 @@ import { X } from 'lucide-react'
 import Modal from '../../Modal'
 import { getToken } from '../../../utils/UserRoleUtils'
 import { toast } from 'react-toastify'
+import { API_GRADEBOOK_URL } from '../../../utils/config'
 
 const formatDate = (date) => {
   const d = new Date(date)
@@ -34,7 +35,7 @@ function EditHomeworkForm({ onSuccess, onClose, isOpen, homework }) {
     setError(null)
 
     try {
-      const response = await fetch(`http://localhost:3001/homework/${homework.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/homework/${homework.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

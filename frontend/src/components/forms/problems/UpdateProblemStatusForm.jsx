@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../../Modal'; // Adjust the import path as necessary
+import Modal from '../../Modal';
 import Button from '../../Button';
 import { toast } from 'react-toastify';
 import { getToken } from '../../../utils/UserRoleUtils';
 import { X } from 'lucide-react';
+import { API_GRADEBOOK_URL } from '../../../utils/config';
 
 const UpdateProblemStatusForm = ({ isOpen, onClose, problem, statuses, onSuccess }) => {
   const [selectedStatus, setSelectedStatus] = useState(problem.statuses?.id || '');
@@ -21,7 +22,7 @@ const UpdateProblemStatusForm = ({ isOpen, onClose, problem, statuses, onSuccess
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:3001/problem/${problem.id}`, {
+      const response = await fetch(`${API_GRADEBOOK_URL}/problem/${problem.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

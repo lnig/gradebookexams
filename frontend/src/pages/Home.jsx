@@ -8,6 +8,7 @@ import UserRoles from '../utils/userRoles';
 import FilterForm from '../components/FilterForm';
 import { getToken, getUserRole } from "../utils/UserRoleUtils";
 import { toast } from 'react-toastify'
+import { API_EXAMS_URL } from "../utils/config";
 
 export const Home = () => {
   const [exams, setExams] = useState([]);
@@ -25,7 +26,7 @@ export const Home = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch('http://localhost:3000/exams/getExams', {
+        const response = await fetch(`${API_EXAMS_URL}/exams/getExams`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -39,10 +40,8 @@ export const Home = () => {
         }
 
         const data = await response.json();
-        // console.log(data);
         setExams(data.data || []);
       } catch (err) {
-        // console.error('Error fetching exams:', err);
         setError(err.message || 'Failed to load exams.');
         toast.error(err.message || 'Failed to load exams.');
       } finally {
