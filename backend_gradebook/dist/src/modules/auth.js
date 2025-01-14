@@ -6,14 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authorize = exports.authenticate = exports.generateJWT = exports.hashPassword = exports.comparePasswords = void 0;
 const validateEnv_js_1 = require("./validateEnv.js");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const responseInterfaces_js_1 = require("../interfaces/responseInterfaces.js");
 const comparePasswords = (password, hash) => {
-    return bcrypt_1.default.compare(password, hash);
+    return bcryptjs_1.default.compare(password, hash);
 };
 exports.comparePasswords = comparePasswords;
 const hashPassword = (password) => {
-    return bcrypt_1.default.hash(password, 10);
+    return bcryptjs_1.default.hash(password, 10);
 };
 exports.hashPassword = hashPassword;
 const generateJWT = (authUser) => {
