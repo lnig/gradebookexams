@@ -15,7 +15,7 @@ const ResponsiveTable = ({ students, student, result }) => {
         background: 'bg-green-100',
         textColor: 'text-green-600',
       };
-    } else if (percent > 50) {
+    } else if (percent > 40) {
       return {
         background: 'bg-yellow-100',
         textColor: 'text-yellow-600',

@@ -16,7 +16,7 @@ export default function QuestionOnSolving({
     is_multiple,
     solving,
     reviewing,
-    onAnswerChange 
+    onAnswerChange, 
 }) {
     const [selectedAnswers, setSelectedAnswers] = useState(() => {
         // Zamień to na zawsze tablicę.

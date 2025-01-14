@@ -149,7 +149,7 @@ export function EvaluateAnswers() {
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/exams/gradeOpenAnswers`, {
+            const response = await fetch(`${API_EXAMS_URL}/exams/gradeOpenAnswers`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -216,6 +216,7 @@ export function EvaluateAnswers() {
                                             attemptNumber={question.attempt_number}
                                             disabled 
                                             description={question.question_description}
+                                            score={question.max_score}
                                         />
                                         <div className="flex flex-col gap-3">
                                             <label className="text-xl text-textBg-700">Points</label>
