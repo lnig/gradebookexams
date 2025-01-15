@@ -18,16 +18,22 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Navigate to backend folder
-        run: cd backend_gradebook
+      - name: Set DATABASE_URL environment variable
+        run: echo "DATABASE_URL=${{ secrets.AZURE_DATABASE_URL }}" > ./backend_gradebook/.env
 
-      - name: npm install, build, and test
+      - name: Install dependencies
+        working-directory: ./backend_gradebook
+        run: npm install
+
+      - name: Run database migrations
+        working-directory: ./backend_gradebook
+        run: npm run migrate
+
+      - name: Run tests
         working-directory: ./backend_gradebook
         env:
           TERM: xterm
-        run: |
-          npm install
-          npm run test
+        run: npm run test
 
       - name: Zip artifact for deployment
         working-directory: ./backend_gradebook
@@ -64,11 +70,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_94D252A275014E249A1FC64010EC7371 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CA9F716C92324C88A70652E5E64D600A }}
 
-      - name: 'Start application'
-        working-directory: ./backend_gradebook
-        run: npm run start
-
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
