@@ -41,14 +41,14 @@ const node_test_1 = __importStar(require("node:test"));
 const node_assert_1 = __importDefault(require("node:assert"));
 const requestHelpers_1 = require("../../src/utils/requestHelpers");
 const testData_1 = require("../../src/utils/testData");
-(0, node_test_1.suite)('surveysRouter', { only: true }, () => {
+(0, node_test_1.suite)('surveysRouter', () => {
     (0, node_test_1.afterEach)(async () => {
         await db_1.default.questions_possible_responses.deleteMany();
         await db_1.default.questions.deleteMany();
         await db_1.default.questions_types.deleteMany();
         await db_1.default.surveys.deleteMany();
     });
-    (0, node_test_1.default)('CreateSurvey() - success', { only: true }, async () => {
+    (0, node_test_1.default)('CreateSurvey() - success', async () => {
         const createQuestionTypeResponse1 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType1);
         node_assert_1.default.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
         const createQuestionTypeResponse2 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType2);
@@ -85,7 +85,7 @@ const testData_1 = require("../../src/utils/testData");
         node_assert_1.default.strictEqual(createSurveyResponse.body.data.questions[0].questions_possible_responses[0].content, testData_1.closedQuestionResponse1.content, `Expected the content to be "${testData_1.closedQuestionResponse1.content}".`);
         node_assert_1.default.strictEqual(createSurveyResponse.body.data.questions.length, 2, `Expected the number of surveys questions to be 2`);
     });
-    (0, node_test_1.default)('CreateSurvey() - validation error - questions is not an empty array', { only: true }, async () => {
+    (0, node_test_1.default)('CreateSurvey() - validation error - questions is not an empty array', async () => {
         const createSurveyResponse = await (0, requestHelpers_1.sendPostRequest)('/survey', {
             name: testData_1.emptyString,
             description: testData_1.emptyString,
@@ -112,7 +112,7 @@ const testData_1 = require("../../src/utils/testData");
         node_assert_1.default.strictEqual(createSurveyResponse.statusCode, 400, 'Expected the status code to be 400 for a validation error.');
         node_assert_1.default.strictEqual(createSurveyResponse.body.errors.length, 11, 'Expected the number of validation errors to be 11.');
     });
-    (0, node_test_1.default)('CreateSurvey() - validation error - questions array does not exist', { only: true }, async () => {
+    (0, node_test_1.default)('CreateSurvey() - validation error - questions array does not exist', async () => {
         const createSurveyResponse = await (0, requestHelpers_1.sendPostRequest)('/survey', {
             name: testData_1.emptyString,
             description: testData_1.emptyString,
@@ -124,7 +124,7 @@ const testData_1 = require("../../src/utils/testData");
         node_assert_1.default.strictEqual(createSurveyResponse.statusCode, 400, 'Expected the status code to be 400 for a validation error.');
         node_assert_1.default.strictEqual(createSurveyResponse.body.errors.length, 7, 'Expected the number of validation errors to be 7.');
     });
-    (0, node_test_1.default)('getSurvey() - success', { only: true }, async () => {
+    (0, node_test_1.default)('getSurvey() - success', async () => {
         const createQuestionTypeResponse1 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType1);
         node_assert_1.default.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
         const createQuestionTypeResponse2 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType2);
@@ -163,16 +163,16 @@ const testData_1 = require("../../src/utils/testData");
         node_assert_1.default.strictEqual(getSurveyResponse.body.data.questions[0].questions_possible_responses[0].content, testData_1.closedQuestionResponse1.content, `Expected the content to be "${testData_1.closedQuestionResponse1.content}".`);
         node_assert_1.default.strictEqual(getSurveyResponse.body.data.questions.length, 2, `Expected the number of surveys questions to be 2`);
     });
-    (0, node_test_1.default)('getSurvey() - validation error', { only: true }, async () => {
+    (0, node_test_1.default)('getSurvey() - validation error', async () => {
         const getSurveyResponse = await (0, requestHelpers_1.sendGetRequest)(`/survey/${testData_1.invalidIdUrl}`);
         node_assert_1.default.strictEqual(getSurveyResponse.statusCode, 400, 'Expected the status code to be 400 for a validation error.');
         node_assert_1.default.strictEqual(getSurveyResponse.body.errors.length, 1, 'Expected the number of validation errors to be 1.');
     });
-    (0, node_test_1.default)('getSurvey() - survey does not exist', { only: true }, async () => {
+    (0, node_test_1.default)('getSurvey() - survey does not exist', async () => {
         const getSurveyResponse = await (0, requestHelpers_1.sendGetRequest)(`/survey/${testData_1.nonExistentId}`);
         node_assert_1.default.strictEqual(getSurveyResponse.statusCode, 404, 'Expected the status code to be 404 for a event type that does not exist.');
     });
-    (0, node_test_1.default)('getSurveys() - success', { only: true }, async () => {
+    (0, node_test_1.default)('getSurveys() - success', async () => {
         const createQuestionTypeResponse1 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType1);
         node_assert_1.default.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
         const createQuestionTypeResponse2 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType2);
@@ -242,7 +242,7 @@ const testData_1 = require("../../src/utils/testData");
         node_assert_1.default.strictEqual(getSurveysResponse.body.data[1].questions[0].questions_possible_responses[0].content, testData_1.closedQuestionResponse2.content, `Expected the content to be "${testData_1.closedQuestionResponse2.content}".`);
         node_assert_1.default.strictEqual(getSurveysResponse.body.data[1].questions.length, 2, `Expected the number of surveys questions to be 2`);
     });
-    (0, node_test_1.default)('updateSurvey() - success', { only: true }, async () => {
+    (0, node_test_1.default)('updateSurvey() - success', async () => {
         const createQuestionTypeResponse1 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType1);
         node_assert_1.default.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
         const createQuestionTypeResponse2 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType2);
@@ -301,7 +301,7 @@ const testData_1 = require("../../src/utils/testData");
         node_assert_1.default.strictEqual(updateSurveyResponse.body.data.questions[0].questions_possible_responses[0].content, testData_1.closedQuestionResponse2.content, `Expected the content to be "${testData_1.closedQuestionResponse2.content}".`);
         node_assert_1.default.strictEqual(updateSurveyResponse.body.data.questions.length, 2, `Expected the number of surveys questions to be 2`);
     });
-    (0, node_test_1.default)('updateSurvey() - validation error', { only: true }, async () => {
+    (0, node_test_1.default)('updateSurvey() - validation error', async () => {
         const updateSurveyResponse = await (0, requestHelpers_1.sendPatchRequest)(`/survey/${testData_1.invalidIdUrl}`, {
             name: testData_1.emptyString,
             description: testData_1.emptyString,
@@ -329,7 +329,7 @@ const testData_1 = require("../../src/utils/testData");
         node_assert_1.default.strictEqual(updateSurveyResponse.statusCode, 400, 'Expected the status code to be 400 for a validation error.');
         node_assert_1.default.strictEqual(updateSurveyResponse.body.errors.length, 7, 'Expected the number of validation errors to be 7.');
     });
-    (0, node_test_1.default)('updateSurvey() - survey does not exist', { only: true }, async () => {
+    (0, node_test_1.default)('updateSurvey() - survey does not exist', async () => {
         const createQuestionTypeResponse1 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType1);
         node_assert_1.default.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
         const createQuestionTypeResponse2 = await (0, requestHelpers_1.sendPostRequest)('/question-type', testData_1.questionType2);

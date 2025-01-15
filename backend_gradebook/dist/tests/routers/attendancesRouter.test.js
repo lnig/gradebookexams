@@ -828,7 +828,7 @@ const testData_1 = require("../../src/utils/testData");
         const getAttendancesInfoResponse = await (0, requestHelpers_1.sendGetRequest)(`/attendance/student/${testData_1.nonExistentId}/by-date/${formattedDate}`);
         node_assert_1.default.strictEqual(getAttendancesInfoResponse.statusCode, 404, 'Expected the status code to be 404 for a student that does not exist.');
     });
-    (0, node_test_1.default)('updateAttendances() - success', async () => {
+    (0, node_test_1.default)('updateAttendance() - success', async () => {
         const createClassNameResponse = await (0, requestHelpers_1.sendPostRequest)('/class-name', testData_1.className1);
         node_assert_1.default.strictEqual(createClassNameResponse.statusCode, 200, 'Expected the status code to be 200 for a successful class name creation.');
         const createSchoolYearResponse = await (0, requestHelpers_1.sendPostRequest)('/school-year', testData_1.schoolYear1);
@@ -888,88 +888,53 @@ const testData_1 = require("../../src/utils/testData");
         const getAttendancesResponse = await (0, requestHelpers_1.sendGetRequest)(`/attendance/${lesson.id}`);
         node_assert_1.default.strictEqual(getAttendancesResponse.statusCode, 200, 'Expected the status code to be 200 for a successful attendances retrieval.');
         node_assert_1.default.strictEqual(getAttendancesResponse.body.data.length, 2, 'Expected the number of retrieved lessons to be 2.');
-        const attendance1 = getAttendancesResponse.body.data[0];
-        const attendance2 = getAttendancesResponse.body.data[1];
-        const attendancesUpdateData = {
-            attendancesUpdate: [
-                {
-                    id: attendance1.id,
-                    wasPresent: false,
-                    wasLate: false,
-                    wasExcused: false
-                },
-                {
-                    id: attendance2.id,
-                    wasPresent: false,
-                    wasLate: false,
-                    wasExcused: false
-                }
-            ]
+        const attendance = getAttendancesResponse.body.data[0];
+        const attendanceUpdateData = {
+            wasPresent: false,
+            wasLate: false,
+            wasExcused: false
         };
-        const updateAttendancesResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/update`, attendancesUpdateData);
+        const updateAttendancesResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/${attendance.id}`, attendanceUpdateData);
         node_assert_1.default.strictEqual(updateAttendancesResponse.statusCode, 200, 'Expected the status code to be 200 for a successful attendances update.');
-        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data[0].was_present, false, `Expected the updated attendance presence to be "false".`);
-        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data[0].was_late, false, `Expected the updated attendance late flag to be "false".`);
-        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data[0].was_excused, false, `Expected the updated attendance excused flag to be "false".`);
-        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data[1].was_present, false, `Expected the updated attendance presence to be "false".`);
-        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data[1].was_late, false, `Expected the updated attendance late flag to be "false".`);
-        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data[1].was_excused, false, `Expected the updated attendance excused flag to be "false".`);
+        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data.was_present, false, `Expected the updated attendance presence to be "false".`);
+        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data.was_late, false, `Expected the updated attendance late flag to be "false".`);
+        node_assert_1.default.strictEqual(updateAttendancesResponse.body.data.was_excused, false, `Expected the updated attendance excused flag to be "false".`);
     });
-    (0, node_test_1.default)('updateAttendances() - validation error', async () => {
-        const attendancesUpdateData = {
-            attendancesUpdate: [
-                {
-                    id: testData_1.emptyString,
-                    wasPresent: testData_1.emptyString,
-                    wasLate: testData_1.emptyString,
-                    wasExcused: testData_1.emptyString
-                }
-            ]
+    (0, node_test_1.default)('updateAttendance() - validation error', async () => {
+        const attendanceUpdateData = {
+            wasPresent: testData_1.emptyString,
+            wasLate: testData_1.emptyString,
+            wasExcused: testData_1.emptyString
         };
-        const updateAttendancesResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/update`, attendancesUpdateData);
+        const updateAttendancesResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/${testData_1.invalidIdUrl}`, attendanceUpdateData);
         node_assert_1.default.strictEqual(updateAttendancesResponse.statusCode, 400, 'Expected the status code to be 400 for a validation error.');
         node_assert_1.default.strictEqual(updateAttendancesResponse.body.errors.length, 4, 'Expected the number of validation errors to be 4.');
     });
-    (0, node_test_1.default)('updateAttendances() - absent and simultaneously late', async () => {
-        const attendancesUpdateData = {
-            attendancesUpdate: [
-                {
-                    id: testData_1.nonExistentId,
-                    wasPresent: false,
-                    wasLate: true,
-                    wasExcused: true
-                }
-            ]
+    (0, node_test_1.default)('updateAttendance() - absent and simultaneously late', async () => {
+        const attendanceUpdateData = {
+            wasPresent: false,
+            wasLate: true,
+            wasExcused: true
         };
-        const updateAttendancesResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/update`, attendancesUpdateData);
+        const updateAttendancesResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/${testData_1.nonExistentId}`, attendanceUpdateData);
         node_assert_1.default.strictEqual(updateAttendancesResponse.statusCode, 422, 'Status code 422 was expected for the presence which states that one was absent and late at the same time.');
     });
-    (0, node_test_1.default)('updateAttendances() - present, not late and simultaneously excused', async () => {
-        const attendancesUpdateData = {
-            attendancesUpdate: [
-                {
-                    id: testData_1.nonExistentId,
-                    wasPresent: true,
-                    wasLate: false,
-                    wasExcused: true
-                }
-            ]
+    (0, node_test_1.default)('updateAttendance() - present, not late and simultaneously excused', async () => {
+        const attendanceUpdateData = {
+            wasPresent: true,
+            wasLate: false,
+            wasExcused: true
         };
-        const updateAttendanceResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/update`, attendancesUpdateData);
+        const updateAttendanceResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/${testData_1.nonExistentId}`, attendanceUpdateData);
         node_assert_1.default.strictEqual(updateAttendanceResponse.statusCode, 422, 'Status code 422 was expected for the presence which states that one was present, not late and excused at the same time.');
     });
-    (0, node_test_1.default)('updateAttendances() - attendance not found', async () => {
-        const attendancesUpdateData = {
-            attendancesUpdate: [
-                {
-                    id: testData_1.nonExistentId,
-                    wasPresent: true,
-                    wasLate: false,
-                    wasExcused: false
-                }
-            ]
+    (0, node_test_1.default)('updateAttendance() - attendance not found', async () => {
+        const attendanceUpdateData = {
+            wasPresent: true,
+            wasLate: false,
+            wasExcused: false
         };
-        const updateAttendanceResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/update`, attendancesUpdateData);
+        const updateAttendanceResponse = await (0, requestHelpers_1.sendPatchRequest)(`/attendance/${testData_1.nonExistentId}`, attendanceUpdateData);
         node_assert_1.default.strictEqual(updateAttendanceResponse.statusCode, 404, 'Expected the status code to be 404 for a attendance that does not exist.');
     });
 });

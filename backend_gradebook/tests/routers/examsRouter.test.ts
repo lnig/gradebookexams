@@ -12,7 +12,7 @@ import { lessons } from '@prisma/client';
 
 suite('examsRouter', () => {
     afterEach(async () => {
-        await prisma.exams.deleteMany();
+        await prisma.gradebook_exams.deleteMany();
         await prisma.lessons.deleteMany();
         await prisma.classes.deleteMany();
         await prisma.teachers.deleteMany();

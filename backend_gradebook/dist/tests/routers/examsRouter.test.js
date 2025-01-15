@@ -43,7 +43,7 @@ const requestHelpers_1 = require("../../src/utils/requestHelpers");
 const testData_1 = require("../../src/utils/testData");
 (0, node_test_1.suite)('examsRouter', () => {
     (0, node_test_1.afterEach)(async () => {
-        await db_1.default.exams.deleteMany();
+        await db_1.default.gradebook_exams.deleteMany();
         await db_1.default.lessons.deleteMany();
         await db_1.default.classes.deleteMany();
         await db_1.default.teachers.deleteMany();

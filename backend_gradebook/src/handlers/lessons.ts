@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../db';
+import { Prisma } from '@prisma/client';
 import { teachers, classes, subjects, lessons, semesters, parents, students } from '@prisma/client';
 import { createSuccessResponse, createErrorResponse } from '../interfaces/responseInterfaces';
 import LessonSchedule from '../interfaces/lessonSchedule';
@@ -75,33 +76,32 @@ export const createLessons = async (req: Request, res: Response) => {
                     const [startHour, startMinute] = schedule.startTime.split(':').map(Number);
                     const [endHour, endMinute] = schedule.endTime.split(':').map(Number);
 
-                    const epochDate = new Date(0);
-
-                    const lessonStartTime = new Date(epochDate);
+                    const lessonStartTime = new Date(currentDate);
                     lessonStartTime.setUTCHours(startHour, startMinute, 0, 0);
 
-                    const lessonEndTime = new Date(epochDate);
+                    const lessonEndTime = new Date(currentDate);
                     lessonEndTime.setUTCHours(endHour, endMinute, 0, 0);
 
                     const dateStr = currentDate.toISOString().split('T')[0];
 
-                    const startHours = lessonStartTime.getUTCHours().toString().padStart(2, '0');
-                    const startMinutes = lessonStartTime.getUTCMinutes().toString().padStart(2, '0');
-                    const startTimeStr = `${startHours}:${startMinutes}:00`;
+                    const startTimeStr = lessonStartTime.toISOString().split('T')[1].slice(0, 8);
+                    const endTimeStr = lessonEndTime.toISOString().split('T')[1].slice(0, 8);
 
-                    const endHours = lessonEndTime.getUTCHours().toString().padStart(2, '0');
-                    const endMinutes = lessonEndTime.getUTCMinutes().toString().padStart(2, '0');
-                    const endTimeStr = `${endHours}:${endMinutes}:00`;
-
-                    const existingLessons = await prisma.$queryRaw<lessons[]>`
-                        SELECT *
-                        FROM lessons
-                        WHERE date = ${dateStr}
-                            AND start_time = ${startTimeStr}
-                            AND end_time   = ${endTimeStr}
-                            AND class_id  = ${classId}
-                        LIMIT 1
-                    `;
+                    const existingLessons = await prisma.$queryRaw<lessons[]>(
+                        Prisma.sql`
+                            SELECT *
+                            FROM lessons
+                            WHERE 
+                                date = ${dateStr} AND
+                                class_id = ${Buffer.from(uuidParse(classId))} AND
+                                (
+                                    ${startTimeStr} BETWEEN start_time AND end_time OR
+                                    ${endTimeStr} BETWEEN start_time AND end_time OR
+                                    start_time BETWEEN ${startTimeStr} AND ${endTimeStr}
+                                )
+                            LIMIT 1
+                        `
+                    );
 
                     if (existingLessons.length > 0) {
                         return res.status(409).json({ error: 'Lesson overlaps with another lesson.' });

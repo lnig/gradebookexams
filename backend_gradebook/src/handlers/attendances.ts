@@ -7,7 +7,6 @@ import { attendances, lessons, students } from '@prisma/client';
 import { parse as uuidParse, stringify as uuidStringify } from 'uuid';
 import MonthlyAttendance from '../interfaces/monthlyAttendance';
 import { Month } from '../enums/months';
-import attendanceUpdate from '../interfaces/attendanceUpdate';
 
 export const createAttendances = async (req: Request, res: Response) => {
     try {
@@ -501,7 +500,7 @@ export const excuseAbsencesForStudentByDate = async (req: Request, res: Response
             return res.status(404).json(createErrorResponse('Student does not exist.'));
         }
 
-        
+
         if (!existingStudent) {
             return res.status(404).json(createErrorResponse('Student does not exist.'));
         }

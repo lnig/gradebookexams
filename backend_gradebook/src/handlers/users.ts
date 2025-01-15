@@ -262,17 +262,17 @@ export const forgotPassword = async (req: Request, res: Response) => {
             port: 587,
             secure: false,
             auth: {
-              user: SMTP_USER,
-              pass: SMTP_PASS,
+                user: SMTP_USER,
+                pass: SMTP_PASS,
             },
             tls: {
-              rejectUnauthorized: false,
+                rejectUnauthorized: false,
             },
-          });
+        });
 
         const message = {
             from: "sender@server.com",
-            to: "recaiver@sender.com",
+            to: "receiver@sender.com",
             subject: "Password Reset",
             text: `Click the following link to reset your password: http://localhost:3001/reset-password/${jwt}`
         };

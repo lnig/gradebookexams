@@ -142,7 +142,7 @@ suite('lessonsRouter', () => {
         assert.strictEqual(createLessonsResponse.statusCode, 404, 'Expected the status code to be 404 for a subject that does not exist.');
     });
 
-    test('createLessons() - lessons already exist', async () => {
+    test('createLessons() - lessons overlap', async () => {
         const signUpResponse = await sendPostRequest('/auth/signup/teacher', teacher1);
         assert.strictEqual(signUpResponse.statusCode, 200, 'Expected the status code to be 200 for a successful signup.');
 
@@ -189,7 +189,7 @@ suite('lessonsRouter', () => {
             classId: createClassResponse.body.data.id,
             subjectId: createSubjectResponse.body.data.id
         });
-        assert.strictEqual(createLessonsResponse2.statusCode, 409, 'Expected the status code to be 409 for lessons that already exists.');
+        assert.strictEqual(createLessonsResponse2.statusCode, 409, 'Expected the status code to be 409 for lessons that overlap.');
     });
 
     test('createLessons() - start date is not earlier than end date', async () => {

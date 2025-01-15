@@ -14,6 +14,6 @@ const SMTP_PASS = process.env.SMTP_PASS;
 exports.SMTP_PASS = SMTP_PASS;
 const BEARER_TOKEN = process.env.BEARER_TOKEN;
 exports.BEARER_TOKEN = BEARER_TOKEN;
-if (!PORT || !SECRET_KEY || !DATABASE_URL || !SMTP_USER || !SMTP_PASS || !BEARER_TOKEN) {
+if (!PORT || !SECRET_KEY || !DATABASE_URL || !DATABASE_TEST_URL || !SMTP_USER || !SMTP_PASS || !BEARER_TOKEN) {
     throw new Error('Missing required environment variables. Please check your .env file.');
 }

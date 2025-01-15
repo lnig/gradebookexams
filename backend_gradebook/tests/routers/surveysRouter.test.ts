@@ -9,7 +9,7 @@ import {
 } from '../../src/utils/requestHelpers';
 import { survey1, questionType1, closedQuestion1, questionType2, closedQuestionResponse1, openQuestion1, emptyString, invalidIdUrl, nonExistentId, closedQuestion2, closedQuestionResponse2, openQuestion2, survey2 } from '../../src/utils/testData';
 
-suite('surveysRouter', { only: true }, () => {
+suite('surveysRouter', () => {
     afterEach(async () => {
         await prisma.questions_possible_responses.deleteMany();
         await prisma.questions.deleteMany();
@@ -17,7 +17,7 @@ suite('surveysRouter', { only: true }, () => {
         await prisma.surveys.deleteMany();
     });
 
-    test('CreateSurvey() - success', { only: true }, async () => {
+    test('CreateSurvey() - success', async () => {
         const createQuestionTypeResponse1 = await sendPostRequest('/question-type', questionType1);
         assert.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
 
@@ -59,7 +59,7 @@ suite('surveysRouter', { only: true }, () => {
         assert.strictEqual(createSurveyResponse.body.data.questions.length, 2, `Expected the number of surveys questions to be 2`);
     });
 
-    test('CreateSurvey() - validation error - questions is not an empty array', { only: true }, async () => {
+    test('CreateSurvey() - validation error - questions is not an empty array', async () => {
         const createSurveyResponse = await sendPostRequest('/survey', {
             name: emptyString,
             description: emptyString,
@@ -87,7 +87,7 @@ suite('surveysRouter', { only: true }, () => {
         assert.strictEqual(createSurveyResponse.body.errors.length, 11, 'Expected the number of validation errors to be 11.');
     });
 
-    test('CreateSurvey() - validation error - questions array does not exist', { only: true }, async () => {
+    test('CreateSurvey() - validation error - questions array does not exist', async () => {
         const createSurveyResponse = await sendPostRequest('/survey', {
             name: emptyString,
             description: emptyString,
@@ -101,7 +101,7 @@ suite('surveysRouter', { only: true }, () => {
         assert.strictEqual(createSurveyResponse.body.errors.length, 7, 'Expected the number of validation errors to be 7.');
     });
 
-    test('getSurvey() - success', { only: true }, async () => {
+    test('getSurvey() - success', async () => {
         const createQuestionTypeResponse1 = await sendPostRequest('/question-type', questionType1);
         assert.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
 
@@ -146,19 +146,19 @@ suite('surveysRouter', { only: true }, () => {
         assert.strictEqual(getSurveyResponse.body.data.questions.length, 2, `Expected the number of surveys questions to be 2`);
     });
 
-    test('getSurvey() - validation error', { only: true }, async () => {
+    test('getSurvey() - validation error', async () => {
         const getSurveyResponse = await sendGetRequest(`/survey/${invalidIdUrl}`);
         assert.strictEqual(getSurveyResponse.statusCode, 400, 'Expected the status code to be 400 for a validation error.');
         assert.strictEqual(getSurveyResponse.body.errors.length, 1, 'Expected the number of validation errors to be 1.');
     });
 
-    test('getSurvey() - survey does not exist', { only: true }, async () => {
+    test('getSurvey() - survey does not exist', async () => {
         const getSurveyResponse = await sendGetRequest(`/survey/${nonExistentId}`);
         assert.strictEqual(getSurveyResponse.statusCode, 404, 'Expected the status code to be 404 for a event type that does not exist.');
 
     });
 
-    test('getSurveys() - success', { only: true }, async () => {
+    test('getSurveys() - success', async () => {
         const createQuestionTypeResponse1 = await sendPostRequest('/question-type', questionType1);
         assert.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
 
@@ -238,7 +238,7 @@ suite('surveysRouter', { only: true }, () => {
         assert.strictEqual(getSurveysResponse.body.data[1].questions.length, 2, `Expected the number of surveys questions to be 2`);
     });
 
-    test('updateSurvey() - success', { only: true }, async () => {
+    test('updateSurvey() - success', async () => {
         const createQuestionTypeResponse1 = await sendPostRequest('/question-type', questionType1);
         assert.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
 
@@ -307,7 +307,7 @@ suite('surveysRouter', { only: true }, () => {
         assert.strictEqual(updateSurveyResponse.body.data.questions.length, 2, `Expected the number of surveys questions to be 2`);
     });
 
-    test('updateSurvey() - validation error', { only: true }, async () => {
+    test('updateSurvey() - validation error', async () => {
         const updateSurveyResponse = await sendPatchRequest(
             `/survey/${invalidIdUrl}`,
             {
@@ -339,7 +339,7 @@ suite('surveysRouter', { only: true }, () => {
         assert.strictEqual(updateSurveyResponse.body.errors.length, 7, 'Expected the number of validation errors to be 7.');
     });
 
-    test('updateSurvey() - survey does not exist', { only: true }, async () => {
+    test('updateSurvey() - survey does not exist', async () => {
         const createQuestionTypeResponse1 = await sendPostRequest('/question-type', questionType1);
         assert.strictEqual(createQuestionTypeResponse1.statusCode, 200, 'Expected the status code to be 200 for a successful question type creation.');
 
