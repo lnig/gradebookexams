@@ -23,6 +23,8 @@ jobs:
 
       - name: npm install, build, and test
         working-directory: ./backend_gradebook
+        env:
+          TERM: xterm
         run: |
           npm install
           npm run test
