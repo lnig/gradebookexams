@@ -148,7 +148,7 @@ const testData_1 = require("../../src/utils/testData");
         });
         node_assert_1.default.strictEqual(createLessonsResponse.statusCode, 404, 'Expected the status code to be 404 for a subject that does not exist.');
     });
-    (0, node_test_1.default)('createLessons() - lessons already exist', async () => {
+    (0, node_test_1.default)('createLessons() - lessons overlap', async () => {
         const signUpResponse = await (0, requestHelpers_1.sendPostRequest)('/auth/signup/teacher', testData_1.teacher1);
         node_assert_1.default.strictEqual(signUpResponse.statusCode, 200, 'Expected the status code to be 200 for a successful signup.');
         const createSubjectResponse = await (0, requestHelpers_1.sendPostRequest)('/subject', testData_1.subject1);
@@ -184,7 +184,7 @@ const testData_1 = require("../../src/utils/testData");
             classId: createClassResponse.body.data.id,
             subjectId: createSubjectResponse.body.data.id
         });
-        node_assert_1.default.strictEqual(createLessonsResponse2.statusCode, 409, 'Expected the status code to be 409 for lessons that already exists.');
+        node_assert_1.default.strictEqual(createLessonsResponse2.statusCode, 409, 'Expected the status code to be 409 for lessons that overlap.');
     });
     (0, node_test_1.default)('createLessons() - start date is not earlier than end date', async () => {
         const signUpResponse = await (0, requestHelpers_1.sendPostRequest)('/auth/signup/teacher', testData_1.teacher1);

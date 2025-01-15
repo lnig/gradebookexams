@@ -7,6 +7,44 @@ import { UserType } from '../enums/userTypes.js';
 
 const attendancesRouter = Router();
 
+attendancesRouter.get('/student/:studentId/by-date/:date',
+    authenticate,
+    authorize([UserType.Administrator, UserType.Teacher, UserType.Parent, UserType.Student]),
+    validateGetAttendancesByDate(),
+    handleInputErrors,
+    getStudentAttendancesByDate
+);
+
+attendancesRouter.get('/student/:studentId',
+    authenticate,
+    authorize([UserType.Administrator, UserType.Teacher, UserType.Parent, UserType.Student]),
+    validateStudentId(),
+    handleInputErrors,
+    getStudentAttendances
+);
+
+attendancesRouter.patch('/excuse/:studentId/by-date/:date',
+    authenticate,
+    authorize([UserType.Administrator, UserType.Teacher, UserType.Parent]),
+    validateUpdateAttendance(),
+    excuseAbsencesForStudentByDate
+);
+
+attendancesRouter.patch('/excuse/:studentId',
+    authenticate,
+    authorize([UserType.Administrator, UserType.Teacher, UserType.Parent]),
+    validateUpdateAttendance(),
+    excuseAbsencesForStudent
+);
+
+attendancesRouter.patch('/:attendanceId',
+    authenticate,
+    authorize([UserType.Administrator, UserType.Teacher]),
+    validateUpdateAttendance(),
+    handleInputErrors,
+    updateAttendance
+);
+
 attendancesRouter.post('',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
@@ -31,50 +69,12 @@ attendancesRouter.get('/statistics/:studentId',
     getAttendancesStatistics
 );
 
-attendancesRouter.get('/student/:studentId',
-    authenticate,
-    authorize([UserType.Administrator, UserType.Teacher, UserType.Parent, UserType.Student]),
-    validateStudentId(),
-    handleInputErrors,
-    getStudentAttendances
-);
-
 attendancesRouter.get('/class/:classId',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher, UserType.Student]),
     validateGetClassAttendances(),
     handleInputErrors,
     getClassAttendances
-);
-
-attendancesRouter.get('/student/:studentId/by-date/:date',
-    authenticate,
-    authorize([UserType.Administrator, UserType.Teacher, UserType.Parent, UserType.Student]),
-    validateGetAttendancesByDate(),
-    handleInputErrors,
-    getStudentAttendancesByDate
-);
-
-attendancesRouter.patch('/:attendanceId',
-    authenticate,
-    authorize([UserType.Administrator, UserType.Teacher]),
-    validateUpdateAttendance(),
-    handleInputErrors,
-    updateAttendance
-);
-
-attendancesRouter.patch('/excuse/:studentId',
-    authenticate,
-    authorize([UserType.Administrator, UserType.Teacher, UserType.Parent]),
-    validateUpdateAttendance(),
-    excuseAbsencesForStudent
-);
-
-attendancesRouter.patch('/excuse/:studentId/by-date/:date',
-    authenticate,
-    authorize([UserType.Administrator, UserType.Teacher, UserType.Parent]),
-    validateUpdateAttendance(),
-    excuseAbsencesForStudentByDate
 );
 
 export default attendancesRouter;

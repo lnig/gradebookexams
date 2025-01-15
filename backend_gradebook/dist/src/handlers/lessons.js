@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteLesson = exports.deleteLessonsByClassIdAndDate = exports.deleteLessonsByClassAndSubjectIds = exports.updateLesson = exports.getLessonsToday = exports.getLessonsThreeDaysAhead = exports.getLessonsThreeDaysBack = exports.getLessonsForUser = exports.getLessonsByClassId = exports.getAllLessons = exports.getLessons = exports.createLessons = void 0;
 const db_1 = __importDefault(require("../db"));
+const client_1 = require("@prisma/client");
 const responseInterfaces_1 = require("../interfaces/responseInterfaces");
 const uuid_1 = require("uuid");
 const node_buffer_1 = require("node:buffer");
@@ -61,27 +62,26 @@ const createLessons = async (req, res) => {
                 if (currentDate < endDate) {
                     const [startHour, startMinute] = schedule.startTime.split(':').map(Number);
                     const [endHour, endMinute] = schedule.endTime.split(':').map(Number);
-                    const epochDate = new Date(0);
-                    const lessonStartTime = new Date(epochDate);
+                    const lessonStartTime = new Date(currentDate);
                     lessonStartTime.setUTCHours(startHour, startMinute, 0, 0);
-                    const lessonEndTime = new Date(epochDate);
+                    const lessonEndTime = new Date(currentDate);
                     lessonEndTime.setUTCHours(endHour, endMinute, 0, 0);
                     const dateStr = currentDate.toISOString().split('T')[0];
-                    const startHours = lessonStartTime.getUTCHours().toString().padStart(2, '0');
-                    const startMinutes = lessonStartTime.getUTCMinutes().toString().padStart(2, '0');
-                    const startTimeStr = `${startHours}:${startMinutes}:00`;
-                    const endHours = lessonEndTime.getUTCHours().toString().padStart(2, '0');
-                    const endMinutes = lessonEndTime.getUTCMinutes().toString().padStart(2, '0');
-                    const endTimeStr = `${endHours}:${endMinutes}:00`;
-                    const existingLessons = await db_1.default.$queryRaw `
-                        SELECT *
-                        FROM lessons
-                        WHERE date = ${dateStr}
-                            AND start_time = ${startTimeStr}
-                            AND end_time   = ${endTimeStr}
-                            AND class_id  = ${classId}
-                        LIMIT 1
-                    `;
+                    const startTimeStr = lessonStartTime.toISOString().split('T')[1].slice(0, 8);
+                    const endTimeStr = lessonEndTime.toISOString().split('T')[1].slice(0, 8);
+                    const existingLessons = await db_1.default.$queryRaw(client_1.Prisma.sql `
+                            SELECT *
+                            FROM lessons
+                            WHERE 
+                                date = ${dateStr} AND
+                                class_id = ${node_buffer_1.Buffer.from((0, uuid_1.parse)(classId))} AND
+                                (
+                                    ${startTimeStr} BETWEEN start_time AND end_time OR
+                                    ${endTimeStr} BETWEEN start_time AND end_time OR
+                                    start_time BETWEEN ${startTimeStr} AND ${endTimeStr}
+                                )
+                            LIMIT 1
+                        `);
                     if (existingLessons.length > 0) {
                         return res.status(409).json({ error: 'Lesson overlaps with another lesson.' });
                     }
