@@ -45,7 +45,7 @@ const server = http_1.default.createServer(app);
 exports.server = server;
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: 'https:/gradebookexams-dwxwi9r5v-lnigs-projects.vercel.app',
+        origin: 'https://egrade.onrender.com',
         methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization']
@@ -53,13 +53,12 @@ const io = new socket_io_1.Server(server, {
 });
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-// app.use(cors({
-//     origin: 'https:/gradebookexams-dwxwi9r5v-lnigs-projects.vercel.app',
-//     credentials: true,
-//     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-//     allowedHeaders: ['Content-Type', 'Authorization']
-// }));
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: 'https://egrade.onrender.com',
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use('/auth', authRouter_1.default);
 app.use('/student-parent', studentsParentsRouter_1.default);
 app.use('/class', classesRouter_1.default);
