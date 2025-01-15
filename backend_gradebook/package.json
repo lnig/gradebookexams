@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "clear && node --test --test-concurrency=1 --test-only",
-    "start": "npx tsc && node --env-file=.env ./dist/src/index.js"
+    "start": "npx tsc && node --env-file=.env ./dist/src/index.js",
+    "migrate": "prisma migrate deploy"
   },
   "keywords": [],
   "author": "",

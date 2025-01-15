@@ -25,7 +25,7 @@ jobs:
         working-directory: ./backend_gradebook
         run: npm install
 
-      - name: Run database migrations
+      - name: Run Prisma migrations
         working-directory: ./backend_gradebook
         run: npm run migrate
 
