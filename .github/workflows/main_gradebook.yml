@@ -21,6 +21,9 @@ jobs:
       - name: Set DATABASE_URL environment variable
         run: echo "DATABASE_URL=${{ secrets.AZURE_DATABASE_URL }}" > ./backend_gradebook/.env
 
+      - name: Debug DATABASE_URL
+        run: cat ./backend_gradebook/.env
+
       - name: Install dependencies and fix permissions
         working-directory: ./backend_gradebook
         run: |
