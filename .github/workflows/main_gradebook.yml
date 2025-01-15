@@ -21,13 +21,13 @@ jobs:
       - name: Set DATABASE_URL environment variable
         run: echo "DATABASE_URL=${{ secrets.AZURE_DATABASE_URL }}" > ./backend_gradebook/.env
 
-      - name: Install dependencies
+      - name: Install dependencies (including Prisma CLI)
         working-directory: ./backend_gradebook
         run: npm install
 
       - name: Run Prisma migrations
         working-directory: ./backend_gradebook
-        run: npm run migrate
+        run: npx prisma migrate deploy
 
       - name: Run tests
         working-directory: ./backend_gradebook
