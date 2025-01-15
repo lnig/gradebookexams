@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAttemptDetails = exports.saveAttempt = exports.startExamAttempt = exports.getUserAttempts = void 0;
+exports.getAttemptDetails = exports.checkAttemptEligibility = exports.saveAttempt = exports.startExamAttempt = exports.getUserAttempts = void 0;
 const db_1 = __importDefault(require("../db"));
 const responseInterfaces_1 = require("../interfaces/responseInterfaces");
 const uuid_1 = require("uuid");
@@ -208,7 +208,6 @@ const startExamAttempt = async (req, res) => {
             return attempt;
         });
         const attemptId = (0, uuid_1.stringify)(newAttempt.id);
-        console.log("starting attempt - " + attemptId);
         const date = new Date();
         return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)({
             attempt_id: attemptId,
@@ -323,7 +322,6 @@ const saveAttempt = async (req, res) => {
                 });
             }
         });
-        console.log("saving attempt");
         return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)({}, 'Exam attempt saved and graded successfully.'));
     }
     catch (error) {
@@ -332,6 +330,42 @@ const saveAttempt = async (req, res) => {
     }
 };
 exports.saveAttempt = saveAttempt;
+const checkAttemptEligibility = async (req, res) => {
+    try {
+        const { exam_id } = req.params;
+        const user = req.user;
+        const student_id = user?.userId;
+        if (!student_id) {
+            return res.status(400).json((0, responseInterfaces_1.createErrorResponse)('Invalid student ID.'));
+        }
+        const exam = await db_1.default.exams.findUnique({
+            where: { id: Buffer.from((0, uuid_1.parse)(exam_id)) },
+            include: {
+                attempts: true,
+            },
+        });
+        if (!exam) {
+            return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Exam not found.'));
+        }
+        const studentAttempts = exam.attempts.filter(attempt => attempt.student_id.equals(Buffer.from((0, uuid_1.parse)(student_id))));
+        let maxAttempts = 0;
+        if (!exam.multiple_tries) {
+            maxAttempts = 1;
+        }
+        else {
+            maxAttempts = exam.number_of_tries != null ? exam.number_of_tries : 0;
+        }
+        if (studentAttempts.length >= maxAttempts) {
+            return res.status(403).json((0, responseInterfaces_1.createErrorResponse)(`You have already completed the maximum number of attempts for this exam.`));
+        }
+        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)({}, 'You are eligible to attempt this exam.'));
+    }
+    catch (error) {
+        console.error('Error checking attempt eligibility:', error);
+        return res.status(500).json((0, responseInterfaces_1.createErrorResponse)('An unexpected error occurred while checking eligibility. Please try again later.'));
+    }
+};
+exports.checkAttemptEligibility = checkAttemptEligibility;
 const getAttemptDetails = async (req, res) => {
     try {
         const { attemptId } = req.params;

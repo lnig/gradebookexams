@@ -103,29 +103,19 @@ const removeUnusedQuestions = async (exam_id_buffer, open_questions, closed_ques
         .map(id => Buffer.from((0, uuid_1.parse)(id)));
     const openIdsToDelete = existingOpenIds.filter(existingId => !providedOpenIdsBuffers.some(providedId => providedId.equals(existingId)));
     if (openIdsToDelete.length > 0) {
-        console.log("openIdsToDelete:", openIdsToDelete);
-        // Find all `open_answer_id`s linked to `openIdsToDelete` for debugging
         const existingOpenAnswerIds = (await prismaTransaction.attempt_questions.findMany({
             where: { open_question_id: { in: openIdsToDelete } },
             select: { id: true },
         })).map((ans) => ans.id);
-        // Log the open answers to ensure they are identified
-        console.log("Existing open answer IDs:", existingOpenAnswerIds);
-        // Delete `attempt_questions` records linked to `open_question_id`
         await prismaTransaction.attempt_questions.deleteMany({
             where: { open_question_id: { in: openIdsToDelete } },
         });
-        console.log("Deleted attempt_questions.");
-        // Delete `open_answers` linked to `open_question_id`
         await prismaTransaction.open_answers.deleteMany({
             where: { open_question_id: { in: openIdsToDelete } },
         });
-        console.log("Deleted open_answers.");
-        // Delete `open_questions`
         await prismaTransaction.open_questions.deleteMany({
             where: { id: { in: openIdsToDelete } },
         });
-        console.log("Deleted open_questions.");
     }
     const providedClosedIds = closed_questions?.map((q) => q.id || '') || [];
     const existingClosedIds = (await prismaTransaction.closed_questions.findMany({
@@ -159,8 +149,6 @@ const upsertQuestions = async (exam_id_buffer, open_questions, closed_questions,
     const processOpenQuestion = async (q) => {
         const { id, description, score, auto_check, answers } = q;
         const questionData = { description, score, auto_check };
-        console.log(q.description);
-        console.log(q.answers);
         let questionId;
         if (id) {
             const qId = Buffer.from((0, uuid_1.parse)(id));

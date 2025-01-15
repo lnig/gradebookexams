@@ -255,7 +255,6 @@ export const startExamAttempt = async (req: Request, res: Response) => {
         });
 
         const attemptId = uuidStringify(newAttempt.id);
-        console.log("starting attempt - "+ attemptId);
         const date = new Date();
         return res.status(200).json(createSuccessResponse({
             attempt_id: attemptId,
@@ -386,11 +385,53 @@ export const saveAttempt = async (req: Request, res: Response) => {
                 });
             }
         });
-        console.log("saving attempt");
         return res.status(200).json(createSuccessResponse({}, 'Exam attempt saved and graded successfully.'));
     } catch (error: any) {
         console.error('Error saving exam attempt:', error);
         return res.status(500).json(createErrorResponse('An unexpected error occurred while saving the exam attempt. Please try again later.'));
+    }
+};
+
+export const checkAttemptEligibility = async (req: Request, res: Response) => {
+    try {
+        const { exam_id } = req.params;
+        const user = req.user;
+        const student_id = user?.userId;
+
+        if (!student_id) {
+            return res.status(400).json(createErrorResponse('Invalid student ID.'));
+        }
+
+        const exam = await prisma.exams.findUnique({
+            where: { id: Buffer.from(uuidParse(exam_id)) },
+            include: {
+                attempts: true,
+            },
+        });
+
+        if (!exam) {
+            return res.status(404).json(createErrorResponse('Exam not found.'));
+        }
+
+        const studentAttempts = exam.attempts.filter(attempt => attempt.student_id.equals(Buffer.from(uuidParse(student_id as string))));
+
+        let maxAttempts = 0;
+
+        if (!exam.multiple_tries) {
+            maxAttempts = 1;
+        }
+        else {
+            maxAttempts = exam.number_of_tries != null ? exam.number_of_tries : 0;
+        }
+
+        if (studentAttempts.length >= maxAttempts) {
+            return res.status(403).json(createErrorResponse(`You have already completed the maximum number of attempts for this exam.`));
+        }
+
+        return res.status(200).json(createSuccessResponse({}, 'You are eligible to attempt this exam.'));
+    } catch (error: any) {
+        console.error('Error checking attempt eligibility:', error);
+        return res.status(500).json(createErrorResponse('An unexpected error occurred while checking eligibility. Please try again later.'));
     }
 };
 
@@ -531,7 +572,6 @@ export const getAttemptDetails = async (req: Request, res: Response) => {
                 questions.push(question);
             }
         }
-
         const response: AttemptDetailsResponse = {
             exam_title: exam_title ?? undefined,
             attempt_id: attemptId,

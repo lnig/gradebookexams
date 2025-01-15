@@ -51,7 +51,6 @@ const getExam = async (req, res) => {
                 start_date_time: new Date(exam.start_date_time),
                 end_date_time: new Date(exam.end_date_time),
             };
-            console.log(responseData);
             return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, 'Exam retrieved successfully.'));
         }
     }
@@ -70,7 +69,6 @@ const getExams = async (req, res) => {
         let exams;
         if (user.role === userTypes_1.UserType.Student) {
             const studentIdBuffer = Buffer.from((0, uuid_1.parse)(user.userId));
-            console.log(user.userId);
             const student = await db_1.default.students.findUnique({
                 where: { id: studentIdBuffer },
                 select: { class_id: true },
@@ -202,8 +200,6 @@ const updateExam = async (req, res) => {
     try {
         const { exam_id } = req.params;
         const { title, lesson_id, start_date_time, end_date_time, visibility, number_of_questions, duration, description, number_of_tries, multiple_tries, randomise_answers, randomise_questions, block_copying_pasting, time_limit_for_each_question, end_test_after_leaving_window, latest_attempt_counts, best_attempt_counts, hide_results, display_points_per_question, show_correct_answers, allow_navigation, allow_review, } = req.body;
-        console.log(lesson_id);
-        console.log("11111111");
         const examIdBuffer = Buffer.from((0, uuid_1.parse)(exam_id));
         const existingExam = await db_1.default.exams.findUnique({
             where: { id: examIdBuffer },
@@ -211,13 +207,10 @@ const updateExam = async (req, res) => {
         if (!existingExam) {
             return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Exam not found.'));
         }
-        console.log(lesson_id);
         const lessonIdBuffer = Buffer.from((0, uuid_1.parse)(lesson_id));
-        console.log("33333333333");
         const existingLesson = await db_1.default.lessons.findUnique({
             where: { id: lessonIdBuffer },
         });
-        console.log("00000000");
         if (!existingLesson) {
             return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Lesson not found.'));
         }
@@ -245,16 +238,13 @@ const updateExam = async (req, res) => {
             allow_navigation: allow_navigation,
             allow_review: allow_review,
         };
-        console.log("111111");
         const updatedExam = await db_1.default.exams.update({
             where: { id: examIdBuffer },
             data: updateData,
         });
-        console.log("22222222");
         const existing1Exam = await db_1.default.exams.findUnique({
             where: { id: examIdBuffer },
         });
-        // console.log(existing1Exam);
         const examUUID = (0, uuid_1.stringify)(updatedExam.id);
         return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)({ id: examUUID }, 'Exam updated successfully.'));
     }
@@ -331,32 +321,40 @@ const deleteExam = async (req, res) => {
 exports.deleteExam = deleteExam;
 const getGradebookExams = async (req, res) => {
     const user = req.user;
-    const teacher_id = user?.userId;
-    if (!user || user.role !== userTypes_1.UserType.Teacher) {
-        return res.status(401).json((0, responseInterfaces_1.createErrorResponse)('Unauthorized'));
+    const user_id = user?.userId;
+    if (!user) {
+        return res.status(401).json((0, responseInterfaces_1.createErrorResponse)('Unauthorized1'));
     }
-    if (!teacher_id || typeof teacher_id !== 'string' || !(0, uuid_1.validate)(teacher_id)) {
+    if (!user_id || typeof user_id !== 'string') {
         return res.status(400).json((0, responseInterfaces_1.createErrorResponse)('Invalid teacher ID.'));
     }
     try {
-        const teacherIdBuffer = Buffer.from((0, uuid_1.parse)(teacher_id));
+        const teacherIdBuffer = Buffer.from((0, uuid_1.parse)(user_id));
         const teacher = await db_1.default.teachers.findUnique({
             where: { id: teacherIdBuffer },
         });
-        if (!teacher) {
-            return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Teacher not found.'));
-        }
-        const gradebookExams = await db_1.default.gradebook_exams.findMany({
-            where: {
-                lessons: {
-                    teacher_id: teacherIdBuffer,
+        let gradebookExams = null;
+        if (teacher) {
+            gradebookExams = await db_1.default.gradebook_exams.findMany({
+                where: {
+                    lessons: {
+                        teacher_id: teacherIdBuffer,
+                    },
                 },
-            },
-            select: {
-                lesson_id: true,
-                topic: true,
-            },
-        });
+                select: {
+                    lesson_id: true,
+                    topic: true,
+                },
+            });
+        }
+        else {
+            gradebookExams = await db_1.default.gradebook_exams.findMany({
+                select: {
+                    lesson_id: true,
+                    topic: true,
+                },
+            });
+        }
         const formattedGradebookExams = gradebookExams.map(exam => ({
             lesson_id: (0, uuid_1.stringify)(exam.lesson_id),
             topic: exam.topic,
@@ -547,7 +545,6 @@ const getExamParticipantsForNewExam = async (req, res) => {
         else if (user.role === userTypes_1.UserType.Teacher) {
             const teacher_id = user.userId;
             const teacherClassesRaw = await (0, classService_1.getClassesByTeacher)(teacher_id);
-            console.log(teacherClassesRaw);
             const classes = teacherClassesRaw.map((cls) => ({
                 id: cls.id,
                 name: cls.name,
@@ -572,7 +569,6 @@ const getExamParticipantsForNewExam = async (req, res) => {
                 students,
                 classes,
             };
-            console.log(responseData);
             return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, 'Exam participants retrieved successfully.'));
         }
         ;

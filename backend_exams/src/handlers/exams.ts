@@ -62,7 +62,6 @@ export const getExam = async (req: Request, res: Response) => {
                 start_date_time: new Date(exam.start_date_time),
                 end_date_time: new Date(exam.end_date_time),
             };
-            console.log(responseData)
             return res.status(200).json(createSuccessResponse(responseData, 'Exam retrieved successfully.'));
 
         }
@@ -84,7 +83,6 @@ export const getExams = async (req: Request, res: Response) => {
 
         if (user.role === UserType.Student) {
             const studentIdBuffer = Buffer.from(uuidParse(user.userId));
-            console.log(user.userId)
             const student = await prisma.students.findUnique({
                 where: { id: studentIdBuffer },
                 select: { class_id: true },
@@ -283,8 +281,6 @@ export const updateExam = async (req: Request, res: Response) => {
             allow_review,
         }: CreateExamInput = req.body;
 
-        console.log(lesson_id);
-        console.log("11111111")
         const examIdBuffer = Buffer.from(uuidParse(exam_id));
 
         const existingExam = await prisma.exams.findUnique({
@@ -294,15 +290,12 @@ export const updateExam = async (req: Request, res: Response) => {
         if (!existingExam) {
             return res.status(404).json(createErrorResponse('Exam not found.'));
         }
-        console.log(lesson_id);
         const lessonIdBuffer = Buffer.from(uuidParse(lesson_id));
 
-        console.log("33333333333")
         const existingLesson = await prisma.lessons.findUnique({
             where: { id: lessonIdBuffer },
         });
 
-        console.log("00000000")
         if (!existingLesson) {
             return res.status(404).json(createErrorResponse('Lesson not found.'));
         }
@@ -330,18 +323,15 @@ export const updateExam = async (req: Request, res: Response) => {
             allow_navigation: allow_navigation,
             allow_review: allow_review,
         };
-        console.log("111111")
 
         const updatedExam = await prisma.exams.update({
             where: { id: examIdBuffer },
             data: updateData,
         });
-        console.log("22222222")
 
         const existing1Exam = await prisma.exams.findUnique({
             where: { id: examIdBuffer },
         });
-        // console.log(existing1Exam);
 
         const examUUID = uuidStringify(updatedExam.id);
 
@@ -437,38 +427,45 @@ export const deleteExam = async (req: Request, res: Response) => {
 
 export const getGradebookExams = async (req: Request, res: Response) => {
     const user = req.user;
-    const teacher_id = user?.userId;
+    const user_id = user?.userId;
 
-    if (!user || user.role !== UserType.Teacher) {
-        return res.status(401).json(createErrorResponse('Unauthorized'));
+    if (!user) {
+        return res.status(401).json(createErrorResponse('Unauthorized1'));
     }
 
-    if (!teacher_id || typeof teacher_id !== 'string' || !isUUID(teacher_id)) {
+    if (!user_id || typeof user_id !== 'string') {
         return res.status(400).json(createErrorResponse('Invalid teacher ID.'));
     }
 
     try {
-        const teacherIdBuffer = Buffer.from(uuidParse(teacher_id));
+        const teacherIdBuffer = Buffer.from(uuidParse(user_id));
 
         const teacher = await prisma.teachers.findUnique({
             where: { id: teacherIdBuffer },
         });
 
-        if (!teacher) {
-            return res.status(404).json(createErrorResponse('Teacher not found.'));
-        }
-
-        const gradebookExams = await prisma.gradebook_exams.findMany({
-            where: {
-                lessons: {
-                    teacher_id: teacherIdBuffer,
+        let gradebookExams = null;
+        if (teacher) {
+            gradebookExams = await prisma.gradebook_exams.findMany({
+                where: {
+                    lessons: {
+                        teacher_id: teacherIdBuffer,
+                    },
                 },
-            },
-            select: {
-                lesson_id: true,
-                topic: true,
-            },
-        });
+                select: {
+                    lesson_id: true,
+                    topic: true,
+                },
+            });
+        }else
+        {
+            gradebookExams = await prisma.gradebook_exams.findMany({
+                select: {
+                    lesson_id: true,
+                    topic: true,
+                },
+            });
+        }
 
         const formattedGradebookExams = gradebookExams.map(exam => ({
             lesson_id: uuidStringify(exam.lesson_id),
@@ -699,7 +696,6 @@ export const getExamParticipantsForNewExam = async (req: Request, res: Response)
           const teacher_id = user.userId;
     
           const teacherClassesRaw = await getClassesByTeacher(teacher_id);
-          console.log(teacherClassesRaw);
           const classes = teacherClassesRaw.map((cls: any) => ({
               id: cls.id,
               name: cls.name,
@@ -728,7 +724,6 @@ export const getExamParticipantsForNewExam = async (req: Request, res: Response)
                 students,
                 classes,
             };
-            console.log(responseData);
             return res.status(200).json(createSuccessResponse(responseData,'Exam participants retrieved successfully.'));
 
           };

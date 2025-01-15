@@ -400,10 +400,8 @@ export const gradeOpenAnswers = async (req: Request, res: Response) => {
                         score: null,
                     },
                 });
-                console.log(ungradedOpenAnswers)
                 
                 if (!ungradedOpenAnswers) {
-                    console.log("weszlo");
                     await prismaTransaction.attempts.update({
                         where: { id: Buffer.from(uuidParse(attemptId)) },
                         data: {

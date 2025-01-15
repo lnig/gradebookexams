@@ -19,8 +19,10 @@ examRouter.post('/createExam', auth_js_1.authenticate, (0, auth_js_1.authorize)(
 examRouter.get('/NewExamParticipants', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), 
 // validateGetExam(),
 middleware_1.handleInputErrors, exams_js_1.getExamParticipantsForNewExam);
-//  nowy endpoint //////////////////////////////////
-examRouter.get('/getGradebookExams', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Teacher]), 
+examRouter.get('/checkAttemptEligibility/:exam_id', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Student]), 
+// validateGetExam(),
+middleware_1.handleInputErrors, attempts_js_1.checkAttemptEligibility);
+examRouter.get('/getGradebookExams', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Administrator]), 
 // validateGetExam(),
 middleware_1.handleInputErrors, exams_js_1.getGradebookExams);
 examRouter.get('/getExams', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Student, userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), 
@@ -39,7 +41,7 @@ examRouter.get('/:exam_id', auth_js_1.authenticate, (0, auth_js_1.authorize)([us
 examRouter.get('/:exam_id/getParticipants', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), 
 // validateGetExam(),
 middleware_1.handleInputErrors, exams_js_1.getExamParticipants);
-examRouter.put('/update/:exam_id', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Teacher]), (0, examValidation_js_1.validateUpdateExam)(), middleware_1.handleInputErrors, exams_js_1.updateExam);
+examRouter.put('/update/:exam_id', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Teacher, userTypes_js_1.UserType.Administrator]), (0, examValidation_js_1.validateUpdateExam)(), middleware_1.handleInputErrors, exams_js_1.updateExam);
 examRouter.delete('/:exam_id', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, examValidation_js_1.validateDeleteExam)(), middleware_1.handleInputErrors, exams_js_1.deleteExam);
 examRouter.post('/:exam_id/participants', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, assignParticipantsToExamValidation_js_1.validateAssignParticipants)(), middleware_1.handleInputErrors, exams_js_2.assignParticipantsToExam);
 examRouter.delete('/:exam_id/deleteparticipants', auth_js_1.authenticate, (0, auth_js_1.authorize)([userTypes_js_1.UserType.Administrator, userTypes_js_1.UserType.Teacher]), (0, assignParticipantsToExamValidation_js_1.validateRemoveParticipants)(), middleware_1.handleInputErrors, exams_js_1.removeParticipantsFromExam);

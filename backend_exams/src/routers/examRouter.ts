@@ -6,7 +6,7 @@ import { validateAssignParticipants, validateRemoveParticipants } from '../valid
 import { validateCreateExam, validateDeleteExam, validateGetExam, validateStartExamAttempt, validateUpdateExam, validateGetExamResults, validateShowOpenAnswersToGrade, validateShowAllOpenAnswersToGrade } from '../validations/examValidation.js';
 import { validateSaveAttempt, validateGetAttemptDetails } from '../validations/attemptValidation.js';
 import { createExam, getExam, getExams, getExamParticipants, getExamParticipantsForNewExam, deleteExam, removeParticipantsFromExam, getAllExamQuestions, updateExam, getGradebookExams } from '../handlers/exams.js';
-import { getUserAttempts, startExamAttempt, saveAttempt, getAttemptDetails } from '../handlers/attempts.js';
+import { getUserAttempts, startExamAttempt, saveAttempt, getAttemptDetails, checkAttemptEligibility } from '../handlers/attempts.js';
 import { getAllAttemptsToGrade, showOpenAnswersToGrade, showAllOpenAnswersToGrade, gradeOpenAnswers, getExamResults, checkExamState, gradeExam} from '../handlers/grading.js';
 import { handleInputErrors } from '../modules/middleware';
 import { assignParticipantsToExam } from '../handlers/exams.js';
@@ -30,10 +30,18 @@ examRouter.get('/NewExamParticipants',
     handleInputErrors,
     getExamParticipantsForNewExam
 );
-//  nowy endpoint //////////////////////////////////
+
+examRouter.get('/checkAttemptEligibility/:exam_id',
+    authenticate,
+    authorize([UserType.Student]),
+    // validateGetExam(),
+    handleInputErrors,
+    checkAttemptEligibility
+);
+
 examRouter.get('/getGradebookExams',
     authenticate,
-    authorize([UserType.Teacher]),
+    authorize([UserType.Teacher,UserType.Administrator]),
     // validateGetExam(),
     handleInputErrors,
     getGradebookExams
@@ -92,7 +100,7 @@ examRouter.get('/:exam_id/getParticipants',
 
 examRouter.put('/update/:exam_id',
     authenticate,
-    authorize([UserType.Teacher]),
+    authorize([UserType.Teacher, UserType.Administrator]),
     validateUpdateExam(),
     handleInputErrors,
     updateExam

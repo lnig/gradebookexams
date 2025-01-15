@@ -9,11 +9,10 @@ import Switch from '../components/Switch';
 import NumberInput from "../components/NumberInput";
 import { useNavigate } from 'react-router-dom';
 import { getToken, getUserRole } from "../utils/UserRoleUtils";
-import UserRoles from "../utils/userRoles"
+import UserRoles from "../utils/UserRoles"
 import { Info } from 'lucide-react';
 import Tooltip from '../components/Tooltip'
 import { toast } from 'react-toastify';
-import { API_EXAMS_URL } from "../utils/config";
 
 export function ExamDetails() {
   const [examData, setExamData] = useState(null);
@@ -21,6 +20,7 @@ export function ExamDetails() {
   const [participants, setParticipants] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [statusData, setStatusData] = useState(null);
+  const [canSolve, setCanSolve] = useState();
   const [gradeError, setGradeError] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -72,7 +72,7 @@ export function ExamDetails() {
       setError(null);
 
       try {
-        const examRes = await fetch(`${API_EXAMS_URL}/exams/${exam_id}`, {
+        const examRes = await fetch(`http://localhost:3000/exams/${exam_id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export function ExamDetails() {
         setExamData(examInfo);
 
         if (userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) {
-          const statusRes = await fetch(`${API_EXAMS_URL}/exams/checkExamState/${exam_id}`, {
+          const statusRes = await fetch(`http://localhost:3000/exams/checkExamState/${exam_id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export function ExamDetails() {
           const statusJson = await statusRes.json();
           const status = statusJson.message;
 
-          const partRes = await fetch(`${API_EXAMS_URL}/exams/${exam_id}/getParticipants`, {
+          const partRes = await fetch(`http://localhost:3000/exams/${exam_id}/getParticipants`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ export function ExamDetails() {
           const { studentsParticipants,  classesParticipants } = partJson.data;
 
 
-          const questRes = await fetch(`${API_EXAMS_URL}/exams/${exam_id}/getExamQuestions`, {
+          const questRes = await fetch(`http://localhost:3000/exams/${exam_id}/getExamQuestions`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -140,13 +140,12 @@ export function ExamDetails() {
             students: studentsParticipants
           });
           setQuestions(examQuestions);
-          console.log("9999")
-          console.log(status);
+
           setStatusData(status);
         }
         
         if (userRole === UserRoles.Student) {
-          const attemptsRes = await fetch(`${API_EXAMS_URL}/exams/getMyAttempts/${exam_id}`, {
+          const attemptsRes = await fetch(`http://localhost:3000/exams/getMyAttempts/${exam_id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -162,7 +161,29 @@ export function ExamDetails() {
           const attemptsInfo = attemptsJson.data; 
           setAttemptsData(attemptsInfo);
 
+
+          const attemptEligibilityRes = await fetch(`http://localhost:3000/exams/checkAttemptEligibility/${exam_id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          if (!attemptEligibilityRes.ok) {
+            const errData = await attemptEligibilityRes.json();
+            throw new Error(errData.message || 'Failed to fetch attempt eligibility info.');
+          }
+            
+          const attemptEligibilityJson = await attemptEligibilityRes.json();
+          const attemptEligibilityInfo = attemptEligibilityJson.message; 
+          if (attemptEligibilityInfo == "You are eligible to attempt this exam."){
+            setCanSolve(true);
+          }
+          else{
+            setCanSolve(false);
+          }
         }
+
 
       } catch (err) {
         setError(err.message);
@@ -215,7 +236,6 @@ export function ExamDetails() {
       toast.error(statusData);
 
     }
-    console.log(statusData)
   
     if (statusData === 'All students have been graded.' || statusData === 'The exam can be graded.') {
       if (statusData === 'All students have been graded.'){
@@ -584,7 +604,7 @@ export function ExamDetails() {
           )}
 
           <div className="flex mt-8 gap-4 sm:gap-8 justify-end">
-            {(userRole === UserRoles.Student && isExamActive) && (
+            {(userRole === UserRoles.Student && isExamActive && canSolve) && (
               <Button 
                 size="m" 
                 text="Solve Exam" 

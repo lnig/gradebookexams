@@ -121,9 +121,7 @@ const removeUnusedQuestions = async (
     );
 
     if (openIdsToDelete.length > 0) {
-        console.log("openIdsToDelete:", openIdsToDelete);
 
-        // Find all `open_answer_id`s linked to `openIdsToDelete` for debugging
         const existingOpenAnswerIds: Buffer[] = (
             await prismaTransaction.attempt_questions.findMany({
                 where: { open_question_id: { in: openIdsToDelete } },
@@ -131,26 +129,17 @@ const removeUnusedQuestions = async (
             })
         ).map((ans: { id: Buffer }) => ans.id);
 
-        // Log the open answers to ensure they are identified
-        console.log("Existing open answer IDs:", existingOpenAnswerIds);
-
-        // Delete `attempt_questions` records linked to `open_question_id`
         await prismaTransaction.attempt_questions.deleteMany({
             where: { open_question_id: { in: openIdsToDelete } },
         });
-        console.log("Deleted attempt_questions.");
 
-        // Delete `open_answers` linked to `open_question_id`
         await prismaTransaction.open_answers.deleteMany({
             where: { open_question_id: { in: openIdsToDelete } },
         });
-        console.log("Deleted open_answers.");
 
-        // Delete `open_questions`
         await prismaTransaction.open_questions.deleteMany({
             where: { id: { in: openIdsToDelete } },
         });
-        console.log("Deleted open_questions.");
     }
 
     const providedClosedIds: string[] = closed_questions?.map((q: ClosedQuestionInput) => q.id || '') || [];
@@ -204,8 +193,6 @@ const upsertQuestions = async (
     const processOpenQuestion = async (q: OpenQuestionInput) => {
         const { id, description, score, auto_check, answers } = q;
         const questionData = { description, score, auto_check };
-        console.log(q.description)
-        console.log(q.answers)
 
         let questionId: Buffer;
         if (id) {

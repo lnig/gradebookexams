@@ -336,9 +336,7 @@ const gradeOpenAnswers = async (req, res) => {
                         score: null,
                     },
                 });
-                console.log(ungradedOpenAnswers);
                 if (!ungradedOpenAnswers) {
-                    console.log("weszlo");
                     await prismaTransaction.attempts.update({
                         where: { id: Buffer.from((0, uuid_1.parse)(attemptId)) },
                         data: {
