@@ -50,12 +50,14 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
-    origin: 'https:/gradebookexams-dwxwi9r5v-lnigs-projects.vercel.app',
-    credentials: true,
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// app.use(cors({
+//     origin: 'https:/gradebookexams-dwxwi9r5v-lnigs-projects.vercel.app',
+//     credentials: true,
+//     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ['Content-Type', 'Authorization']
+// }));
+
+app.use(cors());
 
 app.use('/auth', authRouter);
 app.use('/student-parent', studentsParentsRouter);
