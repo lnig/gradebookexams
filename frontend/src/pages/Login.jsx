@@ -50,7 +50,7 @@ export function Login({ onLogin }) {
       const data = await response.json();
   
       if (response.ok) {
-        const token = data.token || data.data?.jwt || data.jwt; 
+        const token = data.token || data.data?.jwt || data.jwt;
         if (!token) {
           throw new Error('Token not found in server response.');
         }
@@ -59,14 +59,14 @@ export function Login({ onLogin }) {
         if (!userId) {
           throw new Error('User ID not found in server response.');
         }
-
+  
         const userRole = data.data?.role || data.role;
   
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
-
+  
         onLogin();
-        if(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator){
+        if (userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) {
           navigate('/schedule');
         } else {
           navigate('/dashboard');
@@ -78,7 +78,7 @@ export function Login({ onLogin }) {
     } catch (error) {
       setError('An error occurred during login.');
     }
-  }; 
+  };
 
   return (
     <div className="relative h-svh sm:h-screen w-screen flex items-center justify-center bg-white overflow-hidden">
