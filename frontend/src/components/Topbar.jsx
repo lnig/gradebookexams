@@ -21,6 +21,7 @@ export default function Topbar({
   const navigate = useNavigate();
   const notificationsRef = useRef(null);
   const bellRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const fetchNotifications = useCallback(async () => {
     setIsLoading(true);
@@ -55,7 +56,6 @@ export default function Topbar({
   const markAsRead = useCallback(async () => {
     const unreadNotifications = notifications.filter(n => !n.is_read).map(n => n.id);
     if (unreadNotifications.length === 0) return;
-    console.log(notifications)
 
     try {
       const response = await fetch('http://localhost:3000/notifications/markAsRead', {
@@ -99,6 +99,7 @@ export default function Topbar({
   const handleOnClick = (examId) => {
     navigate(`/AboutExam?exam_id=${examId}`);
   };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -108,6 +109,12 @@ export default function Topbar({
         !bellRef.current.contains(event.target)
       ) {
         setIsNotificationsOpen(false);
+      }
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setIsDropdownOpen(false);
       }
     };
 
@@ -178,7 +185,7 @@ export default function Topbar({
         )}
       </div>
 
-      <div className="relative">
+      <div className="relative" ref={dropdownRef}>
         <div className="flex flex-row items-center hover:cursor-pointer" onClick={toggleDropdown}>
           <div className="bg-primary-500 w-9 h-9 rounded-full flex items-center justify-center">
             <User size={18} className="text-textBg-100" />

@@ -10,7 +10,7 @@ import Tag from '../components/Tag'
 import { getToken, getUserRole } from '../utils/UserRoleUtils'
 import ConfirmForm from '../components/forms/ConfirmForm'
 import EditHomeworkForm from '../components/forms/homeworks/EditHomeworkForm'
-import UserRoles from '../data/userRoles'
+import UserRoles from '../utils/userRoles'
 import { API_GRADEBOOK_URL } from '../utils/config'
 
 function HomeworkDetail() {

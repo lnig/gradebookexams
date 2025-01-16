@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import Avatar from './Avatar';
 import { useNavigate } from 'react-router-dom';
 
 const ResponsiveTable = ({ students, student, result }) => {
@@ -69,7 +68,6 @@ const ResponsiveTable = ({ students, student, result }) => {
               return (
                 <tr key={student.attempt_id}>
                   <td className="pr-6 py-3 whitespace-no-wrap flex items-center">
-                    {/* <Avatar avatar={student.avatar} name={fullName} className="hidden xl:block" /> */}
                     { result && (
                       <span className="ml-2">{fullName}</span>
                     )}

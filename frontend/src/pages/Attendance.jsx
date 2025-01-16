@@ -11,7 +11,7 @@ import {
   areDatesEqual,
   getYearForMonthIndex
 } from '../utils/SchedCalUtils';
-import UserRoles from "../data/userRoles";
+import UserRoles from "../utils/userRoles";
 import Select from 'react-select';
 import Tooltip from '../components/Tooltip';
 import Button from "../components/Button";

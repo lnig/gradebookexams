@@ -1,7 +1,7 @@
 import { Fingerprint, Mail, Phone, Trash, User } from "lucide-react";
 import Button from "./Button";
 import { getUserRole } from "../utils/UserRoleUtils";
-import UserRoles from "../data/userRoles";
+import UserRoles from "../utils/userRoles";
 
 const StudentCard = ({name, email, phone, pesel, icon, stClass, onClick}) => {
     

@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import CreateQuestionTypeForm from "../components/forms/questiontypes/CreateQuestionTypeForm";
 import EditQuestionTypeForm from "../components/forms/questiontypes/EditQuestionTypeForm";
 import ConfirmForm from "../components/forms/ConfirmForm";
-import UserRoles from "../data/userRoles";
+import UserRoles from "../utils/userRoles";
 import { API_GRADEBOOK_URL } from "../utils/config";
 
 function Surveys() {

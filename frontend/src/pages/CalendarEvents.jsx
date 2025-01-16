@@ -17,7 +17,7 @@ import CreateEventForm from "../components/forms/events/CreateEventForm";
 import EditEventForm from "../components/forms/events/EditEventForm";
 import EditExamForm from "../components/forms/exams/EditExamForm";
 import ConfirmForm from "../components/forms/ConfirmForm";
-import UserRoles from "../data/userRoles";
+import UserRoles from "../utils/userRoles";
 import Tooltip from '../components/Tooltip';
 import { toast } from "react-toastify";
 import { API_GRADEBOOK_URL } from "../utils/config";

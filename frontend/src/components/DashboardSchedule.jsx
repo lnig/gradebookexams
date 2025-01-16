@@ -9,7 +9,7 @@ import { getToken, getUserId, getUserRole } from "../utils/UserRoleUtils";
 import { Info } from 'lucide-react';
 import Tooltip from '../components/Tooltip';
 import '../customCSS/customScrollbar.css';
-import UserRoles from '../data/userRoles';
+import UserRoles from '../utils/userRoles';
 import { formatTime } from '../utils/dateTimeUtils'
 import { API_GRADEBOOK_URL } from '../utils/config';
 

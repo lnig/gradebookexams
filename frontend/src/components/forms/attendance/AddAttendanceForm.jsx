@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '../../Button';
 import { X, Info } from 'lucide-react';
 import Modal from '../../Modal';
-import UserRoles from '../../../data/userRoles';
+import UserRoles from '../../../utils/userRoles';
 import { getToken, getUserId } from '../../../utils/UserRoleUtils';
 import Tooltip from '../../Tooltip';
 import { toast } from 'react-toastify';

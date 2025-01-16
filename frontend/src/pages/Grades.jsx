@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import { getToken, getUserId, getUserRole } from '../utils/UserRoleUtils';
 import Tooltip from '../components/Tooltip';
 import { Edit, Info, Pen, Trash, User } from 'lucide-react';
-import UserRoles from "../data/userRoles";
+import UserRoles from "../utils/userRoles";
 import Select from 'react-select';
 import EditGradeForm from "../components/forms/grades/EditGradeForm";
 import ConfirmForm from '../components/forms/ConfirmForm';

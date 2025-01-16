@@ -4,7 +4,7 @@ import { getToken, getUserRole } from '../../../utils/UserRoleUtils';
 import Modal from "../../Modal";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
-import UserRoles from "../../../data/userRoles";
+import UserRoles from "../../../utils/userRoles";
 import { API_GRADEBOOK_URL } from "../../../utils/config";
 
 function CreateClassForm({ onSuccess, isOpen, closeModal }) {

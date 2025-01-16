@@ -3,7 +3,7 @@ import PageTitle from '../components/PageTitle'
 import HomeworkCard from '../components/HomeworkCard'
 import { CheckCircle, Hourglass, XCircle, Clock, User } from 'lucide-react'
 import { getUserId, getToken, getUserRole } from '../utils/UserRoleUtils'
-import UserRoles from "../data/userRoles"
+import UserRoles from "../utils/userRoles"
 import { toast } from "react-toastify"
 import { API_GRADEBOOK_URL } from "../utils/config"
 

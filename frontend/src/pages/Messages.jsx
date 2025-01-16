@@ -4,7 +4,7 @@ import PageTitle from '../components/PageTitle';
 import { Search, Send, User } from "lucide-react";
 import Button from "../components/Button";
 import { getToken, getUserId, getUserRole, decodeToken } from "../utils/UserRoleUtils";
-import UserRoles from '../data/userRoles';
+import UserRoles from '../utils/userRoles';
 import '../customCSS/customScrollbar.css';
 import { API_GRADEBOOK_URL } from "../utils/config";
 

@@ -15,7 +15,7 @@ import {
   getYearForMonthIndex,
 } from '../utils/SchedCalUtils';
 import { getToken, getUserRole, getUserId } from '../utils/UserRoleUtils';
-import UserRoles from '../data/userRoles';
+import UserRoles from '../utils/userRoles';
 import '../customCSS/customScrollbar.css';
 import Calendar from '../components/Calendar';
 import Select from 'react-select';

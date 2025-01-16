@@ -10,7 +10,7 @@ import { getToken, getUserRole } from "../utils/UserRoleUtils";
 import ConfirmForm from '../components/forms/ConfirmForm';
 import { validate as validateUUID } from 'uuid'; 
 import { toast } from "react-toastify";
-import UserRoles from "../data/userRoles";
+import UserRoles from "../utils/userRoles";
 import { API_GRADEBOOK_URL } from "../utils/config";
 
 function ClassDetails() {

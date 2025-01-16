@@ -5,7 +5,7 @@ import Modal from './Modal';
 import { Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import { getToken, getUserId, getUserRole } from '../utils/UserRoleUtils';
 import { toast } from 'react-toastify';
-import UserRoles from '../data/userRoles';
+import UserRoles from '../utils/userRoles';
 
 function SurveyCard({ 
   id, 

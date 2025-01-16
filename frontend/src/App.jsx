@@ -29,12 +29,6 @@ import { Problems } from './pages/Problems';
 import { ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import { Home } from './pages/Home';
-import { CreateExamStepOne } from './pages/CreateExamStepOne';
-import { CreateExamStepTwo } from './pages/CreateExamStepTwo';
-import { CreateExamStepThree } from './pages/CreateExamStepThree';
-import { CreateExamStepFour } from './pages/CreateExamStepFour';
-import { CreateExamStepFive } from './pages/CreateExamStepFive';
-import SuccessfullyCreateExam from './pages/SuccessfullyCreateExam';
 import EditExamBasicInfo from './pages/EditExamBasicInfo';
 import EditQuestions from './pages/EditQuestions';
 import EditParticipants from './pages/EditParticipants';
@@ -47,7 +41,7 @@ import Results from './pages/Results';
 import { ExamDetails } from './pages/ExamDetails';
 import CreateExam from "./pages/CreateExam";
 import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword'; // <-- Import nowego komponentu resetowania hasła
+import ResetPassword from './pages/ResetPassword';
 import Surveys from './pages/Surveys';
 import SurveyDetails from './pages/SurveyDetails';
 
@@ -62,8 +56,6 @@ export default function App() {
   useEffect(() => {
     const token = getToken();
     const storedUserId = localStorage.getItem('userId');
-    console.log("Token:", token);
-    console.log("Stored User ID:", storedUserId);
   
     if (location.pathname === '/forgot-password' ||
         location.pathname.startsWith('/reset-password') ||
@@ -73,21 +65,17 @@ export default function App() {
 
     if (token) {
       const decoded = decodeToken(token);
-      console.log("Decoded Token:", decoded);
       if (decoded) {
         setUserRole(getUserRole());
         setUserId(storedUserId); 
         setIsAuthenticated(true);
-        console.log("User authenticated:", true);
       } else {
-        console.error('Invalid token.');
         setIsAuthenticated(false);
         setUserRole(null);
         setUserId(null);
         navigate('/login');
       }
     } else {
-      console.log("No token found.");
       navigate('/login');
     }
   }, [navigate]);
@@ -104,7 +92,6 @@ export default function App() {
         setIsAuthenticated(true);
         navigate('/dashboard');
       } else {
-        console.error('Nieprawidłowy token.');
         setIsAuthenticated(false);
         setUserRole(null);
         setUserId(null);
@@ -135,12 +122,14 @@ export default function App() {
       />
       <AuthContext.Provider value={{ isAuthenticated, userRole, userId, handleLogin, handleLogout }}>
         {isAuthenticated && (
-          <Topbar messNot messNotNumber={10} bellNot onLogout={handleLogout}/>
+          <Topbar bellNot onLogout={handleLogout}/>
         )}
         <div className="flex">
           {isAuthenticated && (
             <Sidebar onLogout={handleLogout}>
-              <SidebarItem icon={<LayoutDashboard size={20} />} text="Exams" path="/exams" />
+              {userRole !== UserRoles.Parent && (
+                <SidebarItem icon={<LayoutDashboard size={20} />} text="Exams" path="/exams" />
+              )}
               {(userRole === UserRoles.Student || userRole === UserRoles.Parent) && (
                 <>
                   <SidebarItem icon={<LayoutDashboard size={20} />} text="Home" path="/dashboard" active />
@@ -165,7 +154,6 @@ export default function App() {
                   <SidebarItem icon={<LayoutDashboard size={20} />} text="Calendar" path="/calendar" />
                   <SidebarItem icon={<LayoutDashboard size={20} />} text="Grades" path="/grades" />
                   <SidebarItem icon={<LayoutDashboard size={20} />} text="Problems" path="/problems" />
-                  <SidebarItem icon={<LayoutDashboard size={20} />} text="Surveys" path="/surveys" />
                 </>
               )}  
               
@@ -198,7 +186,6 @@ export default function App() {
             </Sidebar>
           )}
           <Routes>
-            {/* Publiczne routingi */}
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
@@ -206,71 +193,58 @@ export default function App() {
             {isAuthenticated ? (
               <>
                 <Route path="/schedule" element={<Schedule />} />
-                <Route path="/exams" element={<Home />} />
+                <Route path="/messages" element={<Messages />} />
+                <Route path="/calendar" element={<CalendarEvents />} />
+                <Route path="/attendance" element={<Attendance />} />
+                <Route path="/problems" element={<Problems />} />
+                <Route path="/grades" element={<Grades />} />
+                <Route path="/homework" element={<Homework />} />
+                <Route path="/homework/:id" element={<HomeworkDetail />} />
+                <Route path="/grades" element={<Grades />} />
+                <Route path="/problems" element={<Problems />} />
 
-                {/* --- routingi związane z egzaminami --- */}
-                <Route path="/create-exam/*" element={<CreateExam />} />
-                <Route path="/update-exam/:examId/basic-information" element={<EditExamBasicInfo />} />
-                <Route path="/update-exam/:examId/edit-questions" element={<EditQuestions />} />
-                <Route path="/update-exam/:examId/edit-participants" element={<EditParticipants />} />
-                <Route path="/update-exam/:examId/edit-settings" element={<EditExamDetailedInfo />} />
-                <Route path="/view-attempt/:attempt_id" element={<ReviewingExam />} />
-                <Route path="/SolveExam" element={<SolvingExam />} />
-                <Route path="/EvaluateExam" element={<EvaluateExam />} />
-                <Route path="/EvaluateAnswers" element={<EvaluateAnswers />} />
-                <Route path="/ViewResults" element={<Results />} />
-                <Route path="/AboutExam" element={<ExamDetails />} />
-                {/* --- end routingi związane z egzaminami --- */}
+                {userRole !== UserRoles.Parent && (
+                  <>
+                    <Route path="/exams" element={<Home />} />
+                    <Route path="/AboutExam" element={<ExamDetails />} />
+                    <Route path="/SolveExam" element={<SolvingExam />} />
+                    <Route path="/view-attempt/:attempt_id" element={<ReviewingExam />} />
+                    {(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) && (
+                      <>
+                        <Route path="/create-exam/*" element={<CreateExam />} />
+                        <Route path="/update-exam/:examId/basic-information" element={<EditExamBasicInfo />} />
+                        <Route path="/update-exam/:examId/edit-questions" element={<EditQuestions />} />
+                        <Route path="/update-exam/:examId/edit-participants" element={<EditParticipants />} />
+                        <Route path="/update-exam/:examId/edit-settings" element={<EditExamDetailedInfo />} />
+                        <Route path="/EvaluateExam" element={<EvaluateExam />} />
+                        <Route path="/EvaluateAnswers" element={<EvaluateAnswers />} />
+                        <Route path="/ViewResults" element={<Results />} />
+                      </>
+                    )}
+                  </>
+                )}
 
                 {(userRole === UserRoles.Student || userRole === UserRoles.Parent) && (
                   <>
                     <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/messages" element={<Messages />} />
-                    <Route path="/calendar" element={<CalendarEvents />} />
-                    <Route path="/attendance" element={<Attendance />} />
-                    <Route path="/homework" element={<Homework />} />
-                    <Route path="/homework/:id" element={<HomeworkDetail />} />
-                    <Route path="/grades" element={<Grades />} />
-                    <Route path="/problems" element={<Problems />} />
-                    <Route path="/surveys/:id" element={<SurveyDetails />} />
                     <Route path="/surveys" element={<Surveys />} />
                   </>
                 )}
-
-                {userRole === UserRoles.Teacher && (
+                {(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) && (
                   <>
-                    <Route path="/attendance" element={<Attendance />} />
                     <Route path="students" element={<Students />} />
                     <Route path="/students/:id" element={<StudentDetails />} />
                     <Route path="/classes" element={<Classes />} />
                     <Route path="/classes/:id" element={<ClassDetails />} />
-                    <Route path="/messages" element={<Messages />} />
-                    <Route path="/homework" element={<Homework />} />
-                    <Route path="/homework/:id" element={<HomeworkDetail />} />
-                    <Route path="/calendar" element={<CalendarEvents />} />
-                    <Route path="/problems" element={<Problems />} />
-                    <Route path="/grades" element={<Grades />} />
                   </>
                 )}
-               
                 {userRole === UserRoles.Administrator && (
                   <>
                     <Route path="/event-types" element={<EventTypes />} />
-                    <Route path="/attendance" element={<Attendance />} />
-                    <Route path="students" element={<Students />} />
-                    <Route path="/students/:id" element={<StudentDetails />} />
-                    <Route path="/classes" element={<Classes />} />
-                    <Route path="/classes/:id" element={<ClassDetails />} />
                     <Route path="/class-names" element={<ClassNames />} />
                     <Route path="/school-years" element={<SchoolYears />} />
                     <Route path="/school-years/:id" element={<SchoolYearsDetails />} />
-                    <Route path="/messages" element={<Messages />} />
                     <Route path="/subjects" element={<Subjects />} />
-                    <Route path="/homework" element={<Homework />} />
-                    <Route path="/homework/:id" element={<HomeworkDetail />} />
-                    <Route path="/calendar" element={<CalendarEvents />} />
-                    <Route path="/problems" element={<Problems />} />
-                    <Route path="/grades" element={<Grades />} />
                     <Route path="/surveys" element={<Surveys />} />
                     <Route path="/surveys/:id" element={<SurveyDetails />} />
                   </>

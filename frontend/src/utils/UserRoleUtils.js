@@ -15,7 +15,6 @@ export const decodeToken = (token) => {
     const decoded = jwtDecode(token);
     return decoded;
   } catch (error) {
-    console.error('Błąd podczas dekodowania tokenu:', error);
     return null;
   }
 };
@@ -28,18 +27,3 @@ export const getUserRole = () => {
   }
   return null;
 };
-
-export function getUser() {
-  const token = getToken();
-  if (token) {
-    const decoded = decodeToken(token);
-    if (decoded) {
-      return {
-        id: getUserId(),
-        typeId: decoded.typeId || 0,
-        role: decoded.role,
-      };
-    }
-  }
-  return null;
-}

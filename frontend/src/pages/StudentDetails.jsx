@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { getToken, getUserRole } from "../utils/UserRoleUtils";
 import { toast } from 'react-toastify'
-import UserRoles from "../data/userRoles";
+import UserRoles from "../utils/userRoles";
 import { API_GRADEBOOK_URL } from "../utils/config";
 
 function StudentDetails() {

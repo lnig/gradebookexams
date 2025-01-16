@@ -8,7 +8,7 @@ import HomeworkCard from "../components/HomeworkCard";
 import DashboardSchedule from "../components/DashboardSchedule";
 import { Link } from "react-router-dom";
 import { getToken, getUserId, getUserRole } from "../utils/UserRoleUtils";
-import UserRoles from "../data/userRoles";
+import UserRoles from "../utils/userRoles";
 import { formatTime, formatDate } from "../utils/dateTimeUtils";
 import { API_GRADEBOOK_URL } from "../utils/config";
 
