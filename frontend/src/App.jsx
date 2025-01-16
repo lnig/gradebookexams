@@ -15,8 +15,8 @@ import HomeworkDetail from './pages/HomeworkDetail';
 import { Grades } from './pages/Grades';
 import { Classes } from './pages/Classes';
 import ClassDetails from './pages/ClassDetails';
-import UserRoles from './data/userRoles';
-import { getToken, getUserRole, decodeToken } from './utils/UserRoleUtils';
+import UserRoles from './utils/userRoles';
+import { getToken, getUserRole, decodeToken, getUserId } from './utils/UserRoleUtils';
 import { Students } from './pages/Students';
 import StudentDetails from './pages/StudentDetails';
 import ClassNames from './pages/ClassNames';
@@ -49,64 +49,61 @@ export const AuthContext = createContext();
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState(null); 
-  const [userId, setUserId] = useState(null);
+
+  const userRole = getUserRole();
   const navigate = useNavigate();
+  const token = getToken();
+  const userId = getUserId();
 
   useEffect(() => {
-    const token = getToken();
-    const storedUserId = localStorage.getItem('userId');
+    const isAuthRoute = ['/forgot-password', '/login'].includes(location.pathname) || location.pathname.startsWith('/reset-password');
   
-    if (location.pathname === '/forgot-password' ||
-        location.pathname.startsWith('/reset-password') ||
-        location.pathname === '/login') {
-      return;
-    }
-
+    if (isAuthRoute) return;
+  
     if (token) {
       const decoded = decodeToken(token);
       if (decoded) {
-        setUserRole(getUserRole());
-        setUserId(storedUserId); 
-        setIsAuthenticated(true);
+        setAuthState(true);
       } else {
-        setIsAuthenticated(false);
-        setUserRole(null);
-        setUserId(null);
+        clearAuthState();
         navigate('/login');
       }
     } else {
       navigate('/login');
     }
   }, [navigate]);
-
+  
+  const setAuthState = (isAuthenticated) => {
+    setIsAuthenticated(isAuthenticated);
+  };
+  
+  const clearAuthState = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    setAuthState(false);
+  };
+  
   const handleLogin = () => {
-    const token = getToken();
-    const storedUserId = localStorage.getItem('userId');
-
     if (token) {
       const decoded = decodeToken(token);
       if (decoded) {
-        setUserRole(getUserRole());
-        setUserId(storedUserId); 
-        setIsAuthenticated(true);
-        navigate('/dashboard');
+        setAuthState(true);
+        if(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator){
+          navigate('/schedule');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
-        setIsAuthenticated(false);
-        setUserRole(null);
-        setUserId(null);
+        clearAuthState();
       }
     }
   };
-
+  
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId'); 
-    setIsAuthenticated(false);
-    setUserRole(null);
-    setUserId(null);
+    clearAuthState();
     navigate('/login');
   };
+  
 
   return (
     <SocketProvider>
