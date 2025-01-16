@@ -9,7 +9,7 @@ import { Schedule } from './pages/Schedule';
 import { Messages } from './pages/Messages';
 import { CalendarEvents } from './pages/CalendarEvents';
 import { Attendance } from './pages/Attendance';
-import { LayoutDashboard, LogOut } from 'lucide-react';
+import { LayoutDashboard, LogOut, User } from 'lucide-react';
 import { Homework } from './pages/Homework';
 import HomeworkDetail from './pages/HomeworkDetail';
 import { Grades } from './pages/Grades';
@@ -88,6 +88,9 @@ export default function App() {
       const decoded = decodeToken(token);
       if (decoded) {
         setAuthState(true);
+        if(userRole === UserRoles.Administrator || userRole === UserRoles.Teacher){
+          console.log("ddddddddddddddd");
+        }
         navigate('/dashboard');
       } else {
         clearAuthState();

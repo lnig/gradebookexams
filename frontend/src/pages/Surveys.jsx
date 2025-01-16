@@ -162,7 +162,7 @@ function Surveys() {
 
   return (
     <main className="flex-1 mt-12 lg:mt-0 lg:ml-64 pt-3 pb-8 px-6 sm:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <PageTitle text="Surveys" />
             {userRole === UserRoles.Administrator && (
                <nav className="flex gap-4 mb-5">

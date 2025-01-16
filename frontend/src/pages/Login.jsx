@@ -61,6 +61,10 @@ export function Login({ onLogin }) {
         }
   
         const userRole = data.data?.role || data.role;
+        if(userRole === UserRoles.Administrator || userRole === UserRoles.Teacher){
+          console.log("USERROLE: " + userRole);
+          console.log("xxxxxxxxxxxxxxxxxxxx");
+        }
   
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
