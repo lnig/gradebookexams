@@ -35,8 +35,6 @@ export function Attendance() {
     baseYear -= 1;
   }
 
-  console.log(API_GRADEBOOK_URL);
-
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentMonthIndex, setCurrentMonthIndex] = useState(() => {
     const currentMonthName = monthNames[today.getMonth()];

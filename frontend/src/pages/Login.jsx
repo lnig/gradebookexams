@@ -26,13 +26,12 @@ import {
 import Button from '../components/Button';
 import { toast } from 'react-toastify';
 import { API_GRADEBOOK_URL } from '../utils/config';
+import UserRoles from '../utils/userRoles';
 
 export function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [token, setToken] = useState();
-  const [userId, setUserId] = useState();
 
   const navigate = useNavigate();
 
@@ -60,14 +59,18 @@ export function Login({ onLogin }) {
         if (!userId) {
           throw new Error('User ID not found in server response.');
         }
+
+        const userRole = data.data?.role || data.role;
   
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
-  
-        setToken(token);
-        setUserId(userId);
+
         onLogin();
-        navigate('/dashboard');
+        if(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator){
+          navigate('/schedule');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         setError(data.message || 'An error occurred during login.');
         toast.error(data.message || 'An error occurred during login.');
@@ -163,7 +166,6 @@ export function Login({ onLogin }) {
                   Remember me
                 </span>
               </label>
-              {/* Używamy Link z react-router-dom do nawigacji */}
               <Link to="/forgot-password" className="text-sm text-primary-500 hover:underline">
                 Forgot password?
               </Link>
