@@ -66,11 +66,7 @@ export function Login({ onLogin }) {
         localStorage.setItem('userId', userId);
   
         onLogin();
-        if (userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) {
-          navigate('/schedule');
-        } else {
-          navigate('/dashboard');
-        }
+        navigate('/dashboard');
       } else {
         setError(data.message || 'An error occurred during login.');
         toast.error(data.message || 'An error occurred during login.');

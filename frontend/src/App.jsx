@@ -88,11 +88,7 @@ export default function App() {
       const decoded = decodeToken(token);
       if (decoded) {
         setAuthState(true);
-        if(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator){
-          navigate('/schedule');
-        } else {
-          navigate('/dashboard');
-        }
+        navigate('/dashboard');
       } else {
         clearAuthState();
       }

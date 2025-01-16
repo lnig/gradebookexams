@@ -370,9 +370,7 @@ export function Attendance() {
           },
         });
       } else if (excuseType === 'by-date') {
-        console.log(selectedDate);
         const date = formatDateLocal(selectedDate);
-        console.log(date);
         response = await fetch(`${API_GRADEBOOK_URL}/attendance/excuse/${studentId}/by-date/${encodeURIComponent(date)}`, {
           method: 'PATCH',
           headers: {
