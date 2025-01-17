@@ -580,7 +580,7 @@ export function Attendance() {
                                           </div>
                                         }
                                         position="top">
-                                        <span className='webkit-box webkit-line-clamp-1 webkit-box-orient-vertical font-medium items-center w-24 xxs:w-28 xs:w-32 overflow-hidden text-ellipsis'>
+                                        <span className='webkit-box webkit-line-clamp-1 webkit-box-orient-vertical font-medium items-center w-24 xxs:w-28 xs:w-32 sm:w-40 md:w-48 overflow-hidden text-ellipsis'>
                                           {student.first_name} {student.last_name}
                                         </span>
                                       </Tooltip>
