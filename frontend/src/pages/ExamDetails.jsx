@@ -13,6 +13,7 @@ import UserRoles from "../utils/userRoles";
 import { Info } from 'lucide-react';
 import Tooltip from '../components/Tooltip'
 import { toast } from 'react-toastify';
+import { API_EXAMS_URL } from "../utils/config";
 
 export function ExamDetails() {
   const [examData, setExamData] = useState(null);
@@ -72,7 +73,7 @@ export function ExamDetails() {
       setError(null);
 
       try {
-        const examRes = await fetch(`http://localhost:3000/exams/${exam_id}`, {
+        const examRes = await fetch(`${API_EXAMS_URL}/exams/${exam_id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ export function ExamDetails() {
         setExamData(examInfo);
 
         if (userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) {
-          const statusRes = await fetch(`http://localhost:3000/exams/checkExamState/${exam_id}`, {
+          const statusRes = await fetch(`${API_EXAMS_URL}/exams/checkExamState/${exam_id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -104,7 +105,7 @@ export function ExamDetails() {
           const statusJson = await statusRes.json();
           const status = statusJson.message;
 
-          const partRes = await fetch(`http://localhost:3000/exams/${exam_id}/getParticipants`, {
+          const partRes = await fetch(`${API_EXAMS_URL}/exams/${exam_id}/getParticipants`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -119,7 +120,7 @@ export function ExamDetails() {
           const { studentsParticipants,  classesParticipants } = partJson.data;
 
 
-          const questRes = await fetch(`http://localhost:3000/exams/${exam_id}/getExamQuestions`, {
+          const questRes = await fetch(`${API_EXAMS_URL}/exams/${exam_id}/getExamQuestions`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -145,7 +146,7 @@ export function ExamDetails() {
         }
         
         if (userRole === UserRoles.Student) {
-          const attemptsRes = await fetch(`http://localhost:3000/exams/getMyAttempts/${exam_id}`, {
+          const attemptsRes = await fetch(`${API_EXAMS_URL}/exams/getMyAttempts/${exam_id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -162,7 +163,7 @@ export function ExamDetails() {
           setAttemptsData(attemptsInfo);
 
 
-          const attemptEligibilityRes = await fetch(`http://localhost:3000/exams/checkAttemptEligibility/${exam_id}`, {
+          const attemptEligibilityRes = await fetch(`${API_EXAMS_URL}/exams/checkAttemptEligibility/${exam_id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -205,7 +206,7 @@ export function ExamDetails() {
   const handleDeleteExam = () => {
     const DeleteExam = async () => {
       try {
-        const examRes = await fetch(`http://localhost:3000/exams/${exam_id}`, {
+        const examRes = await fetch(`${API_EXAMS_URL}/exams/${exam_id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -258,7 +259,7 @@ export function ExamDetails() {
           return;
         }
     
-        const response = await fetch(`http://localhost:3000/exams/gradeExam/${exam_id}`, {
+        const response = await fetch(`${API_EXAMS_URL}/exams/gradeExam/${exam_id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

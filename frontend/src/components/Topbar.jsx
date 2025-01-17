@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Mail, Bell, User, ChevronDown, Search, LogOut, Settings } from 'lucide-react';
 import { getToken } from '../utils/UserRoleUtils';
 import { useNavigate } from 'react-router-dom';
+import { API_EXAMS_URL } from '../utils/config';
 
 export default function Topbar({ 
   messNot, 
@@ -27,7 +28,7 @@ export default function Topbar({
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3000/notifications/getNotifications', {
+      const response = await fetch(`${API_EXAMS_URL}/notifications/getNotifications`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ export default function Topbar({
     if (unreadNotifications.length === 0) return;
 
     try {
-      const response = await fetch('http://localhost:3000/notifications/markAsRead', {
+      const response = await fetch(`${API_EXAMS_URL}/notifications/markAsRead`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
