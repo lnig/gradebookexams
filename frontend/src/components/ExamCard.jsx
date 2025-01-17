@@ -41,9 +41,9 @@ export default function ExamCard({
           <p className={`text-sm border-solid border rounded ${typeClass} px-3 w-fit`}>
            {typeMessage}
           </p>
-          <p className="max-[430px]:hidden text-xs text-textBg-700">{typeMessage}: {typeMessage === typeMessages.active ? `${startDate} - ${endDate}` : typeMessage === typeMessages.ended ? `${endDate}` : `${startDate}`}</p>
+          <p className="hidden xs:flex text-xs text-textBg-700">{typeMessage}: {typeMessage === typeMessages.active ? `${startDate} - ${endDate}` : typeMessage === typeMessages.ended ? `${endDate}` : `${startDate}`}</p>
         </div>
-        <p className="text-textBg-700 text-3xl font-epilogue font-bold my-3 hover:cursor-pointer">{title}</p>
+        <p className="webkit-box webkit-line-clamp-1 webkit-box-orient-vertical overflow-hidden text-textBg-700 text-2xl sm:text-3xl font-epilogue font-bold my-3 hover:cursor-pointer">{title}</p>
         <p className="webkit-box webkit-line-clamp-2 webkit-box-orient-vertical overflow-hidden text-textBg-700 text-base">
           {description}
         </p>
@@ -54,7 +54,6 @@ export default function ExamCard({
           </div>
 
           <div className='flex gap-4 flex-wrap w-full sm:w-fit'> 
-            {/* <Button size="m" icon={<Pen size={16} />} className={'px-0 min-w-9 max-w-9'} type="secondary"/> */}
             <Button size="m" text="View Exam Info" className={'w-full sm:w-fit'} onClick={handleViewResults}/>
           </div>
         </div>

@@ -27,6 +27,7 @@ import Button from '../components/Button';
 import { toast } from 'react-toastify';
 import { API_GRADEBOOK_URL } from '../utils/config';
 import UserRoles from '../utils/userRoles';
+import { decodeToken } from '../utils/UserRoleUtils';
 
 export function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -60,17 +61,18 @@ export function Login({ onLogin }) {
           throw new Error('User ID not found in server response.');
         }
   
-        const userRole = data.data?.role || data.role;
-        if(userRole === UserRoles.Administrator || userRole === UserRoles.Teacher){
-          console.log("USERROLE: " + userRole);
-          console.log("xxxxxxxxxxxxxxxxxxxx");
-        }
+        const decoded = decodeToken(token);
+        const userRole = decoded.role || decoded.Role || decoded.user?.role || null;
   
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
   
-        onLogin();
-        navigate('/dashboard');
+        if(userRole === UserRoles.Administrator || userRole === UserRoles.Teacher){
+          navigate('/schedule');
+         }else{
+          navigate('/dashboard');
+         }
+
       } else {
         setError(data.message || 'An error occurred during login.');
         toast.error(data.message || 'An error occurred during login.');

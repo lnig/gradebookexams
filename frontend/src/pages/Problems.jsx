@@ -13,6 +13,7 @@ import { Pen, Plus, Trash } from 'lucide-react';
 import { formatDate } from "../utils/dateTimeUtils";
 import UpdateProblemStatusForm from "../components/forms/problems/UpdateProblemStatusForm";
 import { API_GRADEBOOK_URL } from "../utils/config";
+import Tooltip from "../components/Tooltip"
 
 export function Problems() {
   const [loading, setLoading] = useState(false);
@@ -112,7 +113,6 @@ export function Problems() {
         throw new Error(`Error: ${response.status}`);
       }
       const result = await response.json();
-      console.log(result.data);
       setProblems(result.data);
     } catch (err) {
       toast.error(err.message || 'An unexpected error occurred.');
@@ -379,28 +379,38 @@ export function Problems() {
   return (
     <main className="flex-1 mt-12 lg:mt-0 lg:ml-64 pt-3 pb-8 px-6 sm:px-8">
       <div className="flex items-center justify-between">
-        <PageTitle text="Problems"/>
-        {userRole === UserRoles.Administrator && (
-          <div className="mb-4">
-          <nav className="flex gap-4">
-            <Button 
-              text="Reported Problems"
-              type={activeTab === 'problems' ? 'tertiary' : 'link'}
-              onClick={() => setActiveTab('problems')}
-            />
-            <Button 
-              text="Problem Types"
-              type={activeTab === 'types' ? 'tertiary' : 'link'}
-              onClick={() => setActiveTab('types')}
-            />
-            <Button 
-              text="Statuses"
-              type={activeTab === 'statuses' ? 'tertiary' : 'link'}
-              onClick={() => setActiveTab('statuses')}
-            />
-          </nav>
-        </div>      
-        )}
+          <PageTitle text="Problems"/>
+          {userRole === UserRoles.Administrator && (
+            <>
+              <div className="hidden md:flex gap-4 mb-4">
+                <Button 
+                    text="Reported Problems"
+                    type={activeTab === 'problems' ? 'tertiary' : 'link'}
+                    onClick={() => setActiveTab('problems')}
+                />
+                <Button 
+                    text="Problem Types"
+                    type={activeTab === 'types' ? 'tertiary' : 'link'}
+                    onClick={() => setActiveTab('types')}
+                />
+                <Button 
+                    text="Statuses"
+                    type={activeTab === 'statuses' ? 'tertiary' : 'link'}
+                    onClick={() => setActiveTab('statuses')}
+                />
+              </div>    
+              <div className="md:hidden mb-4">
+                <select 
+                    value={activeTab} 
+                    onChange={(e) => setActiveTab(e.target.value)} 
+                    className="w-full focus:outline-none px-2 overflow-hidden text-ellipsis">
+                    <option value="problems">Reported Problems</option>
+                    <option value="types">Problem Types</option>
+                    <option value="statuses">Statuses</option>
+                </select>
+              </div>
+            </>
+          )}
       </div>
       
       {userRole !== UserRoles.Administrator && (
@@ -464,7 +474,7 @@ export function Problems() {
         <div>
           {activeTab === 'problems' && (
             <div>
-              <h2 className="text-xl font-semibold mb-4">Reported Problems</h2>
+              <h2 className="text-xl font-semibold mb-4 text-textBg-700">Reported Problems</h2>
               {loading ? (
                 <p>Loading...</p>
               ) : (
@@ -474,23 +484,54 @@ export function Problems() {
                   ) : (
                     problems.map((problem) => (
                       <div key={problem.id} className="border px-4 py-2 rounded">
-                        <div className="flex items-center justify-between mb-1">
-                          <div className="flex items-center gap-4">
-                            <p className="text-textBg-550 text-sm">{problem.problem_types?.name || "Unknown"}</p>
-                            <div className={`w-24 text-center py-[2px] rounded-md ${problem.statuses?.name === 'Resolved' ? 'bg-[#eefdf3]' : problem.statuses?.name === 'Pending' ? 'bg-[#fef9ed]' : problem.statuses?.name === 'Closed' ? 'bg-primary-100' : 'bg-[#e0f2fe]'}`}>
+                        <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between mb-1">
+                          <div className="flex sm:items-center sm:gap-4">
+                            <p className="text-textBg-550 text-sm font-medium">{problem.problem_types?.name || "Unknown"}</p>
+                            <div className={`w-24 hidden sm:flex justify-center text-center py-[2px] rounded-md ${problem.statuses?.name === 'Resolved' ? 'bg-[#eefdf3]' : problem.statuses?.name === 'Pending' ? 'bg-[#fef9ed]' : problem.statuses?.name === 'Closed' ? 'bg-primary-100' : 'bg-[#e0f2fe]'}`}>
                               <p className={`text-xs font-medium ${problem.statuses?.name === 'Resolved' ? 'text-[#17a948]' : problem.statuses?.name === 'Pending' ? 'text-[#d29211]' : problem.statuses?.name === 'Closed' ? 'text-primary-600' : 'text-blue-600'}`}>{problem.statuses?.name || "Pending"}</p>
                             </div>
                           </div>
-                          <div>
+                          <div className="flex justify-between">
                             <p className="text-textBg-600 text-xs">{formatDate(problem.reported_time)}</p>
+                            <div className={`w-24 sm:hidden flex justify-center text-center py-[2px] rounded-md ${problem.statuses?.name === 'Resolved' ? 'bg-[#eefdf3]' : problem.statuses?.name === 'Pending' ? 'bg-[#fef9ed]' : problem.statuses?.name === 'Closed' ? 'bg-primary-100' : 'bg-[#e0f2fe]'}`}>
+                              <p className={`text-xs font-medium ${problem.statuses?.name === 'Resolved' ? 'text-[#17a948]' : problem.statuses?.name === 'Pending' ? 'text-[#d29211]' : problem.statuses?.name === 'Closed' ? 'text-primary-600' : 'text-blue-600'}`}>{problem.statuses?.name || "Pending"}</p>
+                            </div>
                           </div>
                         </div>
-                        <div className="flex">
+                        <div className="flex items-center justify-between mb-1">
                           <p className="text-textBg-700 text-base font-semibold">{problem.reporter?.first_name} {problem.reporter?.last_name}</p>
+                          <div className="flex sm:hidden">
+                            <Button 
+                              icon={<Pen size={14} color='#1A99EE'/>} 
+                              type="link" 
+                              onClick={() => handleOpenUpdateStatusModal(problem)}
+                              className="!h-6"
+                            />
+                            <Button 
+                              icon={<Trash size={14} color='#FF4D4F'/>} 
+                              type="link" 
+                              onClick={() => handleOpenDeleteProblemConfirm(problem)}
+                              className="!h-6"
+                            />
+                          </div>
                         </div>
                         <div className="flex justify-between items-center">
-                          <p className="text-textBg-600 text-sm">{problem.description || "Unknown"}</p>
-                          <div className="flex">
+                          <div className="sm:hidden">
+                            <Tooltip content={
+                              <div className="max-w-[80vw]">
+                                <p>{problem.description || "Unknown"}</p>
+                              </div>
+                            } position="top">
+                              <p className="webkit-box webkit-line-clamp-2 webkit-box-orient-vertical overflow-hidden text-textBg-600 text-sm">{problem.description || "Unknown"}</p>
+                              <p className="text-xs text-textBg-600">Click to see more</p>
+                            </Tooltip>
+                          </div>
+                          <div className="hidden sm:flex">
+                            <p className="text-textBg-600 text-sm">{problem.description || "Unknown"}</p>
+                          </div>
+                          
+                         
+                          <div className="hidden sm:flex">
                             <Button 
                               icon={<Pen size={16} color='#1A99EE'/>} 
                               type="link" 

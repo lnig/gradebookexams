@@ -21,7 +21,6 @@ export default function Sidebar({ children, onLogout }) {
               />
               <p className="text-2xl lg:mt-4 font-averia text-[#007dfc]">eGrade</p>
             </div>
-            
             <button
               className="lg:hidden p-1.5 rounded-lg"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -33,13 +32,15 @@ export default function Sidebar({ children, onLogout }) {
           <SidebarContext.Provider value={{ isMobileMenuOpen, setIsMobileMenuOpen }}>
             <ul
               className={`
-                flex-1 px-3 lg:block mt-5
-                ${isMobileMenuOpen ? 'block' : 'hidden'} lg:h-auto lg:overflow-y-auto
+                flex-1 px-3 mt-5 lg:block
+                ${isMobileMenuOpen ? 'block' : 'hidden'}
+                lg:h-auto lg:overflow-y-auto
+                overflow-y-auto max-h-[calc(100vh-64px)]
               `}
             >
               {children}
             </ul>
-          </SidebarContext.Provider>      
+          </SidebarContext.Provider>
         </nav>
       </aside>
     </>

@@ -9,7 +9,7 @@ function Modal({ isOpen, onClose, children, widthHeightClassname }) {
       onClick={onClose}
     >
       <div
-        className={`bg-white p-6 mx-4 sm:mx-0 rounded shadow-lg w-full ${widthHeightClassname} overflow-y-auto custom-scrollbar`}
+        className={`bg-white p-6 mx-4 sm:mx-0 rounded shadow-lg w-full ${widthHeightClassname} overflow-y-auto custom-scrollbar max-h-[90%]`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}

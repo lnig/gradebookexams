@@ -162,23 +162,34 @@ function Surveys() {
 
   return (
     <main className="flex-1 mt-12 lg:mt-0 lg:ml-64 pt-3 pb-8 px-6 sm:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <PageTitle text="Surveys" />
-            {userRole === UserRoles.Administrator && (
-               <nav className="flex gap-4 mb-5">
-               <Button 
-                   text="Surveys"
-                   type={activeTab === 'surveys' ? 'tertiary' : 'link'}
-                   onClick={() => setActiveTab('surveys')}
-               />
-               <Button 
-                   text="Question Type"
-                   type={activeTab === 'questionType' ? 'tertiary' : 'link'}
-                   onClick={() => setActiveTab('questionType')}
-               />
-           </nav>
-            )} 
-        </div>
+      <div className="flex flex-row items-center justify-between">
+          <PageTitle text="Surveys" />
+          {userRole === UserRoles.Administrator && (
+              <div className="mb-4">
+                <div className="hidden tn:flex">
+                  <Button 
+                        text="Surveys"
+                        type={activeTab === 'surveys' ? 'tertiary' : 'link'}
+                        onClick={() => setActiveTab('surveys')}
+                    />
+                    <Button 
+                        text="Question Type"
+                        type={activeTab === 'questionType' ? 'tertiary' : 'link'}
+                        onClick={() => setActiveTab('questionType')}
+                    />
+                </div>
+                <div className="tn:hidden">
+                  <select 
+                      value={activeTab} 
+                      onChange={(e) => setActiveTab(e.target.value)} 
+                      className="w-full focus:outline-none px-2">
+                      <option value="surveys">Surveys</option>
+                      <option value="questionType">Question Type</option>
+                  </select>
+              </div>
+            </div>
+          )}
+      </div>
 
       {activeTab === 'surveys' && (
         <>

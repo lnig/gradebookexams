@@ -83,21 +83,6 @@ export default function App() {
     setAuthState(false);
   };
   
-  const handleLogin = () => {
-    if (token) {
-      const decoded = decodeToken(token);
-      if (decoded) {
-        setAuthState(true);
-        if(userRole === UserRoles.Administrator || userRole === UserRoles.Teacher){
-          console.log("ddddddddddddddd");
-        }
-        navigate('/dashboard');
-      } else {
-        clearAuthState();
-      }
-    }
-  };
-  
   const handleLogout = () => {
     clearAuthState();
     navigate('/login');
@@ -116,7 +101,7 @@ export default function App() {
         pauseOnHover
         draggable
       />
-      <AuthContext.Provider value={{ isAuthenticated, userRole, userId, handleLogin, handleLogout }}>
+      <AuthContext.Provider value={{ isAuthenticated, userRole, userId, handleLogout }}>
         {isAuthenticated && (
           <Topbar bellNot onLogout={handleLogout}/>
         )}
@@ -182,7 +167,7 @@ export default function App() {
             </Sidebar>
           )}
           <Routes>
-            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
 
@@ -247,7 +232,7 @@ export default function App() {
                 )}
               </>
             ) : (
-              <Route path="*" element={<Login onLogin={handleLogin} />} />
+              <Route path="*" element={<Login />} />
             )}
           </Routes>
         </div>

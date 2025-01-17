@@ -624,7 +624,6 @@ export function Schedule() {
                 <>
                   <div className="w-full sm:w-full mt-1 max-w-full overflow-x-auto relative">
                     <div className="relative overflow-hidden" style={{ height: `${calendarHeight}px` }}>
-                      {/* Siatka czasu */}
                       <div className="grid grid-cols-[auto,1fr] grid-rows-[repeat(11,66px)] w-full h-full">
                         {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'].map(
                           (time, idx) => (
@@ -636,7 +635,6 @@ export function Schedule() {
                         )}
                       </div>
 
-                      {/* Lekcje */}
                       {events
                       .filter((event) => areDatesEqual(event.date, selectedDate))
                       .map((event, eventIdx) => {
@@ -684,7 +682,6 @@ export function Schedule() {
                                   />
                                 </Tooltip>
 
-                                {/* Akcje dla desktop */}
                                 {(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) && (
                                   <div className='hidden md:flex -space-x-1'>
                                     <Button 
@@ -717,6 +714,7 @@ export function Schedule() {
                                         openCreateExamModal(event);
                                       }}
                                     />
+                                    {userRole === UserRoles.Administrator && (
                                     <Button 
                                       type="link" 
                                       icon={<Trash size={16} strokeWidth={3} className={`${event.colors.text}`}/>} 
@@ -727,6 +725,7 @@ export function Schedule() {
                                         openDeleteModal(event);
                                       }}
                                     />
+                                    )}
                                   </div>
                                 )}
 
@@ -786,7 +785,8 @@ export function Schedule() {
                                             Create Exam
                                           </button>
                                         </div>
-
+                                        
+                                        {userRole === UserRoles.Administrator && (
                                         <div className='flex items-center gap-2 text-textBg-600 p-2'>
                                           <Trash size={16} strokeWidth={3}/>
                                           <button
@@ -800,6 +800,7 @@ export function Schedule() {
                                             Delete
                                           </button>
                                         </div>
+                                        )}
                                       </DropdownMenu>
                                     )}
                                   </div>
@@ -810,7 +811,6 @@ export function Schedule() {
                         );
                       })}
 
-                      {/* Indykator aktualnego czasu */}
                       {currentTimePosition < calendarHeight && (
                         <div
                           className="absolute right-0 left-8 sm:left-4 flex items-center"
@@ -850,7 +850,6 @@ export function Schedule() {
 
                     <div className="relative w-full sm:w-full mt-4 max-w-full overflow-x-auto">
                       <div className="relative overflow-hidden" style={{ height: `${calendarHeight}px` }}>
-                        {/* Siatka czasu tygodniowego */}
                         <div className="grid grid-cols-[auto,repeat(5,1fr)] grid-rows-[repeat(11,66px)] w-full h-full">
                           {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'].map(
                             (time, idx) => (
@@ -864,7 +863,6 @@ export function Schedule() {
                           )}
                         </div>
 
-                        {/* Lekcje tygodniowe */}
                         {events
                           .filter((event) => 
                             getCurrentWeekDates().some((date) => areDatesEqual(date, event.date))
@@ -901,7 +899,6 @@ export function Schedule() {
                             );
                           })}
 
-                        {/* Indykator aktualnego czasu */}
                         {currentTimePosition < calendarHeight && (
                           <div
                             className="absolute right-0 left-8 sm:left-4 flex items-center"
@@ -921,7 +918,6 @@ export function Schedule() {
         </div>
       </div>
 
-      {/* Formularze modali */}
       <CreateLessonForm
         isOpen={isCreateModalOpen} 
         onSuccess={() => {

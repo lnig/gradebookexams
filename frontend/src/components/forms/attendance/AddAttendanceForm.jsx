@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../../Button';
-import { X, Info } from 'lucide-react';
+import { X, Info, CheckCircle, Hourglass, XCircle } from 'lucide-react';
 import Modal from '../../Modal';
 import UserRoles from '../../../utils/userRoles';
 import { getToken, getUserId } from '../../../utils/UserRoleUtils';
@@ -247,26 +247,68 @@ const AddAttendanceForm = ({
           />
         </div>
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 mt-4">
           <label className="block text-textBg-900 font-medium mb-2">Attendance</label>
           <div className="w-full flex mb-2">
             <div className="w-2/5">
-              <p className="text-textBg-700 font-medium">First and Last Name</p>
+              <p className="text-textBg-700 text-sm font-medium">Student Name</p>
             </div>
-            <div className="flex justify-evenly w-[calc(60%-18px)]">
-              <p className="text-textBg-700 font-medium">Present</p>
-              <p className="text-textBg-700 font-medium">Late</p>
-              <p className="text-textBg-700 font-medium">Absent</p>
+            <div className="flex justify-end xs:justify-evenly w-3/5 xs:w-[calc(60%-12px)]">
+              <div className="hidden xs:flex gap-6">
+                <p className="text-textBg-700 text-xs xs:text-base font-medium">Present</p>
+                <p className="text-textBg-700 text-xs xs:text-base font-medium">Late</p>
+                <p className="text-textBg-700 text-xs xs:text-base font-medium">Absent</p>
+              </div>
+              <div className="flex gap-[13px] xs:hidden">
+                <Tooltip content={
+                  <div>
+                    <p>Present</p>
+                  </div>
+                }
+                position="top">
+                    <div className={`flex items-center justify-center w-5 h-5 rounded bg-[#eefdf3]`}>
+                      <CheckCircle size={44} color='#16a34a' />
+                    </div>
+                </Tooltip>
+                <Tooltip content={
+                  <div>
+                    <p>Late</p>
+                  </div>
+                }
+                position="top">
+                    <div className={`flex items-center justify-center w-5 h-5 rounded bg-[#fef9ed]`}>
+                      <Hourglass size={44} color='#f59e0b' />
+                    </div>
+                </Tooltip>
+                <Tooltip content={
+                  <div>
+                    <p>Absent</p>
+                  </div>
+                }
+                position="top">
+                    <div className={`flex items-center justify-center w-5 h-5 rounded bg-primary-100`}>
+                      <XCircle size={44} color='#ef4444' />
+                    </div>
+                </Tooltip>
+              </div>
             </div>
           </div>
 
-          <div className="max-h-96 overflow-y-auto custom-scrollbar">
+          <div className="overflow-y-auto custom-scrollbar">
             {selectedEvent.students.map((student) => (
               <div className="w-full flex mb-2" key={student.id}>
                 <div className="w-2/5 flex items-center">
-                  <p className="text-base text-textBg-500">
+                <Tooltip
+                  content={
+                    <div>
+                      <p>{student.first_name} {student.last_name}</p>
+                    </div>
+                  }
+                  position="top">
+                  <span className='webkit-box webkit-line-clamp-1 webkit-box-orient-vertical font-medium items-center w-24 xxs:w-28 xs:w-32 overflow-hidden text-ellipsis'>
                     {student.first_name} {student.last_name}
-                  </p>
+                  </span>
+                </Tooltip>
 
                   <Tooltip 
                     content={
@@ -294,7 +336,7 @@ const AddAttendanceForm = ({
                     />
                   </Tooltip>
                 </div>
-                <div className="flex items-center justify-evenly w-3/5">
+                <div className="flex items-center justify-end gap-4 xs:gap-0 xs:justify-evenly w-3/5">
                   <label className="flex items-center">
                     <input
                       type="radio"

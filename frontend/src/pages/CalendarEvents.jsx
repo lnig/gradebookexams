@@ -111,7 +111,7 @@ export function CalendarEvents() {
       const result = await response.json();
       setUserId(result.data);
     } catch (err) {
-      console.error("Failed to fetch students for parent:", err.message);
+      setError(true);
     }
   };
 
@@ -219,7 +219,6 @@ export function CalendarEvents() {
       ];
 
       setEvents(combinedEvents);
-      console.log(combinedEvents);
     } catch (err) {
       setError(err.message || 'Failed to load events and exams.');
       toast.error(err.message || 'An unexpected error occurred.');
@@ -460,10 +459,21 @@ export function CalendarEvents() {
                                     <p className='text-sm'>{new Date(event.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(event.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                   </div>
                                   {event.type === 'exam' ? (
-                                    <div className='flex items-center gap-2 text-textBg-500'>
-                                      <Info size={16} />
-                                      <p className='text-sm'>{event.scope}</p>
-                                    </div>
+                                     <Tooltip
+                                     content={
+                                       <div className="w-[80vw]">
+                                         <div>
+                                           <p>{event.scope}</p>
+                                         </div>
+                                       </div>
+                                     }
+                                     position="top"
+                                   >
+                                     <div className="flex items-center gap-2 text-textBg-500">
+                                       <Info className="w-4 h-4 text-gray-500 cursor-pointer" />
+                                       <p className="text-xs">Click to see description</p>
+                                     </div>
+                                   </Tooltip>
                                   ) : (
                                     <>
                                       <div className='flex items-center gap-2 text-textBg-500'>
@@ -472,7 +482,7 @@ export function CalendarEvents() {
                                       </div>
                                       <Tooltip
                                         content={
-                                          <div className="w-96">
+                                          <div className="w-[80vw]">
                                             <div>
                                               <p>{event.description}</p>
                                             </div>
@@ -482,7 +492,7 @@ export function CalendarEvents() {
                                       >
                                         <div className="flex items-center gap-2 text-textBg-500">
                                           <Info className="w-4 h-4 text-gray-500 cursor-pointer" />
-                                          <p className="text-xs">Hover to see description</p>
+                                          <p className="text-xs">Click to see description</p>
                                         </div>
                                       </Tooltip>
                                     </>

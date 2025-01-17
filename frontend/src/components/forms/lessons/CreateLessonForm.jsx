@@ -216,8 +216,8 @@ function CreateLessonForm({ onSuccess, onClose, isOpen }) {
       </div>
 
       <form className="flex flex-col gap-6" onSubmit={handleCreate}>
-        <div className='flex gap-6'>
-          <div className="flex flex-col gap-1 w-1/2">
+        <div className='flex flex-col tn:flex-row gap-6'>
+          <div className="flex flex-col gap-1 w-full tn:w-1/2">
             <label className="text-base text-textBg-700" htmlFor="startDate">Start Date</label>
             <input
               type="date"
@@ -229,7 +229,7 @@ function CreateLessonForm({ onSuccess, onClose, isOpen }) {
             />
           </div>
 
-          <div className="flex flex-col gap-1 w-1/2">
+          <div className="flex flex-col gap-1 w-full tn:w-1/2">
             <label className="text-base text-textBg-700" htmlFor="endDate">End Date</label>
             <input
               type="date"
@@ -332,8 +332,8 @@ function CreateLessonForm({ onSuccess, onClose, isOpen }) {
                   </select>
                 </div>
 
-                <div className='flex gap-6'>
-                  <div className="flex flex-col gap-1 w-1/2">
+                <div className='flex flex-col xxs:flex-row gap-6'>
+                  <div className="flex flex-col gap-1 w-full xxs:w-1/2">
                     <label className="text-base text-textBg-700" htmlFor={`startTime-${index}`}>Start Time</label>
                     <input
                       type="time"
@@ -345,7 +345,7 @@ function CreateLessonForm({ onSuccess, onClose, isOpen }) {
                     />
                   </div>
 
-                  <div className="flex flex-col gap-1 w-1/2">
+                  <div className="flex flex-col gap-1 w-full xxs:w-1/2">
                     <label className="text-base text-textBg-700" htmlFor={`endTime-${index}`}>End Time</label>
                     <input
                       type="time"

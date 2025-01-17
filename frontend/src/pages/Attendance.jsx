@@ -430,7 +430,7 @@ export function Attendance() {
       </div>
       
       {(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) && (
-        <div className='flex flex-col xs:flex-row gap-4 items-center justify-between mb-6 mt-4 sm:mt-0'>
+        <div className='flex flex-col xs:flex-row gap-4 items-center justify-between mb-6 -mt-2 sm:mt-0'>
           <Select
             value={selectedOption}
             onChange={handleChange}
@@ -573,9 +573,18 @@ export function Attendance() {
                                 <div key={student.id} className='flex items-center justify-between'>
                                   <div className='flex items-center gap-4'>
                                     <div className='flex items-center'>
-                                      <span className='font-medium flex items-center w-32 overflow-hidden text-ellipsis'>
-                                        {student.first_name} {student.last_name}
-                                      </span>
+                                      <Tooltip
+                                        content={
+                                          <div>
+                                            <p>{student.first_name} {student.last_name}</p>
+                                          </div>
+                                        }
+                                        position="top">
+                                        <span className='webkit-box webkit-line-clamp-1 webkit-box-orient-vertical font-medium items-center w-24 xxs:w-28 xs:w-32 overflow-hidden text-ellipsis'>
+                                          {student.first_name} {student.last_name}
+                                        </span>
+                                      </Tooltip>
+                                      
                                       <Tooltip
                                         content={
                                           <div>
@@ -600,11 +609,11 @@ export function Attendance() {
                                         }
                                         position="top"
                                       >
-                                        <Info className="w-4 h-4 ml-2 text-gray-500 cursor-pointer" />
+                                        <Info className="w-4 h-4 ml-2 mr-2 text-gray-500 cursor-pointer" />
                                       </Tooltip>
                                     </div>
                                   </div>
-                                  <div className='flex gap-2'>
+                                  <div className='flex flex-wrap gap-1'>
                                     {attendances.map((attendance, index) => {
                                       let status = 'Absent';
                                       if (attendance.was_excused) {
