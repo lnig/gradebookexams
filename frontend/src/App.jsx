@@ -183,23 +183,25 @@ export default function App() {
                 <Route path="/homework/:id" element={<HomeworkDetail />} />
                 <Route path="/grades" element={<Grades />} />
                 <Route path="/problems" element={<Problems />} />
+                <Route path="/exams" element={<Home />} />
+                <Route path="/AboutExam" element={<ExamDetails />} />
+                <Route path="/SolveExam" element={<SolvingExam />} />
+                <Route path="/view-attempt/:attempt_id" element={<ReviewingExam />} />
+                <Route path="/create-exam/*" element={<CreateExam />} />
+                <Route path="/update-exam/:examId/basic-information" element={<EditExamBasicInfo />} />
+                <Route path="/update-exam/:examId/edit-questions" element={<EditQuestions />} />
+                <Route path="/update-exam/:examId/edit-participants" element={<EditParticipants />} />
+                <Route path="/update-exam/:examId/edit-settings" element={<EditExamDetailedInfo />} />
+                <Route path="/EvaluateExam" element={<EvaluateExam />} />
+                <Route path="/EvaluateAnswers" element={<EvaluateAnswers />} />
+                <Route path="/ViewResults" element={<Results />} />
 
                 {userRole !== UserRoles.Parent && (
                   <>
-                    <Route path="/exams" element={<Home />} />
-                    <Route path="/AboutExam" element={<ExamDetails />} />
-                    <Route path="/SolveExam" element={<SolvingExam />} />
-                    <Route path="/view-attempt/:attempt_id" element={<ReviewingExam />} />
+                    
                     {(userRole === UserRoles.Teacher || userRole === UserRoles.Administrator) && (
                       <>
-                        <Route path="/create-exam/*" element={<CreateExam />} />
-                        <Route path="/update-exam/:examId/basic-information" element={<EditExamBasicInfo />} />
-                        <Route path="/update-exam/:examId/edit-questions" element={<EditQuestions />} />
-                        <Route path="/update-exam/:examId/edit-participants" element={<EditParticipants />} />
-                        <Route path="/update-exam/:examId/edit-settings" element={<EditExamDetailedInfo />} />
-                        <Route path="/EvaluateExam" element={<EvaluateExam />} />
-                        <Route path="/EvaluateAnswers" element={<EvaluateAnswers />} />
-                        <Route path="/ViewResults" element={<Results />} />
+                        
                       </>
                     )}
                   </>
