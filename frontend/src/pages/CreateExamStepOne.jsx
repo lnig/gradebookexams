@@ -125,13 +125,11 @@ export function CreateExamStepOne({ onCancel, onSave, isEditing, isSaving }) {
 
   useEffect(() => {
     if (!contextIsEditing) {
-      console.log("Wywołanie fetchGradebookExams z CreateExamStepOne");
       fetchGradebookExams()
         .then(() => {
         })
         .catch(error => {
-          console.error("Błąd podczas pobierania gradebook exams:", error);
-          toast.error("Nie udało się pobrać gradebook exams.");
+          toast.error("Failed to retrieve gradebook exams.");
         });
     }
     console.log("useeffect")

@@ -1,5 +1,3 @@
-// src/components/QuestionOnSolving.jsx
-
 import React, { useState, useEffect } from 'react';
 import Checkbox from "./Checkbox";
 
@@ -19,9 +17,6 @@ export default function QuestionOnSolving({
     onAnswerChange, 
 }) {
     const [selectedAnswers, setSelectedAnswers] = useState(() => {
-        // Zamień to na zawsze tablicę.
-        // Jeżeli `value` jest stringiem, zrób z niego 1-elementową tablicę.
-        // Jeśli `value` jest tablicą, zostaje jak jest.
         if (Array.isArray(value)) {
           return value;
         } else if (typeof value === 'string' && value.trim() !== '') {
@@ -32,7 +27,7 @@ export default function QuestionOnSolving({
       });
 
       useEffect(() => {
-        // Podobna normalizacja
+
         if (Array.isArray(value)) {
           setSelectedAnswers(value);
         } else if (typeof value === 'string' && value.trim() !== '') {
@@ -43,7 +38,6 @@ export default function QuestionOnSolving({
       }, [value]);
 
     useEffect(() => {
-        console.log(`Selected Answers Updated: ${JSON.stringify(selectedAnswers)}`);
     }, [selectedAnswers]);
 
     const getOptionLabel = (index) => {
@@ -51,35 +45,26 @@ export default function QuestionOnSolving({
     };
 
     const handleCheckboxChange = (answerId) => {
-        console.log(`Checkbox changed: ${answerId}`);
       
         if (is_multiple) {
-          // WIELOKROTNY WYBÓR -> PRZETRZYMUJEMY TABLICĘ WIELU ID
           let updatedAnswers;
           if (selectedAnswers.includes(answerId)) {
-            // Odznaczanie odpowiedzi
             updatedAnswers = selectedAnswers.filter(id => id !== answerId);
-            console.log(`Odznaczono: ${answerId}`);
           } else {
             updatedAnswers = [...selectedAnswers, answerId];
-            console.log(`Zaznaczono: ${answerId}`);
           }
           setSelectedAnswers(updatedAnswers);
-          onAnswerChange(updatedAnswers); // <-- PRZEKAZUJEMY TABLICĘ
+          onAnswerChange(updatedAnswers);
       
         } else {
-          // POJEDYNCZY WYBÓR -> PRZETRZYMUJEMY TABLICĘ O MAX 1 ELEMENCIE
           let updatedAnswers;
           if (selectedAnswers.includes(answerId)) {
-            // Odznaczanie odpowiedzi
             updatedAnswers = [];
-            console.log(`Odznaczono: ${answerId}`);
           } else {
             updatedAnswers = [answerId];
-            console.log(`Zaznaczono: ${answerId}`);
           }
           setSelectedAnswers(updatedAnswers);
-          onAnswerChange(updatedAnswers); // <-- PRZEKAZUJEMY TABLICĘ
+          onAnswerChange(updatedAnswers);
         }
       };
 

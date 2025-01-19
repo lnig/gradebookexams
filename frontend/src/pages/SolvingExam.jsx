@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import Button from "../components/Button";
 import PageTitle from "../components/PageTitle";
@@ -7,7 +6,7 @@ import QuestionList from "../components/QuestionList";
 import { AlarmCheck } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getToken } from "../utils/UserRoleUtils";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_EXAMS_URL } from "../utils/config";
 
@@ -27,7 +26,6 @@ export function SolvingExam() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  
   const [examId, setExamId] = useState(null);
   const [attemptId, setAttemptId] = useState(null);
   const [title, setTitle] = useState("Exam Title");
@@ -39,9 +37,7 @@ export function SolvingExam() {
   const [allowNavigation, setAllowNavigation] = useState(false);
   const [block_copying_pasting, setBlockCopyingPasting] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-
   const [end_test_after_leaving_window, setEnd_test_after_leaving_window] = useState(false);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -103,11 +99,8 @@ export function SolvingExam() {
           const errData = await resp.json();
           throw new Error(errData.message || "Failed to fetch exam.");
         }
-        console.log("4444444")
         let data = await resp.json();
         let attemptData = data.data;
-
-        console.log("[fetchExamData] (No Cache) Fetched attemptData:", attemptData);
 
         setExamId(examId);
         setAttemptId(attemptData.attempt_id);
@@ -142,7 +135,7 @@ export function SolvingExam() {
         console.error(err);
         setError(err.message);
         setLoading(false);
-        toast.error(err.message || "Wystąpił niespodziewany błąd.");
+        toast.error(err.message || "An unexpected error has occurred.");
       }
     },
     [token]
@@ -154,13 +147,10 @@ export function SolvingExam() {
       isAttemptEndedRef.current = true;
 
       if (!attemptId) {
-        console.error("[handleEndAttempt] – attemptId is null");
         return;
       }
 
       try {
-        console.log("[handleEndAttempt] -> saving finalAnswers to backend...");
-
         const resp = await fetch(`${API_EXAMS_URL}/exams/saveAttempt/${attemptId}`, {
           method: "POST",
           headers: {
@@ -218,7 +208,6 @@ export function SolvingExam() {
         storedAllowNav &&
         storedEndAfterLeaving != true
       ) {
-        console.log("[SolvingExam] => Loading from localStorage...");
         setExamId(storedExamId);
         setAttemptId(storedAttemptId);
         setTitle(storedTitle || "Exam from localStorage");
@@ -274,7 +263,6 @@ export function SolvingExam() {
     const exitTs = parseInt(storedExitTime, 10);
     const now = Date.now();
     const diff = (now - exitTs) / 1000;
-    console.log("[SolvingExam attemptId] => Checking exitTime diff:", diff);
 
     if (diff > 10) {
       toast.error("You left for more than 10s, attempt saved.");

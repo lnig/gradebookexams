@@ -4,7 +4,6 @@ import { createErrorResponse, createSuccessResponse } from '../interfaces/respon
 import { parse as uuidParse, v4 as uuidv4  } from 'uuid';
 import { OpenQuestionInput, OpenAnswerInput, ClosedQuestionInput, ClosedAnswerInput, UpsertAnswer } from '../interfaces/questions';
 
-
 export const addQuestionsToExam = async (req: Request, res: Response) => {
     try {
         const exam_id = req.params.exam_id;

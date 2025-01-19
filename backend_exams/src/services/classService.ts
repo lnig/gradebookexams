@@ -9,7 +9,6 @@ export async function getClassesByTeacher(teacher_id: string) {
 
   const teacherIdBuffer = Buffer.from(uuidParse(teacher_id));
 
-  // Pobieramy lekcje danego nauczyciela, wraz z powiązaną klasą i nazwą klasy
   const lessonsRaw = await prisma.lessons.findMany({
     where: {
       teacher_id: teacherIdBuffer,
@@ -33,7 +32,6 @@ export async function getClassesByTeacher(teacher_id: string) {
     return [];
   }
 
-  // Dla unikalności używamy Map
   const uniqueClassesMap = new Map<string, any>();
 
   for (const lesson of lessonsRaw) {

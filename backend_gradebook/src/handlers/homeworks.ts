@@ -307,11 +307,11 @@ export const getHomeworksForStudent = async (req: Request, res: Response) => {
         });
 
         if (!existingStudent) {
-            return res.status(404).json(createErrorResponse('Uczeń nie istnieje.'));
+            return res.status(404).json(createErrorResponse('Student does not exist.'));
         }
 
         if (!existingStudent.class_id) {
-            return res.status(404).json(createErrorResponse('Uczeń nie jest przypisany do żadnej klasy.'));
+            return res.status(404).json(createErrorResponse('Student not assigned to any class.'));
         }
 
         const lessons = await prisma.lessons.findMany({
@@ -334,7 +334,7 @@ export const getHomeworksForStudent = async (req: Request, res: Response) => {
         });
 
         if (lessons.length === 0) {
-            return res.status(200).json(createSuccessResponse([], 'Brak lekcji dla klasy ucznia.'));
+            return res.status(200).json(createSuccessResponse([], 'No lessons for the students class'));
         }
 
         const lessonIds = lessons.map(lesson => lesson.id);
@@ -366,7 +366,7 @@ export const getHomeworksForStudent = async (req: Request, res: Response) => {
         });
 
         if (homeworks.length === 0) {
-            return res.status(200).json(createSuccessResponse([], 'Brak prac domowych dla ucznia.'));
+            return res.status(200).json(createSuccessResponse([], 'No homework for the student.'));
         }
 
         const responseData = homeworks.map(hw => ({
@@ -378,10 +378,10 @@ export const getHomeworksForStudent = async (req: Request, res: Response) => {
             teacher_full_name: `${hw.lessons.teachers.first_name} ${hw.lessons.teachers.last_name}`
         }));
 
-        return res.status(200).json(createSuccessResponse(responseData, 'Prace domowe pobrane pomyślnie.'));
+        return res.status(200).json(createSuccessResponse(responseData, 'Homeworks retrieved successfully.'));
     } catch (err) {
-        console.error('Błąd podczas pobierania prac domowych dla ucznia', err);
-        return res.status(500).json(createErrorResponse('Wystąpił nieoczekiwany błąd podczas pobierania prac domowych. Proszę spróbować ponownie później.'));
+        console.error('Error retrieving homework for student', err);
+        return res.status(500).json(createErrorResponse('An unexpected error occurred while deleting the homework. Please try again later.'));
     }
 };
 
@@ -426,7 +426,7 @@ export const getHomeworksForTeacher = async (req: Request, res: Response) => {
         });
 
         if (!existingTeacher) {
-            return res.status(404).json(createErrorResponse('Uczeń nie istnieje.'));
+            return res.status(404).json(createErrorResponse('The student does not exist.'));
         }
 
 
@@ -444,7 +444,7 @@ export const getHomeworksForTeacher = async (req: Request, res: Response) => {
         });
 
         if (lessons.length === 0) {
-            return res.status(200).json(createSuccessResponse([], 'Brak lekcji dla nauczyciela.'));
+            return res.status(200).json(createSuccessResponse([], 'No lessons for the teacher.'));
         }
 
         const lessonIds = lessons.map(lesson => lesson.id);
@@ -476,7 +476,7 @@ export const getHomeworksForTeacher = async (req: Request, res: Response) => {
         });
 
         if (homeworks.length === 0) {
-            return res.status(200).json(createSuccessResponse([], 'Brak prac domowych dla nauczyciela.'));
+            return res.status(200).json(createSuccessResponse([], 'No homework for the teacher.'));
         }
 
         const responseData = homeworks.map(hw => ({
@@ -488,10 +488,10 @@ export const getHomeworksForTeacher = async (req: Request, res: Response) => {
             teacher_full_name: `${hw.lessons.teachers.first_name} ${hw.lessons.teachers.last_name}`
         }));
 
-        return res.status(200).json(createSuccessResponse(responseData, 'Prace domowe pobrane pomyślnie.'));
+        return res.status(200).json(createSuccessResponse(responseData, 'Homework retrieved successfully.'));
     } catch (err) {
-        console.error('Błąd podczas pobierania prac domowych dla ucznia', err);
-        return res.status(500).json(createErrorResponse('Wystąpił nieoczekiwany błąd podczas pobierania prac domowych. Proszę spróbować ponownie później.'));
+        console.error('Error retrieving homework', err);
+        return res.status(500).json(createErrorResponse('An unexpected error occurred while deleting the homework. Please try again later.'));
     }
 };
 

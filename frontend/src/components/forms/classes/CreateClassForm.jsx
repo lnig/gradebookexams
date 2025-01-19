@@ -10,10 +10,8 @@ import { API_GRADEBOOK_URL } from "../../../utils/config";
 function CreateClassForm({ onSuccess, isOpen, closeModal }) {
   const [classNames, setClassNames] = useState([]);
   const [schoolYears, setSchoolYears] = useState([]);
-
   const [classNameId, setClassNameId] = useState('');
   const [schoolYearId, setSchoolYearId] = useState('');
-
   const [loading, setLoading] = useState(false);
 
   const token = getToken();

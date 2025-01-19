@@ -55,23 +55,7 @@ export function CreateExamStepFour({ onCancel, onSave, isEditing, isSaving }){
             
             <div>
               <Switch text="End test when the user leaves the window" isOn={examData.endTestAfterLeavingWindow} onToggle={handleToggle('endTestAfterLeavingWindow')}/>
-                {/* {isLeaveWindowSwitchOn&& (
-                <div className="p-4 md:p-6 mt-4 ml-20 bg-textBg-150 rounded w-fit">
-                  <p className="text-textBg-700 text-lg w-full ">How many times a user can leave the page?</p>
-                  <NumberInput className={"w-32 mt-4"} defaultValue={1}/>
-                </div>
-                )} */}
             </div>
-
-            {/* <div>
-              <Switch text="Randomize questions from a larger pool" onToggle={setIsQuestionPoolSwitchOn} />
-                {isQuestionPoolSwitchOn&& (
-                <div className="p-4 md:p-6 mt-4 ml-20 bg-textBg-150 rounded w-fit">
-                  <p className="text-textBg-700 text-lg">Random pick __ questions</p>
-                  <NumberInput className={"w-32 mt-4"} defaultValue={1}/>
-                </div>
-                )}
-            </div>  */}
         </div>
       </div>
 
@@ -110,7 +94,6 @@ export function CreateExamStepFour({ onCancel, onSave, isEditing, isSaving }){
         </div>
       </div>
       
-
       <div className="flex mt-8 gap-4 sm:gap-8 justify-end">
         <Button
           size="xl"

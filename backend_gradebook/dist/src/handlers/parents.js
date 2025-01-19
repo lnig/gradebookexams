@@ -54,11 +54,11 @@ const getAvailableParents = async (req, res) => {
             email: parent.email,
             phone_number: parent.phone_number,
         }));
-        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, `Dostępni rodzice pobrani pomyślnie.`));
+        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, `Available parents retrieved successfully.`));
     }
     catch (err) {
         console.error('Error fetching available parents', err);
-        return res.status(500).json((0, responseInterfaces_1.createErrorResponse)('Wystąpił nieoczekiwany błąd podczas pobierania dostępnych rodziców. Spróbuj ponownie później.'));
+        return res.status(500).json((0, responseInterfaces_1.createErrorResponse)('An unexpected error occurred while retrieving parents. Please try again later.'));
     }
 };
 exports.getAvailableParents = getAvailableParents;

@@ -31,20 +31,17 @@ const EvaluateItem = ({ firstName, lastName, endTime, totalScore, maxScore, atte
                         icon={<Pen size={18} className="text-primary-500" />}
                     />
                 </div>
-            </>
-                            
-                        ) : (
-                        <div>
-                        <Button
-                            text="Evaluate all"
-                            size="m"
-                            className="w-full"
-                            onClick={() => handleEvaluateAll(examId)} />
-                            
-                    </div>
-                        )}
-
-
+            </>              
+            ) : (
+            <div>
+            <Button
+                text="Evaluate all"
+                size="m"
+                className="w-full"
+                onClick={() => handleEvaluateAll(examId)} 
+            />    
+            </div>
+        )}
         </div>
     );
 };

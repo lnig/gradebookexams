@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Check, X } from 'lucide-react';
 import React from 'react';
 

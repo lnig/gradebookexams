@@ -256,7 +256,6 @@ export function CreateExamStepFive(){
             <Switch text="Allow the user to return to previous questions" isOn={examData.allowNavigation} disabled  />
             <Switch text="Allow the user to review the test after completion" isOn={examData.allowReview} disabled   />
             <Switch text="Allow the user to attempt the test multiple times" isOn={examData.multipleTries} disabled  />
-            {/* <NumberInput className={"w-32 mt-4"} value={examData.numberOfTries} onChange={handleNumberChange('numberOfTries')} min={1} defaultValue={1} /> */}
 
       </div>
       </div>

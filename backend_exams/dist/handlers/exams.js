@@ -481,16 +481,6 @@ const getExamParticipants = async (req, res) => {
                 class_id: student.class_id ? (0, uuid_1.stringify)(student.class_id) : null,
             }));
             const students = studentsInTeacherClasses;
-            // const classesParticipantsBuffers = classesParticipantsIds.map(classId => Buffer.from(uuidParse(classId)));
-            // const students = studentsInTeacherClasses.filter((student) => {
-            //   const isIndividuallyParticipating = studentsParticipantsIds.includes(student.id);
-            //   let isParticipatingViaClass = false;
-            //   if (student.class_id !== null) {
-            //     const studentClassIdBuffer = Buffer.from(uuidParse(student.class_id));
-            //     isParticipatingViaClass = classesParticipantsBuffers.some(classIdBuffer => classIdBuffer.equals(studentClassIdBuffer));
-            //   }
-            //   return !isIndividuallyParticipating && !isParticipatingViaClass;
-            // });
             const responseData = {
                 studentsParticipants,
                 classesParticipants,

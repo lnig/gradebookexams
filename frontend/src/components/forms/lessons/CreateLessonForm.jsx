@@ -10,20 +10,17 @@ import { API_GRADEBOOK_URL } from '../../../utils/config';
 function CreateLessonForm({ onSuccess, onClose, isOpen }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-
   const [teacherId, setTeacherId] = useState('');
   const [classId, setClassId] = useState('');
   const [subjectId, setSubjectId] = useState('');
-  const [lessonSchedules, setLessonSchedules] = useState([
-    { dayOfWeek: 1, startTime: '09:00', endTime: '10:00', frequency: 1 },
-  ]);
-
   const [teachers, setTeachers] = useState([]);
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [lessonSchedules, setLessonSchedules] = useState([
+    { dayOfWeek: 1, startTime: '09:00', endTime: '10:00', frequency: 1 },
+  ]);
 
   const token = getToken();
 

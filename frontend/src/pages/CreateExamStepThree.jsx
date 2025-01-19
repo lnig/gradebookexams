@@ -1,4 +1,3 @@
-// src/pages/CreateExamStepThree.jsx
 import React, { useState, useEffect, useContext, useRef } from "react";
 import PageTitle from "../components/PageTitle";
 import Stepper from "../components/Stepper";

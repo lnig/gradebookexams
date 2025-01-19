@@ -14,10 +14,6 @@ import UserRoles from "../utils/userRoles";
 import { API_GRADEBOOK_URL } from "../utils/config";
 
 function ClassDetails() {
-  const { id } = useParams();
-  const token = getToken();
-  const navigate = useNavigate();
-
   const [classInfo, setClassInfo] = useState(null);
   const [students, setStudents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,6 +23,9 @@ function ClassDetails() {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const { id } = useParams();
+  const token = getToken();
+  const navigate = useNavigate();
   const userRole = getUserRole();
 
   const fetchClassDetails = async () => {

@@ -77,7 +77,6 @@ export const validateUpdateExam = (): ValidationChain[] => {
             .custom((value: string) => isUUID(value))
             .withMessage('exam_id must be a valid UUID.'),
 
-        // All fields are required
         body('start_date_time')
             .exists().withMessage('start_date_time is required.')
             .bail()

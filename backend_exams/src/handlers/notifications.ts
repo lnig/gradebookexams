@@ -5,8 +5,6 @@ import { createErrorResponse, createSuccessResponse } from '../interfaces/respon
 import prisma from "../db";
 import { UserType } from "../enums/userTypes";
 
-
-
 export const getNotifications = async (req: Request, res: Response) => {
     const user = req.user;
     const student_id = user?.userId;
@@ -18,7 +16,6 @@ export const getNotifications = async (req: Request, res: Response) => {
     if (!student_id) {
         return res.status(400).json(createErrorResponse('Invalid student ID.'));
     }
-
 
     try {
         const studentIdBuffer = Buffer.from(uuidParse(student_id));

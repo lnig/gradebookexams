@@ -41,13 +41,13 @@ export const getSubjects = async (req: Request, res: Response) => {
     try {
         const subjects = await prisma.subjects.findMany();
 
-        const responeData = subjects.map(subject => ({
+        const responseData = subjects.map(subject => ({
             ...subject,
             id: uuidStringify(subject.id)
         }));
 
 
-        return res.status(200).json(createSuccessResponse(responeData, 'Subjects retrieved successfully.'));
+        return res.status(200).json(createSuccessResponse(responseData, 'Subjects retrieved successfully.'));
     } catch (err) {
         console.error('Error retrieving subjects', err);
         return res.status(500).json(createErrorResponse('An unexpected error occurred while retrieving subjects. Please try again later.'));

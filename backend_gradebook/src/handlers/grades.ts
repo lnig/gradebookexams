@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../db';
-import { grades_gradebook, subjects, classes, students, teachers, final_grades, semesters } from '@prisma/client';
+import { grades_gradebook, subjects, students, teachers, final_grades, semesters } from '@prisma/client';
 import { createSuccessResponse, createErrorResponse } from '../interfaces/responseInterfaces';
 import { parse as uuidParse, stringify as uuidStringify } from 'uuid';
 import { Buffer } from 'node:buffer';

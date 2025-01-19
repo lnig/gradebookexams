@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import PageTitle from '../components/PageTitle';
-import { Atom, ChevronRight, Dna, GraduationCap, NotepadText, SquareSigma } from 'lucide-react';
+import { ChevronRight, NotepadText } from 'lucide-react';
 import GradeCard from "../components/GradeCard";
 import AttendanceChart from "../components/BarChartGradebook";
 import HomeworkCard from "../components/HomeworkCard";

@@ -30,11 +30,6 @@ if (today.getMonth() < 8) {
 
 export function CalendarEvents() {
   const [selectedDate, setSelectedDate] = useState(today);
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(() => {
-    const currentMonthName = monthNames[today.getMonth()];
-    const initialMonthIndex = displayMonthNames.indexOf(currentMonthName);
-    return initialMonthIndex !== -1 ? initialMonthIndex : 0;
-  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [events, setEvents] = useState([]);
@@ -43,21 +38,24 @@ export function CalendarEvents() {
   const [eventToEdit, setEventToEdit] = useState(null);
   const [isDeleteEventModalOpen, setIsDeleteEventModalOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
-
   const [isEditExamModalOpen, setIsEditExamModalOpen] = useState(false);
   const [examToEdit, setExamToEdit] = useState(null);
   const [isDeleteExamModalOpen, setIsDeleteExamModalOpen] = useState(false);
   const [examToDelete, setExamToDelete] = useState(null);
-
   const [userId, setUserId] = useState(null);
+  const [eventTypes, setEventTypes] = useState([]);
+  const [eventTypeCardColors, setEventTypeCardColors] = useState({});
+  const [eventTypeLegendColors, setEventTypeLegendColors] = useState({});
+
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(() => {
+    const currentMonthName = monthNames[today.getMonth()];
+    const initialMonthIndex = displayMonthNames.indexOf(currentMonthName);
+    return initialMonthIndex !== -1 ? initialMonthIndex : 0;
+  });
   
   const parentId = getUserId();
   const token = getToken();
   const userRole = getUserRole();
-
-  const [eventTypes, setEventTypes] = useState([]);
-  const [eventTypeCardColors, setEventTypeCardColors] = useState({});
-  const [eventTypeLegendColors, setEventTypeLegendColors] = useState({});
 
   const assignColorsToEventTypeCardColors = (types) => {
     const cardColors = [

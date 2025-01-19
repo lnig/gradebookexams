@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { ScrollText, Clock3, Pen, Calendar, User, Check, Bold } from 'lucide-react';
+import { ScrollText, Clock3, Pen, Check } from 'lucide-react';
 import PageTitle from '../components/PageTitle';
 import Button from '../components/Button';
 import ExamTag from '../components/ExamTag';
@@ -22,7 +21,6 @@ export function ExamDetails() {
   const [questions, setQuestions] = useState([]);
   const [statusData, setStatusData] = useState(null);
   const [canSolve, setCanSolve] = useState();
-  const [gradeError, setGradeError] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

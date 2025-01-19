@@ -1,4 +1,3 @@
-// components/DropdownMenu.jsx
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -28,8 +27,8 @@ const DropdownMenu = ({ children, position, onClose }) => {
     position: 'absolute',
     top: position.top,
     left: position.left,
-    width: '176px', // odpowiada Tailwind klasie w-44
-    zIndex: 9999, // zapewnia najwyższy priorytet
+    width: '176px',
+    zIndex: 9999,
   };
 
   return ReactDOM.createPortal(

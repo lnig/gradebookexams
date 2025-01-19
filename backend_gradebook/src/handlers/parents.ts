@@ -3,7 +3,7 @@ import { signUp } from './users';
 import { UserType } from '../enums/userTypes';
 import prisma from '../db';
 import { createSuccessResponse, createErrorResponse } from '../interfaces/responseInterfaces';
-import { parse as uuidParse, stringify as uuidStringify } from 'uuid';
+import { stringify as uuidStringify } from 'uuid';
 
 export const signUpParent = (req: Request, res: Response) => {
     return signUp(req, res, UserType.Parent);
@@ -53,9 +53,9 @@ export const getAvailableParents = async (req: Request, res: Response) => {
             phone_number: parent.phone_number,
         }));
 
-        return res.status(200).json(createSuccessResponse(responseData, `Dostępni rodzice pobrani pomyślnie.`));
+        return res.status(200).json(createSuccessResponse(responseData, `Available parents retrieved successfully.`));
     } catch (err) {
         console.error('Error fetching available parents', err);
-        return res.status(500).json(createErrorResponse('Wystąpił nieoczekiwany błąd podczas pobierania dostępnych rodziców. Spróbuj ponownie później.'));
+        return res.status(500).json(createErrorResponse('An unexpected error occurred while retrieving parents. Please try again later.'));
     }
 };

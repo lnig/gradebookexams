@@ -1,4 +1,3 @@
-/* BarChart2.jsx */
 import React, { useState, useEffect } from 'react';
 import {
   BarChart as RechartsBarChart,

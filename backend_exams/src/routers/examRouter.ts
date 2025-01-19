@@ -26,7 +26,6 @@ examRouter.post('/createExam',
 examRouter.get('/NewExamParticipants',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
-    // validateGetExam(),
     handleInputErrors,
     getExamParticipantsForNewExam
 );
@@ -34,7 +33,6 @@ examRouter.get('/NewExamParticipants',
 examRouter.get('/checkAttemptEligibility/:exam_id',
     authenticate,
     authorize([UserType.Student]),
-    // validateGetExam(),
     handleInputErrors,
     checkAttemptEligibility
 );
@@ -42,7 +40,6 @@ examRouter.get('/checkAttemptEligibility/:exam_id',
 examRouter.get('/getGradebookExams',
     authenticate,
     authorize([UserType.Teacher,UserType.Administrator]),
-    // validateGetExam(),
     handleInputErrors,
     getGradebookExams
 );
@@ -50,7 +47,6 @@ examRouter.get('/getGradebookExams',
 examRouter.get('/getExams',
     authenticate,
     authorize([UserType.Student,UserType.Administrator, UserType.Teacher]),
-    // validateGetExam(),
     handleInputErrors,
     getExams
 );
@@ -58,7 +54,6 @@ examRouter.get('/getExams',
 examRouter.get('/:exam_id/getExamQuestions',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
-    // validateGetExam(),
     handleInputErrors,
     getAllExamQuestions
 );
@@ -66,7 +61,6 @@ examRouter.get('/:exam_id/getExamQuestions',
 examRouter.get('/:exam_id/getAllAttemptsToGrade',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
-    // validateGetExam(),
     handleInputErrors,
     getAllAttemptsToGrade
 );
@@ -74,7 +68,6 @@ examRouter.get('/:exam_id/getAllAttemptsToGrade',
 examRouter.get('/getMyAttempts/:exam_id',
     authenticate,
     authorize([UserType.Student]),
-    // validateGetExam(),
     handleInputErrors,
     getUserAttempts
 );
@@ -87,15 +80,12 @@ examRouter.get('/:exam_id',
     getExam
 );
 
-
 examRouter.get('/:exam_id/getParticipants',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
-    // validateGetExam(),
     handleInputErrors,
     getExamParticipants
 );
-
 
 
 examRouter.put('/update/:exam_id',
@@ -105,7 +95,6 @@ examRouter.put('/update/:exam_id',
     handleInputErrors,
     updateExam
 );
-
 
 examRouter.delete('/:exam_id',
     authenticate,
@@ -130,8 +119,6 @@ examRouter.delete('/:exam_id/deleteparticipants',
     removeParticipantsFromExam
 );
 
-
-
 examRouter.post('/:exam_id/addquestions',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
@@ -143,7 +130,6 @@ examRouter.post('/:exam_id/addquestions',
 examRouter.post('/:exam_id/upsertQuestionsToExam',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
-    // validateAddQuestions(),
     handleInputErrors,
     upsertQuestionsToExam
 );
@@ -167,7 +153,6 @@ examRouter.post('/saveAttempt/:attempt_id',
 examRouter.get('/checkExamState/:exam_id',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
-    // validateSaveAttempt(),
     handleInputErrors,
     checkExamState
 );
@@ -188,7 +173,6 @@ examRouter.get('/showAllOpenAnswersToGrade/:exam_id',
     showAllOpenAnswersToGrade
 );
 
-
 examRouter.post('/gradeOpenAnswers', 
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
@@ -205,7 +189,6 @@ examRouter.get('/:exam_id/results',
     getExamResults
 );
 
-
 examRouter.get('/getAttemptDetails/:attemptId',     
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher, UserType.Student]),
@@ -214,11 +197,9 @@ examRouter.get('/getAttemptDetails/:attemptId',
     getAttemptDetails
 );
 
-
 examRouter.post('/gradeExam/:exam_id',
     authenticate,
     authorize([UserType.Administrator, UserType.Teacher]),
-    // validateGetAttemptDetails(),
     handleInputErrors,
     gradeExam
   );

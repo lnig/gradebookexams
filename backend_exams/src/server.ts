@@ -4,9 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import authRouter from './routers/authRouter';
 import examsRouter from './routers/examRouter';
 import notificationsRouter from './routers/notificationsRouter';
-
 import studentsRouter from './routers/studentsRouter';
-
 
 const app = express();
 

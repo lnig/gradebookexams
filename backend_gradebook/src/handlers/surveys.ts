@@ -492,8 +492,6 @@ export const sendSurvey = async (req: Request, res: Response) => {
     try {
       const surveyId: string = req.params.surveyId;
   
-      // Pobranie ankiety wraz z pytaniami. Do każdego pytania dołączamy możliwe odpowiedzi (questions_possible_responses)
-      // oraz odpowiedzi studentów (questions_responses)
       const existingSurvey = await prisma.surveys.findUnique({
         where: {
           id: Buffer.from(uuidParse(surveyId))
@@ -503,7 +501,6 @@ export const sendSurvey = async (req: Request, res: Response) => {
             include: {
               questions_possible_responses: true,
               questions_responses: {
-                // Jeśli chcesz pobrać dodatkowe dane studenta, możesz rozszerzyć ten include, np. include: { students: true }
               }
             }
           }
@@ -514,7 +511,6 @@ export const sendSurvey = async (req: Request, res: Response) => {
         return res.status(404).json(createErrorResponse(`Survey does not exist.`));
       }
   
-      // Przetwarzamy wyniki, zamieniając pola UUID z Buffer na string oraz daty na ISO string
       const processedQuestions = existingSurvey.questions.map(question => ({
         ...question,
         id: uuidStringify(question.id),

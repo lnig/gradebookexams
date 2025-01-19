@@ -39,11 +39,11 @@ exports.createSubject = createSubject;
 const getSubjects = async (req, res) => {
     try {
         const subjects = await db_1.default.subjects.findMany();
-        const responeData = subjects.map(subject => ({
+        const responseData = subjects.map(subject => ({
             ...subject,
             id: (0, uuid_1.stringify)(subject.id)
         }));
-        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responeData, 'Subjects retrieved successfully.'));
+        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, 'Subjects retrieved successfully.'));
     }
     catch (err) {
         console.error('Error retrieving subjects', err);

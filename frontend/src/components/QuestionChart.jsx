@@ -1,4 +1,3 @@
-/* QuestionChart.jsx */
 import React from 'react';
 import BarChart2 from "../components/BarChart2"; 
 import OpenQuestionChart from "../components/BarChart3";

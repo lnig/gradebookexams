@@ -1,1 +1,0 @@
--- sprawdzic przy liscie osob do egzaminu czy ta osoba juz nie jest w jakiejs klasie i czy generalnie nie zdubluja sie te osoby przy wypisywaniu ich

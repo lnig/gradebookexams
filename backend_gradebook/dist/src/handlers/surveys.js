@@ -417,8 +417,6 @@ exports.sendSurvey = sendSurvey;
 const getSurveyFullDetails = async (req, res) => {
     try {
         const surveyId = req.params.surveyId;
-        // Pobranie ankiety wraz z pytaniami. Do każdego pytania dołączamy możliwe odpowiedzi (questions_possible_responses)
-        // oraz odpowiedzi studentów (questions_responses)
         const existingSurvey = await db_1.default.surveys.findUnique({
             where: {
                 id: node_buffer_1.Buffer.from((0, uuid_1.parse)(surveyId))
@@ -427,9 +425,7 @@ const getSurveyFullDetails = async (req, res) => {
                 questions: {
                     include: {
                         questions_possible_responses: true,
-                        questions_responses: {
-                        // Jeśli chcesz pobrać dodatkowe dane studenta, możesz rozszerzyć ten include, np. include: { students: true }
-                        }
+                        questions_responses: {}
                     }
                 }
             }
@@ -437,7 +433,6 @@ const getSurveyFullDetails = async (req, res) => {
         if (!existingSurvey) {
             return res.status(404).json((0, responseInterfaces_1.createErrorResponse)(`Survey does not exist.`));
         }
-        // Przetwarzamy wyniki, zamieniając pola UUID z Buffer na string oraz daty na ISO string
         const processedQuestions = existingSurvey.questions.map(question => ({
             ...question,
             id: (0, uuid_1.stringify)(question.id),

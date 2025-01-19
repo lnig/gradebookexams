@@ -1,4 +1,3 @@
-/* StatisticsBarChart.jsx */
 import React, { useState, useEffect } from 'react';
 import {
   BarChart as RechartsBarChart,
@@ -8,7 +7,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  LabelList,
 } from 'recharts';
 
 const calculateTicks = (data) => {

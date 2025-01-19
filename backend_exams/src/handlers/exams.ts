@@ -2,21 +2,12 @@ import { Request, Response } from 'express';
 import  prisma  from '../db';
 import { CreateExamInput } from '../interfaces/examCredentials';
 import { createErrorResponse, createSuccessResponse } from '../interfaces/responseInterfaces';
-import {  parse as uuidParse, validate as isUUID, stringify as uuidStringify, v4 as uuidv4 } from 'uuid';
+import {  parse as uuidParse, validate as isUUID, stringify as uuidStringify } from 'uuid';
 import { getClassesByTeacher } from '../services/classService';
-import { Student, Class, StudentExam, ClassExam} from '../interfaces/ConvertedTypes';
+import { Student, Class} from '../interfaces/ConvertedTypes';
 import { convertBuffersToUUIDs } from '../utils/uuidUtils';
-import AuthUser from '../interfaces/authUser';
-import { GradingService } from '../services/gradingService';
-import { students, exams, open_questions, closed_questions, closed_answers, attempt_questions_question_type } from '@prisma/client';
-import { ClosedAnswerInput, OpenAnswerInput, SaveAttemptInput } from '../interfaces/attemptCredentials';
-import { GradeOpenAnswerInput, OpenAnswerToGrade, StudentOpenAnswers, OpenAnswersToGradeResponse, StudentToGrade } from '../interfaces/GradingInterfaces';
 import { SelectedQuestion } from '../interfaces/questions'
-import { ParticipantAttempt, ExamStatistics, ScoreDistribution } from '../interfaces/ExamResults'
-import { getClosedQuestionsStatistics, getOpenQuestionsStatistics, calculateScoreDistribution } from '../services/statisticsService';
-import { AttemptDetailsResponse, Question, Answer } from '../interfaces/reviewingInterfaces';
 import { UserType } from '../enums/userTypes';
-
 
 export const getExam = async (req: Request, res: Response) => {
     try {
@@ -131,10 +122,6 @@ export const getExams = async (req: Request, res: Response) => {
         } else {
             return res.status(403).json(createErrorResponse('Forbidden'));
         }
-
-
-        
-
 
         const responseData = exams.map(exam => ({
             id: uuidStringify(exam.id),
@@ -616,19 +603,7 @@ export const getExamParticipants = async (req: Request, res: Response) => {
           );
           
         const students = studentsInTeacherClasses;
-        // const classesParticipantsBuffers = classesParticipantsIds.map(classId => Buffer.from(uuidParse(classId)));
-  
-        // const students = studentsInTeacherClasses.filter((student) => {
-        //   const isIndividuallyParticipating = studentsParticipantsIds.includes(student.id);
-  
-        //   let isParticipatingViaClass = false;
-        //   if (student.class_id !== null) {
-        //     const studentClassIdBuffer = Buffer.from(uuidParse(student.class_id));
-        //     isParticipatingViaClass = classesParticipantsBuffers.some(classIdBuffer => classIdBuffer.equals(studentClassIdBuffer));
-        //   }
-  
-        //   return !isIndividuallyParticipating && !isParticipatingViaClass;
-        // });
+        
         const responseData = {
             studentsParticipants,
             classesParticipants,

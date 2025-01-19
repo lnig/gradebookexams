@@ -64,7 +64,6 @@ export function Messages() {
       const result = await response.json();
       setUserTypes(result.data);
     } catch (err) {
-      console.error("Error fetching user types:", err);
       setError(err.message);
     }
   }, [token]);
@@ -86,7 +85,6 @@ export function Messages() {
       const result = await response.json();
       return result.data;
     } catch (err) {
-      console.error(`Error fetching users from ${url}:`, err);
       setError(err.message);
       return [];
     }
@@ -112,7 +110,6 @@ export function Messages() {
       const sortedMessages = messages.sort((msg1, msg2) => new Date(msg1.date_time) - new Date(msg2.date_time));
       return sortedMessages;
     } catch (err) {
-      console.error("Error fetching conversation messages:", err);
       setError(err.message);
       return [];
     }
@@ -135,7 +132,6 @@ export function Messages() {
       const result = await response.json();
       setUnreadMessages(result.data);
     } catch (err) {
-      console.error("Error fetching unread messages:", err);
       setError(err.message);
     }
   }, [token]);
@@ -160,7 +156,6 @@ export function Messages() {
       const sortedMessages = messages.sort((msg1, msg2) => new Date(msg2.date_time) - new Date(msg1.date_time));
       setRecentConversations(sortedMessages);
     } catch (err) {
-      console.error("Error fetching recent conversations:", err);
       setError(err.message);
     }
   }, [token]);
@@ -192,7 +187,6 @@ export function Messages() {
           });
 
           socketRef.current.on("error", (errorMessage) => {
-            console.error('Socket error:', errorMessage);
             setError(errorMessage);
           });
 
@@ -231,7 +225,6 @@ export function Messages() {
           throw new Error("User ID is not available.");
         }
       } catch (err) {
-        console.error('Error initializing component:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -265,7 +258,6 @@ export function Messages() {
       });
       setSearchTerm('');
     } catch (err) {
-      console.error("Error selecting user:", err);
       setError(err.message);
     }
   }, [fetchConversationMessages]);
@@ -328,7 +320,6 @@ export function Messages() {
       socketRef.current.emit("send_message", messageData);
       setNewMessage("");
     } catch (err) {
-      console.error("Error sending message:", err);
       setError("Failed to send message. Please try again.");
     }
   }, [newMessage, selectedConversation, findUserTypeId, currentUser.role, currentUser.id]);

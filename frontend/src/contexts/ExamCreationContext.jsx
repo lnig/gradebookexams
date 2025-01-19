@@ -81,7 +81,6 @@ export const ExamCreationProvider = ({ children, examId }) => {
   };
 
   const fetchGradebookExams = useCallback(async () => {
-    console.log("Fetching Gradebook Exams...");
     incrementLoading();
     try {
       const response = await fetch(`${API_EXAMS_URL}/exams/getGradebookExams`, {
@@ -94,7 +93,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.message || 'Nie udało się pobrać gradebook exams.');
+        throw new Error(errData.message || 'Failed to retrieved gradebook exams.');
       }
 
       const data = await response.json();
@@ -107,9 +106,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
         ...prevData,
         gradebookExams: fetchedGradebookExams,
       }));
-      console.log("Fetched Gradebook Exams:", fetchedGradebookExams);
     } catch (error) {
-      console.error('Error fetching gradebook exams:', error);
       setError(error.message);
     } finally {
       decrementLoading();
@@ -172,7 +169,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.message || 'Nie udało się pobrać danych egzaminu.');
+        throw new Error(errData.message || 'Failed to retrieved gradebook exams.');
       }
 
       const data = await response.json();
@@ -217,7 +214,6 @@ export const ExamCreationProvider = ({ children, examId }) => {
         endTime: endTime,
       }));
     } catch (error) {
-      console.error('Error fetching exam info:', error);
       setError(error.message);
     } finally {
       decrementLoading();
@@ -237,7 +233,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.message || 'Nie udało się pobrać pytań egzaminu.');
+        throw new Error(errData.message || 'Failed to retrieved gradebook exams.');
       }
 
       const data = await response.json();
@@ -258,7 +254,6 @@ export const ExamCreationProvider = ({ children, examId }) => {
         questions: mappedQuestions,
       }));
     } catch (error) {
-      console.error('Error fetching exam questions:', error);
       setError(error.message);
     } finally {
       decrementLoading();
@@ -278,7 +273,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.message || 'Nie udało się pobrać uczestników egzaminu.');
+        throw new Error(errData.message || 'Failed to retrieved gradebook exams.');
       }
 
       const data = await response.json();
@@ -305,7 +300,7 @@ export const ExamCreationProvider = ({ children, examId }) => {
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.message || 'Nie udało się pobrać uczestników egzaminu.');
+        throw new Error(errData.message || 'Failed to retrieved gradebook exams.');
       }
 
       const data = await response.json();
@@ -331,7 +326,6 @@ export const ExamCreationProvider = ({ children, examId }) => {
       }));
 
     } catch (error) {
-      console.error('Error fetching participants:', error);
       setError(error.message);
     } finally {
       decrementLoading();

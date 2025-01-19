@@ -32,14 +32,12 @@ function SchoolYearAndSemesterCard({ id, name, startDate, endDate, onEdit, onDel
           icon={<Pen size={16} color='#1A99EE' />}
           type="link"
           onClick={handleEditClick}
-          aria-label={`Edytuj ${name}`}
           className="z-10"
         />
         <Button
           icon={<Trash size={16} color='#FF4D4F' />}
           type="link"
           onClick={handleDeleteClick}
-          aria-label={`Usuń ${name}`}
           className="z-10"
         />
       </div>

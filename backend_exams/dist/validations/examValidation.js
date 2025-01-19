@@ -78,7 +78,6 @@ const validateUpdateExam = () => {
             .bail()
             .custom((value) => (0, uuid_1.validate)(value))
             .withMessage('exam_id must be a valid UUID.'),
-        // All fields are required
         (0, express_validator_1.body)('start_date_time')
             .exists().withMessage('start_date_time is required.')
             .bail()

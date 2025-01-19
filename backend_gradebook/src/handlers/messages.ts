@@ -5,8 +5,7 @@ import Message from '../interfaces/message';
 import { createSuccessResponse, createErrorResponse } from '../interfaces/responseInterfaces';
 import { stringify as uuidStringify, parse as uuidParse, } from 'uuid';
 import AuthUser from '../interfaces/authUser';
-import { UserType } from '../enums/userTypes';
-import { administrators, teachers, parents, students, user_types } from '@prisma/client';
+import { administrators, teachers, parents, students } from '@prisma/client';
 
 export function messagesHandler(io: Server, socket: Socket) {
     const user: AuthUser = socket.user;

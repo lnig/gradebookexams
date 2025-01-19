@@ -12,7 +12,6 @@ async function getClassesByTeacher(teacher_id) {
         throw new Error('Invalid teacher ID format.');
     }
     const teacherIdBuffer = Buffer.from((0, uuid_1.parse)(teacher_id));
-    // Pobieramy lekcje danego nauczyciela, wraz z powiązaną klasą i nazwą klasy
     const lessonsRaw = await db_1.default.lessons.findMany({
         where: {
             teacher_id: teacherIdBuffer,
@@ -34,7 +33,6 @@ async function getClassesByTeacher(teacher_id) {
     if (lessonsRaw.length === 0) {
         return [];
     }
-    // Dla unikalności używamy Map
     const uniqueClassesMap = new Map();
     for (const lesson of lessonsRaw) {
         if (!lesson.classes)

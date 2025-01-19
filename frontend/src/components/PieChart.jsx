@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 
 const PieChart = ({ percentage, inside, background, foreground, size = 100, strokeWidth = 8 }) => {

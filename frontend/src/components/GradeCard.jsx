@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 const GradeCard = ({title, subtitle, grade, textColor, bgColor}) => {
    
     return (

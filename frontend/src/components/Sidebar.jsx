@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { LogOut, Menu, X } from "lucide-react";
 import { createContext, useState, useContext } from "react";
 import { Link, useLocation } from 'react-router-dom';

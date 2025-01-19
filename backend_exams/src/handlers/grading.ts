@@ -1,22 +1,11 @@
 import { Request, Response } from 'express';
 import  prisma  from '../db';
-import { CreateExamInput } from '../interfaces/examCredentials';
 import { createErrorResponse, createSuccessResponse } from '../interfaces/responseInterfaces';
 import {  parse as uuidParse, validate as isUUID, stringify as uuidStringify, v4 as uuidv4 } from 'uuid';
-import { getClassesByTeacher } from '../services/classService';
-import { Student, Class, StudentExam, ClassExam} from '../interfaces/ConvertedTypes';
-import { convertBuffersToUUIDs } from '../utils/uuidUtils';
-import AuthUser from '../interfaces/authUser';
 import { GradingService } from '../services/gradingService';
-import { students, exams, open_questions, closed_questions, closed_answers, attempt_questions_question_type } from '@prisma/client';
-import { ClosedAnswerInput, OpenAnswerInput, SaveAttemptInput } from '../interfaces/attemptCredentials';
-import { GradeOpenAnswerInput, OpenAnswerToGrade, StudentOpenAnswers, OpenAnswersToGradeResponse, StudentToGrade, GradeToInsert, AttemptToUpdate  } from '../interfaces/GradingInterfaces';
-import { SelectedQuestion } from '../interfaces/questions'
+import { GradeOpenAnswerInput, OpenAnswerToGrade, StudentOpenAnswers, OpenAnswersToGradeResponse, StudentToGrade, GradeToInsert  } from '../interfaces/GradingInterfaces';
 import { ParticipantAttempt, ExamStatistics, ScoreDistribution } from '../interfaces/ExamResults'
 import { getClosedQuestionsStatistics, getOpenQuestionsStatistics, calculateScoreDistribution } from '../services/statisticsService';
-import { AttemptDetailsResponse, Question, Answer } from '../interfaces/reviewingInterfaces';
-
-
 
 export const showOpenAnswersToGrade = async (req: Request, res: Response) => {
     const { attempt_id } = req.params;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import PageTitle from '../components/PageTitle';
 import { CheckCircle, XCircle, Clock, Hourglass, Info } from 'lucide-react';
 import Calendar from '../components/Calendar';
-import { decodeToken, getToken, getUserId, getUserRole } from '../utils/UserRoleUtils';
+import { getToken, getUserId, getUserRole } from '../utils/UserRoleUtils';
 import {
   monthNames,
   displayMonthNames,
@@ -36,15 +36,6 @@ export function Attendance() {
   }
 
   const [selectedDate, setSelectedDate] = useState(today);
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(() => {
-    const currentMonthName = monthNames[today.getMonth()];
-    const initialMonthIndex = displayMonthNames.indexOf(currentMonthName);
-    return initialMonthIndex !== -1 ? initialMonthIndex : 0;
-  });
-  const [daysInMonth, setDaysInMonth] = useState(
-    getDaysInMonth(monthNumbers[currentMonthIndex], getYearForMonthIndex(currentMonthIndex, baseYear))
-  );
-
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchedClasses, setFetchedClasses] = useState([]);
@@ -52,11 +43,19 @@ export function Attendance() {
   const [classAttendances, setClassAttendances] = useState([]);
   const [isConfirmFormOpen, setIsConfirmFormOpen] = useState(false);
   const [isExcuseModalOpen, setIsExcuseModalOpen] = useState(false);
-  
   const [excuseType, setExcuseType] = useState('all'); 
   const [excuseDate, setExcuseDate] = useState(null);
-
   const [studentId, setStudentId] = useState(null);
+
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(() => {
+    const currentMonthName = monthNames[today.getMonth()];
+    const initialMonthIndex = displayMonthNames.indexOf(currentMonthName);
+    return initialMonthIndex !== -1 ? initialMonthIndex : 0;
+  });
+  
+  const [daysInMonth, setDaysInMonth] = useState(
+    getDaysInMonth(monthNumbers[currentMonthIndex], getYearForMonthIndex(currentMonthIndex, baseYear))
+  );
 
   const parentId = getUserId();
   const token = getToken();

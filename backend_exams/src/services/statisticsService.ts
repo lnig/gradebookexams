@@ -1,6 +1,7 @@
 import prisma from '../db';
 import { ClosedQuestionStatistic, OpenQuestionStatistic, OpenQuestionStatisticAutoCheck, OpenQuestionStatisticManualCheck } from '../interfaces/ExamResults';
 import {ParticipantAttempt, ScoreDistribution } from '../interfaces/ExamResults'
+
 export const getClosedQuestionsStatistics = async (examId: Buffer): Promise<ClosedQuestionStatistic[]> => {
     const closedQuestions = await prisma.closed_questions.findMany({
         where: { exam_id: examId },

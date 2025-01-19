@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useMemo } from "react";
 import PageTitle from '../components/PageTitle';
 import Button from "../components/Button";

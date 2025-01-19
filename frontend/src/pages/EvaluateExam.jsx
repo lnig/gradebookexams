@@ -58,7 +58,6 @@ export function EvaluateExam() {
                     setError(data.message || 'Failed to fetch students to grade.');
                 }
             } catch (err) {
-                console.error('Error fetching students to grade:', err);
                 setError('An unexpected error occurred.');
                 toast.error(err.message || "An unexpected error occurred.")
             } finally {

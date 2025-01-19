@@ -264,10 +264,10 @@ const getHomeworksForStudent = async (req, res) => {
             }
         });
         if (!existingStudent) {
-            return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Uczeń nie istnieje.'));
+            return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Student does not exist.'));
         }
         if (!existingStudent.class_id) {
-            return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Uczeń nie jest przypisany do żadnej klasy.'));
+            return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Student not assigned to any class.'));
         }
         const lessons = await db_1.default.lessons.findMany({
             where: {
@@ -288,7 +288,7 @@ const getHomeworksForStudent = async (req, res) => {
             }
         });
         if (lessons.length === 0) {
-            return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)([], 'Brak lekcji dla klasy ucznia.'));
+            return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)([], 'No lessons for the students class'));
         }
         const lessonIds = lessons.map(lesson => lesson.id);
         const homeworks = await db_1.default.homeworks.findMany({
@@ -317,7 +317,7 @@ const getHomeworksForStudent = async (req, res) => {
             }
         });
         if (homeworks.length === 0) {
-            return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)([], 'Brak prac domowych dla ucznia.'));
+            return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)([], 'No homework for the student.'));
         }
         const responseData = homeworks.map(hw => ({
             id: (0, uuid_1.stringify)(hw.id),
@@ -327,11 +327,11 @@ const getHomeworksForStudent = async (req, res) => {
             subject_name: hw.lessons.subjects.name,
             teacher_full_name: `${hw.lessons.teachers.first_name} ${hw.lessons.teachers.last_name}`
         }));
-        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, 'Prace domowe pobrane pomyślnie.'));
+        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, 'Homeworks retrieved successfully.'));
     }
     catch (err) {
-        console.error('Błąd podczas pobierania prac domowych dla ucznia', err);
-        return res.status(500).json((0, responseInterfaces_1.createErrorResponse)('Wystąpił nieoczekiwany błąd podczas pobierania prac domowych. Proszę spróbować ponownie później.'));
+        console.error('Error retrieving homework for student', err);
+        return res.status(500).json((0, responseInterfaces_1.createErrorResponse)('An unexpected error occurred while deleting the homework. Please try again later.'));
     }
 };
 exports.getHomeworksForStudent = getHomeworksForStudent;
@@ -373,7 +373,7 @@ const getHomeworksForTeacher = async (req, res) => {
             }
         });
         if (!existingTeacher) {
-            return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('Uczeń nie istnieje.'));
+            return res.status(404).json((0, responseInterfaces_1.createErrorResponse)('The student does not exist.'));
         }
         const lessons = await db_1.default.lessons.findMany({
             where: {
@@ -388,7 +388,7 @@ const getHomeworksForTeacher = async (req, res) => {
             }
         });
         if (lessons.length === 0) {
-            return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)([], 'Brak lekcji dla nauczyciela.'));
+            return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)([], 'No lessons for the teacher.'));
         }
         const lessonIds = lessons.map(lesson => lesson.id);
         const homeworks = await db_1.default.homeworks.findMany({
@@ -417,7 +417,7 @@ const getHomeworksForTeacher = async (req, res) => {
             }
         });
         if (homeworks.length === 0) {
-            return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)([], 'Brak prac domowych dla nauczyciela.'));
+            return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)([], 'No homework for the teacher.'));
         }
         const responseData = homeworks.map(hw => ({
             id: (0, uuid_1.stringify)(hw.id),
@@ -427,11 +427,11 @@ const getHomeworksForTeacher = async (req, res) => {
             subject_name: hw.lessons.subjects.name,
             teacher_full_name: `${hw.lessons.teachers.first_name} ${hw.lessons.teachers.last_name}`
         }));
-        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, 'Prace domowe pobrane pomyślnie.'));
+        return res.status(200).json((0, responseInterfaces_1.createSuccessResponse)(responseData, 'Homework retrieved successfully.'));
     }
     catch (err) {
-        console.error('Błąd podczas pobierania prac domowych dla ucznia', err);
-        return res.status(500).json((0, responseInterfaces_1.createErrorResponse)('Wystąpił nieoczekiwany błąd podczas pobierania prac domowych. Proszę spróbować ponownie później.'));
+        console.error('Error retrieving homework', err);
+        return res.status(500).json((0, responseInterfaces_1.createErrorResponse)('An unexpected error occurred while deleting the homework. Please try again later.'));
     }
 };
 exports.getHomeworksForTeacher = getHomeworksForTeacher;
