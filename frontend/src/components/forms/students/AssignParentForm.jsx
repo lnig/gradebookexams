@@ -53,7 +53,7 @@ function AssignParentForm({ onSuccess, isOpen, closeModal, studentId, studentNam
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/student-parent/', { 
+      const response = await fetch(`${API_GRADEBOOK_URL}/student-parent/`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
