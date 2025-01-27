@@ -238,7 +238,7 @@ const forgotPassword = async (req, res) => {
         });
         const message = {
             from: "sender@server.com",
-            to: "receiver@sender.com",
+            to: "receiver@server.com",
             subject: "Password Reset",
             text: `Click the following link to reset your password: http://localhost:3001/reset-password/${jwt}`
         };
